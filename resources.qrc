@@ -1,0 +1,15 @@
+    <!DOCTYPE RCC><RCC version="1.0">
+    <qresource>
+        <file>icons/peggle.ico</file>
+        <file>sprites/peggle_title.png</file>
+        
+        <file>sprites/krita.png</file>
+    
+        <file>sprites/ball.png</file>
+        <file>sprites/peggles.png</file>
+        <file>sprites/stage_elements.png</file>
+	    <file>sprites/Peggle_Fonts.png</file>
+	    <file>sprites/sprites.png</file>
+        
+    </qresource>
+    </RCC>

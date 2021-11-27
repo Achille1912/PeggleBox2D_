@@ -1,0 +1,35 @@
+OBIETTIVO: LIVELLO 1 e basta. però che funziona tutto, quindi al momento solo peg circolari, punteggio, moltiplicatore, palline rimaste, bucket, sprites etc...
+
+CLASSE Peg
+gestisce i pegs, creazione, forma, parametri, texture, colore...
+:: quindi quella parte di creazione pegs in build level di game.cpp sono oggetti di questa classe
+Peg::Peg(posizione,forma,colore)
+
+CLASSE Bucket
+CLASSE MasterPeg
+giusto per tenere separato il codice e avere tutto più ordinato, facilmente trovabile e debuggabile
+
+CLASSE Hud
+molto simile a sprites, se non uguale, semplicemente dividiamo il codice e per Hud intendiamo tutte le sprites che fanno parte del'hud:
+punteggi in alto, punteggi quando la pallina colpisce i peg (forse), font, moltiplicatore, contatore palline, fevermeter, scoremeter, cannone (forse), personaggio (forse)
+
+CLASSE Score
+
+CLASSE Platform (ALLA FINE, PRIMA DEVE FUNZIONARE IL GIOCO CON SOLO I PEG CIRCOLARI)
+Platform::Platform(posizione, width, height ...
+
+
+suddivisione lavoro:
+Achille: tutte le cose con box2d, fisica, 
+Simone: sprites, revisione codice,
+Martina: sprites, revisione codice,
+Angelo: suoni, sprites, supervisione, gestione,
+
+perfavore cerchiamo di fare le cose ordinate dall'INIZIO, in partenza, se il problema può essere riusato e si può dividere in più parti, allora
+lo mettiamo separato in un metodo di una classe che categorizza quel tipo di gestione del problema,
+
+se abbiamo più righe di codice che fanno una cosa è meglio creare una funzione che le esegue così diventa tutto più ordinato e leggibile, Importante!
+
+guardate per esempio i commenti di buildLevel, va tutto nelle apposite classi e negli appositi metodi
+
+cambiate i nomi e perdeteci più tempo che potete finché non vi sembra la definizione migliore per qualcosa che state creando
