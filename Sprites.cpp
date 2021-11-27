@@ -42,7 +42,7 @@ Sprites::Sprites() //load in RAM
     //dynamic Hud da fare
 
     stage_elements = loadTexture(":/sprites/stage_elements.png", QColor(255, 0, 255));
-    pegles = loadTexture(":/sprites/peggles.png", QColor(255, 255, 255));
+    peggles = loadTexture(":/sprites/peggles.png", QColor(255, 255, 255));
     fonts = loadTexture(":/sprites/Peggle_Fonts.png");
     sprites = loadTexture(":/sprites/sprites.png");
 }
@@ -56,7 +56,7 @@ QPixmap Sprites::get(const std::string &id)
         return Hud_Unicorn;
 
     else if (id == "player")
-        return sprites.copy(403,82,9,12);
+        return sprites.copy(403, 82, 9, 12);
     else if (id == "bucket")
         return stage_elements.copy(bucket);
 
@@ -64,7 +64,7 @@ QPixmap Sprites::get(const std::string &id)
     else if (id == "0")
         return fonts.copy(remainingBallNumber);
     else if (id == "1")
-        return fonts.copy(moveBy(remainingBallNumber, 1, 0, 30*1));
+        return fonts.copy(moveBy(remainingBallNumber, 1, 0, 30 * 1));
     else if (id == "2")
         return fonts.copy(moveBy(remainingBallNumber, 1, 0, (30 * 2)));
     else if (id == "3")
@@ -77,25 +77,29 @@ QPixmap Sprites::get(const std::string &id)
         return fonts.copy(moveBy(remainingBallNumber, 1, 0, (30 * 6)));
     else if (id == "7")
         return fonts.copy(moveBy(remainingBallNumber, 1, 0, (35 * 6)));
-    else if (id == "8") 
+    else if (id == "8")
         return fonts.copy(moveBy(remainingBallNumber, 1, 0, (35 * 7)));
     else if (id == "9")
         return fonts.copy(moveBy(remainingBallNumber, 1, 0, (35 * 8)));
     else if (id == "10")
-        return (fonts.copy(478, 305, 52, 54).transformed(QTransform().scale(-1,1)));
-    // else if (id == "cannon")
-    //    return stage_elements.copy(cannon);
+        return (fonts.copy(478, 305, 52, 54).transformed(QTransform().scale(-1, 1)));
 
-    
+    else if (id == "cannon")
+        return sprites.copy(385, 390, 51, 64);
+
+
     else if (id == "peg_blue_hit")
-        return pegles.copy(pegle);
+        return peggles.copy(pegle);
     else if (id == "peg_red_hit")
-        return pegles.copy(moveBy(pegle, 1, 0, 200));
+        return peggles.copy(moveBy(pegle, 1, 0, 200));
     else if (id == "peg_blue")
-        return pegles.copy(moveBy(pegle, 0, 1, 0, 200));
+        return peggles.copy(moveBy(pegle, 0, 1, 0, 200));
     else if (id == "peg_red")
-        return pegles.copy(moveBy(pegle, 1, 1, 200, 200));
+        return peggles.copy(moveBy(pegle, 1, 1, 200, 200));
 
+
+    else if (id == "band")
+        return sprites.copy(91, 528, 15, 422);
     else
     {
         std::cerr << "Cannot find sprite texture with id \"" << id << "\"\n";

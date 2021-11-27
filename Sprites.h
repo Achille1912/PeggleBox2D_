@@ -14,7 +14,7 @@ private:
     QPixmap background_level;
     QPixmap stage_elements;
     QPixmap title_screen;
-    QPixmap pegles;
+    QPixmap peggles;
     QPixmap fonts;
     QPixmap sprites;
 

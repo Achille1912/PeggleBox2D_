@@ -9,16 +9,19 @@
 
 namespace PGG
 {
-    class Bucket;
-
+    class MasterPeg;
+    
 }
 
-class PGG::Bucket : public QGraphicsPixmapItem
+class PGG::MasterPeg : public QGraphicsPixmapItem
 {
 private:
-
+    
 public:
-    Bucket(QPoint pos);
+    MasterPeg(QPoint pos);
 
     void advance(b2Body* box);
+
+    /*void startContact() { printf("Startttt"); }
+    void endContact() { printf("End"); }*/
 };
