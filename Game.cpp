@@ -56,6 +56,11 @@ Game::Game() : QGraphicsView()
 
     _builder = new LevelBuilder();
 
+    // install HUD
+    //_hud = new HUD(width(), height(), this);
+    _score = 0;
+    _redPegHit = -1;
+
     reset();
     init();
 }
@@ -113,11 +118,21 @@ void Game::nextFrame()
     
   for (b2ContactEdge* edge = MasterPegBox->GetContactList(); edge; edge = edge->next)
     {
-       if (bandOne->scenePos().y() >= 300) {
-           bandOne->setY(bandOne->scenePos().y() - 5);
-           bandTwo->setY(bandTwo->scenePos().y() - 5);
-       }
-        //static_cast<QGraphicsPixmapItem*>(edge->contact->GetFixtureA()->GetBody()->GetUserData())->setPixmap(Sprites::instance()->get("peg_blue_hit").scaled(18, 18));
+      
+      if (edge->contact->IsTouching()&& static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData())&& edge->contact->GetFixtureA()->GetBody()->GetType()==b2BodyType::b2_staticBody) {
+          // if is a Peg
+          Peg* tmp = static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData());
+          if (!tmp->getHitted()) {
+              if (bandOne->scenePos().y() >= 300) {
+                  bandOne->setY(bandOne->scenePos().y() - 5);
+                  bandTwo->setY(bandTwo->scenePos().y() - 5);
+              }
+
+              tmp->hit();
+          }
+        
+
+      }
     }
 
     //master peg
@@ -126,6 +141,7 @@ void Game::nextFrame()
 
     if (MasterPegBox->GetPosition().y > 35)
     {
+        clearHittedPeg();
         remainingBall--;
         printf("%d",remainingBall);
         printRemainingBall(remainingBall);
@@ -365,3 +381,17 @@ void Game::printRemainingBall(int b) {
     remainingBallPixmap->setPixmap(Sprites::instance()->get(tmp));
 }
 
+
+void Game::clearHittedPeg() {
+    for (int i = 0; i < PegBox.size(); i++) {
+       
+        Peg* tmp = static_cast<Peg*>(PegBox[i]->GetUserData());
+        if (tmp->getHitted()) {
+            tmp->setVisible(false);
+            //world2d->DestroyBody(PegBox[i]);
+            PegBox[i]->DestroyFixture(PegBox[i]->GetFixtureList());
+            
+        }
+    }
+
+}

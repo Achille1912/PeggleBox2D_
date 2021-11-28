@@ -10,6 +10,7 @@
 #include "MasterPeg.h"
 #include "Peg.h"
 #include "LevelBuilder.h"
+#include "Hud.h"
 
 #include "box2d/include/box2d/b2_settings.h"
 #include "box2d/include/box2d/box2d.h"
@@ -43,8 +44,10 @@ private:
     QTimer _engine;
     GameState _state;
     QGraphicsScene *_world;
-    Hud *_hud;
+    HUD* _hud;
     LevelBuilder* _builder;
+    int _score;
+    int _redPegHit;
 
     // FPS measuring and display
     int _frame_count;
@@ -75,7 +78,8 @@ public:
     // getters
     b2World* getWorld2d() { return world2d; }
     QGraphicsScene* world() { return _world; }
-    Hud* Hudd() { return _hud; }
+    HUD* Hudd() { return _hud; }
+    int getScore() { return _score; }
 
     QVector<b2Body*>getPegBox() { return PegBox; }
     Peg* getPegGraphic() { return pegGraphic; }
@@ -85,11 +89,16 @@ public:
 
     b2Body* getBucketBox() { return BucketBox; }
     Bucket* getBucketGraphic() { return bucketGraphic; }
+
     QGraphicsPixmapItem* bandOne;
     QGraphicsPixmapItem* bandTwo;
+    QVector<QGraphicsPixmapItem*> molt;
+
+
     // setters
     void setWorld2d(b2World* b) { world2d = b; }
-
+    void setScore(int s) { _score = s; }
+    
     void setPegGraphic(Peg* p) { pegGraphic = p; }
 
     void setMasterPegBox(b2Body* b) { MasterPegBox = b; }
@@ -98,12 +107,12 @@ public:
     void setBucketBox(b2Body* b) { BucketBox = b; }
     void setBucketGraphic(Bucket* b) { bucketGraphic = b; }
     
-    
-    b2Vec2 getTrajectoryPoint(b2Vec2& startingPosition, b2Vec2& startingVelocity, float n);
-    
-
     // utility
+    void addMolt() { _redPegHit++; molt[_redPegHit]->setVisible(true); }
     void printRemainingBall(int b);
+    void clearHittedPeg();
+    b2Vec2 getTrajectoryPoint(b2Vec2& startingPosition, b2Vec2& startingVelocity, float n);
+
 
     // event handlers
     virtual void mousePressEvent(QMouseEvent *e) override;

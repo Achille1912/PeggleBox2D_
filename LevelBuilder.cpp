@@ -43,6 +43,15 @@ void LevelBuilder::load(const QString& level_name)
 		Game::instance()->bandTwo->setPos(110, Game::instance()->height());
 		Game::instance()->bandTwo->setScale(1.5);
 		
+		Game::instance()->molt.resize(25);
+		for (int i = 0; i < 25; i++) {
+			Game::instance()->molt[i] = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("molt")));
+			Game::instance()->molt[i]->setScale(1.75);
+			Game::instance()->molt[i]->setPos(1325, 915 - (25 * i));
+			Game::instance()->molt[i]->setVisible(false);
+		}
+	
+
 
 	// CREATE PHYSICS WORLD
 		b2Vec2 gravity(0.0f, 6.0f);

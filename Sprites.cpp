@@ -25,6 +25,7 @@ static QRect player(467, 259, 93, 93);
 static QRect pegle(0, 0, 200, 200);
 static QRect bucket(168, 200, 168, 24);
 static QRect remainingBallNumber(479, 305, 30, 54);
+static QRect score(4, 280, 46,70);
 
 Sprites *Sprites::instance()
 {
@@ -100,6 +101,8 @@ QPixmap Sprites::get(const std::string &id)
 
     else if (id == "band")
         return sprites.copy(91, 528, 15, 422);
+    else if (id == "molt")
+        return sprites.copy(535, 355, 50, 16);
     else
     {
         std::cerr << "Cannot find sprite texture with id \"" << id << "\"\n";
@@ -107,6 +110,88 @@ QPixmap Sprites::get(const std::string &id)
     }
 }
 
-//QPixmap Sprites::getScore(int s)
-//{
-//}
+QPixmap Sprites::getNumber(int n, int fill)
+{
+    std::string text = std::to_string(n);
+
+    // fill with 0s on the left
+    if (fill)
+        while (text.size() != fill)
+            text = '0' + text;
+
+    // create collage texture
+    QPixmap collage(8 * int(text.size()), 8);
+    QPainter painter(&collage);
+
+    // add numbers
+    for (int i = 0; i < text.size(); i++)
+        painter.drawPixmap(8 * i, 0, Sprites::instance()->get(std::string("number-") + text[i]));
+
+    // end painting (necessary for setMask)
+    painter.end();
+
+    // make background transparent
+    collage.setMask(collage.createMaskFromColor(QColor(147, 187, 236)));
+
+    return collage;
+}
+
+QPixmap Sprites::getString(std::string text, int fill)
+{
+    // fill with 0s on the left
+    if (fill)
+        while (text.size() != fill)
+            text = ' ' + text;
+
+    // create collage texture
+    QPixmap collage(8 * int(text.size()), 8);
+    QPainter painter(&collage);
+
+    // add letters
+    for (int i = 0; i < text.size(); i++)
+        if (text[i] != ' ')
+            painter.drawPixmap(8 * i, 0, Sprites::instance()->get(std::string("char-") + text[i]));
+
+    // end painting (necessary for setMask)
+    painter.end();
+
+    // make background transparent
+    collage.setMask(collage.createMaskFromColor(QColor(147, 187, 236)));
+
+    return collage;
+}
+
+// score composite from sprite single score pieces
+QPixmap Sprites::getScore(int s)
+{
+    bool thousands = s >= 1000;
+    int base_score = s / (thousands ? 100 : 10);
+
+    QPixmap collage(16, 8);
+    QPainter painter(&collage);
+
+    // add 0s
+    
+
+    // add base number
+    //if (base_score == 10)
+        painter.drawPixmap(0, 0, fonts.copy(score));
+   /* else if (base_score == 20)
+        painter.drawPixmap(0, 0, _stage_tiles.copy(moveBy(score, 1, 0, 8, 8)));
+    else if (base_score == 40)
+        painter.drawPixmap(0, 0, _stage_tiles.copy(moveBy(score, 2, 0, 8, 8)));
+    else if (base_score == 50)
+        painter.drawPixmap(0, 0, _stage_tiles.copy(moveBy(score, 3, 0, 8, 8)));
+    else if (base_score == 80)
+        painter.drawPixmap(0, 0, _stage_tiles.copy(moveBy(score, 4, 0, 8, 8)));
+    else // 1 up
+        painter.drawPixmap(0, 0, _stage_tiles.copy(QRect(718, 185, 16, 8)));
+        */
+    // end painting (necessary for setMask)
+    painter.end();
+
+    // make background transparent
+    collage.setMask(collage.createMaskFromColor(QColor(147, 187, 236)));
+
+    return collage;
+}

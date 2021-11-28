@@ -32,5 +32,13 @@ public:
     // extract texture from sprites using the given id
     QPixmap get(const std::string &id);
 
-    //QPixmap getScore(int);
+
+    // score composite from sprite single score pieces
+    QPixmap getScore(int);
+
+    // number composite from sprite single characters
+    QPixmap getNumber(int n, int fill = 0);
+
+    // string composite from sprite single characters
+    QPixmap getString(std::string text, int fill = 0);
 };

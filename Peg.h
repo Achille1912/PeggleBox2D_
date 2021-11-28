@@ -20,6 +20,9 @@ class PGG::Peg : public QGraphicsPixmapItem
 {
 private:
     PegColor _color;
+    bool _hitted;
 public:
     Peg(QPoint pos, PegColor color);
+    void hit();
+    bool getHitted() { return _hitted; }
 };
