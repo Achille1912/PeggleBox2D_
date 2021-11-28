@@ -111,7 +111,7 @@ void Game::nextFrame()
     world2d->Step(timeStep, velocityIterations, positionIterations); //sarebbe l'advance
 
     
-   for (b2ContactEdge* edge = MasterPegBox->GetContactList(); edge; edge = edge->next)
+  for (b2ContactEdge* edge = MasterPegBox->GetContactList(); edge; edge = edge->next)
     {
        if (bandOne->scenePos().y() >= 300) {
            bandOne->setY(bandOne->scenePos().y() - 5);
@@ -121,6 +121,7 @@ void Game::nextFrame()
     }
 
     //master peg
+   
     masterPegGraphic->advance(MasterPegBox);
 
     if (MasterPegBox->GetPosition().y > 35)

@@ -1,4 +1,5 @@
 #include "LevelBuilder.h"
+#include "MyContactListener.h"
 
 #include "Game.h"
 #include "Sprites.h"
@@ -47,7 +48,7 @@ void LevelBuilder::load(const QString& level_name)
 		b2Vec2 gravity(0.0f, 6.0f);
 		Game::instance()->setWorld2d(new b2World(gravity));
 		//MyContactListener myContactListenerInstance;
-		//world2d->SetContactListener(&myContactListenerInstance);
+		//Game::instance()->getWorld2d()->SetContactListener(&myContactListenerInstance);
 		Game::instance()->getWorld2d()->SetAllowSleeping(false);
 
 
