@@ -119,16 +119,16 @@ void Game::nextFrame()
   for (b2ContactEdge* edge = MasterPegBox->GetContactList(); edge; edge = edge->next)
     {
       
-      if (edge->contact->IsTouching()&& static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData())&& edge->contact->GetFixtureA()->GetBody()->GetType()==b2BodyType::b2_staticBody) {
+      if (edge->contact->IsTouching()&& static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData())) {
           // if is a Peg
-          Peg* tmp = static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData());
-          if (!tmp->getHitted()) {
-              if (bandOne->scenePos().y() >= 300) {
-                  bandOne->setY(bandOne->scenePos().y() - 5);
-                  bandTwo->setY(bandTwo->scenePos().y() - 5);
-              }
-
-              tmp->hit();
+          if (edge->contact->GetFixtureA()->GetBody()->GetType() == b2BodyType::b2_staticBody) {
+              Peg* tmp = static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData());
+              if (!tmp->getHitted())
+                  tmp->hit();
+           // if is Bucket
+          }else if (edge->contact->GetFixtureA()->GetBody()->GetType() == b2BodyType::b2_kinematicBody){
+              Bucket* tmp = static_cast<Bucket*>(edge->contact->GetFixtureA()->GetBody()->GetUserData());
+              tmp->goal();
           }
         
 
@@ -150,14 +150,14 @@ void Game::nextFrame()
         MasterPegBox->SetLinearVelocity(b2Vec2(0, 0));
         MasterPegBox->SetAngularVelocity(0);
         world2d->SetGravity(b2Vec2(0, 0));
-        bandOne->setY(Game::instance()->height());
-        bandTwo->setY(Game::instance()->height());
+        bandOne->setY(924);
+        bandTwo->setY(924);
     }
     
 
     //bucket
     bucketGraphic->advance(BucketBox);
-    if (BucketBox->GetPosition().x >40)
+    if (BucketBox->GetPosition().x >32)
     {
         BucketBox->SetLinearVelocity(b2Vec2(-10, 0));
         
@@ -192,6 +192,8 @@ void Game::mousePressEvent(QMouseEvent* e)
         QPoint midPos((sceneRect().width() / 2), 0), currPos;
 
         currPos = QPoint(mapToScene(e->pos()).x(), mapToScene(e->pos()).y());
+        double t = pow((4*(-((currPos.y()-midPos.y())* (currPos.y() - midPos.y()))+1-((currPos.x()-midPos.x())* (currPos.x() - midPos.x())))),(1/4))/36;
+ 
         MasterPegBox->SetLinearVelocity(b2Vec2((currPos.x()-midPos.x())/50, (currPos.y()-midPos.y())/50));
   
     }
@@ -394,4 +396,18 @@ void Game::clearHittedPeg() {
         }
     }
 
+}
+
+
+void Game::addMolt() {
+    _redPegHit++; 
+    molt[_redPegHit]->setVisible(true); 
+    if (_redPegHit == 9)
+        molt_x[0]->setVisible(true);
+    else if(_redPegHit == 14) 
+        molt_x[1]->setVisible(true);
+    else if (_redPegHit == 18)//18
+        molt_x[2]->setVisible(true);
+    else if (_redPegHit == 21)
+        molt_x[3]->setVisible(true);
 }

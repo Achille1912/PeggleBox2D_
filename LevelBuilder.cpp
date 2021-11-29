@@ -36,19 +36,38 @@ void LevelBuilder::load(const QString& level_name)
 		double screenHeight = Game::instance()->sceneRect().height();
 		Game::instance()->bandOne= Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("band")));
 		Game::instance()->bandOne->setZValue(-2);
-		Game::instance()->bandOne->setPos(10, Game::instance()->height());
+		Game::instance()->bandOne->setPos(10, 924);
 		Game::instance()->bandOne->setScale(1.5);
 		Game::instance()->bandTwo = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("band").transformed(QTransform().scale(-1, 1))));
 		Game::instance()->bandTwo->setZValue(-2);
-		Game::instance()->bandTwo->setPos(110, Game::instance()->height());
+		Game::instance()->bandTwo->setPos(110, 924);
 		Game::instance()->bandTwo->setScale(1.5);
 		
+
+		Game::instance()->molt_x.resize(4);
+		Game::instance()->molt_x[0] = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("molt-x2")));
+		Game::instance()->molt_x[1] = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("molt-x3")));
+		Game::instance()->molt_x[2] = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("molt-x5")));
+		Game::instance()->molt_x[3] = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("molt-x10")));
+		
+		for (int i = 0; i < 4; i++) {
+			
+			Game::instance()->molt_x[i]->setScale(1.8);
+			Game::instance()->molt_x[i]->setVisible(false);
+		}
+		Game::instance()->molt_x[0]->setPos(1344, 667);
+		Game::instance()->molt_x[1]->setPos(1344, 543);
+		Game::instance()->molt_x[2]->setPos(1344, 440);
+		Game::instance()->molt_x[3]->setPos(1344, 667);
+
+
 		Game::instance()->molt.resize(25);
 		for (int i = 0; i < 25; i++) {
 			Game::instance()->molt[i] = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("molt")));
 			Game::instance()->molt[i]->setScale(1.75);
 			Game::instance()->molt[i]->setPos(1325, 915 - (25 * i));
 			Game::instance()->molt[i]->setVisible(false);
+			Game::instance()->molt[i]->setZValue(-2);
 		}
 	
 
@@ -68,9 +87,10 @@ void LevelBuilder::load(const QString& level_name)
 		std::mt19937 gen(rd()); // seed the generator
 		std::uniform_int_distribution<> distr(0, 95);
 		int randomRed[25];
+		
 		for (int i = 0; i < 25; i++)
 			randomRed[i] = (distr(gen));
-
+	
 			// Definition
 		b2BodyDef pegDef;
 		pegDef.type = b2_staticBody;
@@ -167,7 +187,7 @@ void LevelBuilder::load(const QString& level_name)
 		b2BodyDef bucketDef;
 		bucketDef.type = b2_kinematicBody;
 		bucketDef.linearDamping = 0.1;
-		bucketDef.position.Set((Game::instance()->sceneRect().width() / 2) / 30.0, (screenHeight-32) / 30.0);
+		bucketDef.position.Set((Game::instance()->sceneRect().width() / 2) / 30.0, (screenHeight-50) / 30.0);
 		
 		Game::instance()->setBucketBox(Game::instance()->getWorld2d()->CreateBody(&bucketDef));
 

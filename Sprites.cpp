@@ -103,6 +103,14 @@ QPixmap Sprites::get(const std::string &id)
         return sprites.copy(91, 528, 15, 422);
     else if (id == "molt")
         return sprites.copy(535, 355, 50, 16);
+    else if (id == "molt-x2")
+        return sprites.copy(673, 324, 25, 20);
+    else if (id == "molt-x3")
+        return sprites.copy(673, 344, 25, 20);
+    else if (id == "molt-x5")
+        return sprites.copy(673, 364, 25, 20);
+    else if (id == "molt-x10")
+        return sprites.copy(673, 384, 25, 20);
     else
     {
         std::cerr << "Cannot find sprite texture with id \"" << id << "\"\n";

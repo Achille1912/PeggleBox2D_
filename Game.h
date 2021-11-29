@@ -93,6 +93,7 @@ public:
     QGraphicsPixmapItem* bandOne;
     QGraphicsPixmapItem* bandTwo;
     QVector<QGraphicsPixmapItem*> molt;
+    QVector<QGraphicsPixmapItem*> molt_x;
 
 
     // setters
@@ -108,7 +109,7 @@ public:
     void setBucketGraphic(Bucket* b) { bucketGraphic = b; }
     
     // utility
-    void addMolt() { _redPegHit++; molt[_redPegHit]->setVisible(true); }
+    void addMolt();
     void printRemainingBall(int b);
     void clearHittedPeg();
     b2Vec2 getTrajectoryPoint(b2Vec2& startingPosition, b2Vec2& startingVelocity, float n);
