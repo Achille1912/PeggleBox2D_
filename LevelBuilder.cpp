@@ -58,7 +58,7 @@ void LevelBuilder::load(const QString& level_name)
 		Game::instance()->molt_x[0]->setPos(1344, 667);
 		Game::instance()->molt_x[1]->setPos(1344, 543);
 		Game::instance()->molt_x[2]->setPos(1344, 440);
-		Game::instance()->molt_x[3]->setPos(1344, 667);
+		Game::instance()->molt_x[3]->setPos(1344, 369);
 
 
 		Game::instance()->molt.resize(25);
