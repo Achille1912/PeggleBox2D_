@@ -6,6 +6,7 @@
 
 #include <random>
 #include <iostream>
+#include <set>
 
 
 using namespace PGG;
@@ -32,7 +33,7 @@ void LevelBuilder::load(const QString& level_name)
 		Game::instance()->remainingBallPixmap->setScale(1.8);
 		Game::instance()->fitInView(level, Qt::KeepAspectRatio);
 		Game::instance()->cannon = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("cannon")));
-		Game::instance()->cannon->setPos(Game::instance()->sceneRect().width() / 2, 300);
+		Game::instance()->cannon->setPos(Game::instance()->sceneRect().width() / 2, 230);
 		double screenHeight = Game::instance()->sceneRect().height();
 		Game::instance()->bandOne= Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("band")));
 		Game::instance()->bandOne->setZValue(-2);
@@ -65,15 +66,26 @@ void LevelBuilder::load(const QString& level_name)
 		for (int i = 0; i < 25; i++) {
 			Game::instance()->molt[i] = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("molt")));
 			Game::instance()->molt[i]->setScale(1.75);
-			Game::instance()->molt[i]->setPos(1325, 915 - (25 * i));
+			Game::instance()->molt[i]->setPos(1325, (915 - (25 * i)));
 			Game::instance()->molt[i]->setVisible(false);
 			Game::instance()->molt[i]->setZValue(-2);
 		}
-	
+
+		Game::instance()->paused = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("paused")));
+		Game::instance()->paused->setScale(1.5);
+		Game::instance()->paused->setPos(QPointF((720 - (Game::instance()->paused->boundingRect().width()/2 )), 540 - (Game::instance()->paused->boundingRect().height() / 2)));
+		Game::instance()->paused->setVisible(false);
+		Game::instance()->paused->setZValue(10);
+
+
+		Game::instance()->bjorn = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("unicorn")));
+		Game::instance()->bjorn->setScale(1.6);
+		Game::instance()->bjorn->setPos(660,70);
+
 
 
 	// CREATE PHYSICS WORLD
-		b2Vec2 gravity(0.0f, 6.0f);
+		b2Vec2 gravity(0.0f, 10.0f);
 		Game::instance()->setWorld2d(new b2World(gravity));
 		//MyContactListener myContactListenerInstance;
 		//Game::instance()->getWorld2d()->SetContactListener(&myContactListenerInstance);
@@ -83,23 +95,20 @@ void LevelBuilder::load(const QString& level_name)
 	// CREATE PEGS
 		Game::instance()->PegBox.resize(96);
 
-		std::random_device rd; // obtain a random number from hardware
-		std::mt19937 gen(rd()); // seed the generator
-		std::uniform_int_distribution<> distr(0, 95);
-		int randomRed[25];
+		std::set<int> randomRed;
+		while (randomRed.size() < 25)
+			randomRed.insert(rand() % 95);
 		
-		for (int i = 0; i < 25; i++)
-			randomRed[i] = (distr(gen));
 	
 			// Definition
 		b2BodyDef pegDef;
 		pegDef.type = b2_staticBody;
-		pegDef.linearDamping = 0.3;
+		pegDef.linearDamping = 0.2;
 
 			// Shape
 		b2CircleShape pegShape;
 		pegShape.m_p.Set(0, 0);
-		pegShape.m_radius = 0.4;
+		pegShape.m_radius = 0.5;
 
 			// Fixture
 		b2FixtureDef shapeFixtureDef;
@@ -118,7 +127,7 @@ void LevelBuilder::load(const QString& level_name)
 				k = 1;
 				j++;
 			}
-			if (isIn(i, randomRed))
+			if (randomRed.find(i) != randomRed.end())
 				color = PegColor::RED;
 			pegDef.position.Set((810 + (100 * k)) / 2 / 30.0, (330 + (120 * j)) / 30.0);
 			Game::instance()->PegBox[i] = Game::instance()->getWorld2d()->CreateBody(&pegDef);
@@ -140,7 +149,7 @@ void LevelBuilder::load(const QString& level_name)
 				k = 0;
 				j++;
 			}
-			if (isIn(i, randomRed))
+			if (randomRed.find(i) != randomRed.end())
 				color = PegColor::RED;
 			pegDef.position.Set((860 + (100 * k)) / 2 / 30.0, (390 + (120 * j)) / 30.0);
 			Game::instance()->PegBox[i] = Game::instance()->getWorld2d()->CreateBody(&pegDef);
@@ -229,12 +238,51 @@ void LevelBuilder::load(const QString& level_name)
 
 		// Fixture
 		b2FixtureDef panelFixture;
-		panelFixture.restitution = 0.2;
+		panelFixture.restitution = 0.6;
 		panelFixture.shape = &panelShape;
 		panelFixture.density = 50.0f;
 
 		realPanelLeft->CreateFixture(&panelFixture);
 		realPanelRight->CreateFixture(&panelFixture);
+
+
+		// CREATE PLATFORMS
+		b2PolygonShape shape;
+		b2BodyDef bd;
+		b2FixtureDef fdf;
+		bd.type = b2_staticBody;
+		shape.SetAsBox(161 / 30.0, .3 / 30.0);
+		fdf.shape = &shape;
+		fdf.restitution = 0.5;
+		fdf.density = 50;
+		// Left side
+		bd.position.Set(142/30.0, 475/30.0);
+		bd.angle = 20 * 3.14 / 180;
+		b2Body* bodyA = Game::instance()->getWorld2d()->CreateBody(&bd);
+		bodyA->CreateFixture(&fdf);
+
+		bd.position.Set(142 / 30.0, 610 / 30.0);
+		b2Body* bodyB = Game::instance()->getWorld2d()->CreateBody(&bd);
+		bodyB->CreateFixture(&fdf);
+
+		bd.position.Set(142 / 30.0, 740 / 30.0);
+		b2Body* bodyC = Game::instance()->getWorld2d()->CreateBody(&bd);
+		bodyC->CreateFixture(&fdf);
+
+		// Right side
+		bd.angle = -20 * 3.14 / 180;
+		
+		bd.position.Set(1295 / 30.0, 400 / 30.0);
+		b2Body* bodyD = Game::instance()->getWorld2d()->CreateBody(&bd);
+		bodyD->CreateFixture(&fdf);
+
+		bd.position.Set(1295 / 30.0, 540 / 30.0);
+		b2Body* bodyE = Game::instance()->getWorld2d()->CreateBody(&bd);
+		bodyE->CreateFixture(&fdf);
+
+		bd.position.Set(1295 / 30.0, 685 / 30.0);
+		b2Body* bodyF = Game::instance()->getWorld2d()->CreateBody(&bd);
+		bodyF->CreateFixture(&fdf);
 
 	}
 	else

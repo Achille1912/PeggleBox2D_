@@ -74,6 +74,8 @@ public:
     QGraphicsPixmapItem* cannon;
     int remainingBall = 9;
     QGraphicsPixmapItem* remainingBallPixmap;
+    QGraphicsPixmapItem* paused;
+    QGraphicsPixmapItem* bjorn;
 
     // getters
     b2World* getWorld2d() { return world2d; }

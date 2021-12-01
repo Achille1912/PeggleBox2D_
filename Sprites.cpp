@@ -111,6 +111,11 @@ QPixmap Sprites::get(const std::string &id)
         return sprites.copy(673, 364, 25, 20);
     else if (id == "molt-x10")
         return sprites.copy(673, 384, 25, 20);
+
+    else if (id == "paused")
+        return sprites.copy(700, 1258, 230, 59);
+    else if (id == "unicorn")
+        return loadTexture(":/sprites/scaricati/Peggle2PegglePS3LeftoverGraphic5.png").copy(520, 660, 60, 86);
     else
     {
         std::cerr << "Cannot find sprite texture with id \"" << id << "\"\n";
@@ -203,3 +208,6 @@ QPixmap Sprites::getScore(int s)
 
     return collage;
 }
+
+
+// score 325,794,23,30
