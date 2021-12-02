@@ -22,6 +22,5 @@ public:
 
     void advance(b2Body* box);
 
-    /*void startContact() { printf("Startttt"); }
-    void endContact() { printf("End"); }*/
+
 };
