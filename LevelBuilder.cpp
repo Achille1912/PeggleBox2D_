@@ -28,12 +28,13 @@ void LevelBuilder::load(const QString& level_name)
 		
 	// BACKGROUND
 		QGraphicsPixmapItem* level = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("Hud_Unicorn")));
+		Game::instance()->centerOn(level);
 		Game::instance()->remainingBallPixmap = Game::instance()->world()->addPixmap(Sprites::instance()->get("9"));
 		Game::instance()->remainingBallPixmap->setPos(QPoint(45, 180));
 		Game::instance()->remainingBallPixmap->setScale(1.8);
 		Game::instance()->fitInView(level, Qt::KeepAspectRatio);
 		Game::instance()->cannon = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("cannon")));
-		Game::instance()->cannon->setPos(Game::instance()->sceneRect().width() / 2, 230);
+		Game::instance()->cannon->setPos((Game::instance()->sceneRect().width() / 2)-20, 230);
 		double screenHeight = Game::instance()->sceneRect().height();
 		Game::instance()->bandOne= Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("band")));
 		Game::instance()->bandOne->setZValue(-2);
@@ -83,8 +84,8 @@ void LevelBuilder::load(const QString& level_name)
 		Game::instance()->bjorn->setPos(660,70);
 
 
-
-	// CREATE PHYSICS WORLD
+ // CREATE PHYSICS WORLD
+	//
 		b2Vec2 gravity(0.0f, 10.0f);
 		Game::instance()->setWorld2d(new b2World(gravity));
 		//MyContactListener myContactListenerInstance;
@@ -103,7 +104,7 @@ void LevelBuilder::load(const QString& level_name)
 			// Definition
 		b2BodyDef pegDef;
 		pegDef.type = b2_staticBody;
-		pegDef.linearDamping = 0.2;
+		pegDef.linearDamping =0;
 
 			// Shape
 		b2CircleShape pegShape;
@@ -167,7 +168,7 @@ void LevelBuilder::load(const QString& level_name)
 			// Definition
 		b2BodyDef ballDef;
 		ballDef.type = b2_dynamicBody;
-		ballDef.linearDamping = 0.1;
+		ballDef.linearDamping = 0;
 		ballDef.position.Set((Game::instance()->sceneRect().width() / 2) / 30.0, 0 / 30.0);
 
 		Game::instance()->setMasterPegBox(Game::instance()->getWorld2d()->CreateBody(&ballDef));
@@ -195,7 +196,7 @@ void LevelBuilder::load(const QString& level_name)
 		// Definition
 		b2BodyDef bucketDef;
 		bucketDef.type = b2_kinematicBody;
-		bucketDef.linearDamping = 0.1;
+		bucketDef.linearDamping = 0;
 		bucketDef.position.Set((Game::instance()->sceneRect().width() / 2) / 30.0, (screenHeight-50) / 30.0);
 		
 		Game::instance()->setBucketBox(Game::instance()->getWorld2d()->CreateBody(&bucketDef));
@@ -224,7 +225,7 @@ void LevelBuilder::load(const QString& level_name)
 		b2Body* realPanelLeft;
 		b2Body* realPanelRight;
 		panel.type = b2_staticBody;
-		panel.linearDamping = 0.1;
+		panel.linearDamping = 0;
 		panel.position.Set(0 / 30.0, 0 / 30.0);
 
 		realPanelLeft = Game::instance()->getWorld2d()->CreateBody(&panel);
