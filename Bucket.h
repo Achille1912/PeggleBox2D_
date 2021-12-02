@@ -21,4 +21,6 @@ public:
     Bucket(QPoint pos);
 
     void advance(b2Body* box);
+
+    void goal();
 };

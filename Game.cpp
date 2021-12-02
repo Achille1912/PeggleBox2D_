@@ -119,18 +119,17 @@ void Game::nextFrame()
   for (b2ContactEdge* edge = MasterPegBox->GetContactList(); edge; edge = edge->next)
     {
       
-      if (edge->contact->IsTouching()&& static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData())&& edge->contact->GetFixtureA()->GetBody()->GetType()==b2BodyType::b2_staticBody) {
+      if (edge->contact->IsTouching()&& static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData())) {
           // if is a Peg
-          Peg* tmp = static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData());
-          if (!tmp->getHitted()) {
-              if (bandOne->scenePos().y() >= 300) {
-                  bandOne->setY(bandOne->scenePos().y() - 5);
-                  bandTwo->setY(bandTwo->scenePos().y() - 5);
-              }
-
-              tmp->hit();
+          if (edge->contact->GetFixtureA()->GetBody()->GetType() == b2BodyType::b2_staticBody) {
+              Peg* tmp = static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData());
+              if (!tmp->getHitted())
+                  tmp->hit();
+           // if is Bucket
+          }else if (edge->contact->GetFixtureA()->GetBody()->GetType() == b2BodyType::b2_kinematicBody){
+              Bucket* tmp = static_cast<Bucket*>(edge->contact->GetFixtureA()->GetBody()->GetUserData());
+              tmp->goal();
           }
-        
 
       }
     }
@@ -150,14 +149,14 @@ void Game::nextFrame()
         MasterPegBox->SetLinearVelocity(b2Vec2(0, 0));
         MasterPegBox->SetAngularVelocity(0);
         world2d->SetGravity(b2Vec2(0, 0));
-        bandOne->setY(Game::instance()->height());
-        bandTwo->setY(Game::instance()->height());
+        bandOne->setY(924);
+        bandTwo->setY(924);
     }
     
 
     //bucket
     bucketGraphic->advance(BucketBox);
-    if (BucketBox->GetPosition().x >40)
+    if (BucketBox->GetPosition().x >32)
     {
         BucketBox->SetLinearVelocity(b2Vec2(-10, 0));
         
@@ -192,6 +191,8 @@ void Game::mousePressEvent(QMouseEvent* e)
         QPoint midPos((sceneRect().width() / 2), 0), currPos;
 
         currPos = QPoint(mapToScene(e->pos()).x(), mapToScene(e->pos()).y());
+        double t = pow((4*(-((currPos.y()-midPos.y())* (currPos.y() - midPos.y()))+1-((currPos.x()-midPos.x())* (currPos.x() - midPos.x())))),(1/4))/36;
+ 
         MasterPegBox->SetLinearVelocity(b2Vec2((currPos.x()-midPos.x())/50, (currPos.y()-midPos.y())/50));
   
     }
@@ -213,48 +214,19 @@ void Game::mouseReleaseEvent(QMouseEvent* e)
 
 void Game::mouseMoveEvent(QMouseEvent* e)
 {
-    QPoint midPos((sceneRect().width() / 2), 0), currPos;
+    QPointF midPos((sceneRect().width() / 2), 0), currPos;
 
     currPos = QPoint(mapToScene(e->pos()).x(), mapToScene(e->pos()).y());
     setMouseTracking(true);
-    /*QPoint midPos((sceneRect().width() / 2), 0), currPos;
-
-
-    QGraphicsLineItem* item;
-    item = new QGraphicsLineItem();
-    item->setPen(QPen(Qt::red));
-    
-    currPos = QPoint(mapToScene(e->pos()).x(), mapToScene(e->pos()).y());
-    
    
-    for (int i = 0; i < 600; i++) { // three seconds at 60fps
-        b2Vec2 trajectoryPosition = getTrajectoryPoint(b2Vec2(midPos.x(), 0.0), b2Vec2((currPos.x() - midPos.x())/50.0, (currPos.y() - midPos.y())/50.0 ), i);
-        pol.append(QPoint(trajectoryPosition.x, trajectoryPosition.y));
-    }
-    
-    myPath.addPolygon(pol);
-    world()->addPath(myPath, QPen(Qt::red, 2));
-    
-    pol.clear();*/
-    
-   
-   // item->setLine(QLineF(midPos, currPos));
-   // _world->addItem(item);
-
-    //    QPoint screenMiddle((sceneRect().width() / 2), 0);
-
-    //    QPainter painter(this);
-    //    QPen pen(Qt::red,10);
-    //    //p.setPen(pen);
-    //    painter.setPen(pen);
-
-
-    //    painter.drawLine(screenMiddle.x(), screenMiddle.y(), e->pos().x(), e->pos().y());
-    QPoint itemPos( cannon->scenePos().x()- (midPos.x()), ( cannon->scenePos().y()-midPos.y()));
-
-    double angle = atan2(currPos.y(), midPos.x()) - atan2(midPos.y(), currPos.x());
-    cannon->setTransformOriginPoint(midPos);
-    //cannon->setRotation(angle*180*3.14);
+    QPointF center(540,127);
+    QPointF itemPos((midPos.x() - cannon->scenePos().x()), (midPos.y() - cannon->scenePos().y()));
+    double dot = center.x() * currPos.x() + center.y() * currPos.y();  
+    double det = center.x() * currPos.x() - center.y() * currPos.y();
+    double angle = atan2(det, dot);
+   // double angle = atan2(currPos.y(), midPos.x()) - atan2(midPos.y(), currPos.x());
+    cannon->setTransformOriginPoint(cannon->mapToScene(center));
+    //cannon->setRotation(angle *180/3.14);
 }
 
 void Game::wheelEvent(QWheelEvent* e)
@@ -271,22 +243,14 @@ void Game::keyPressEvent(QKeyEvent* e)
     {
         play();
     }
-    if (e->key() == Qt::Key_P && _state == GameState::PLAYING)
+    if (e->key() == Qt::Key_P && (_state == GameState::PLAYING || _state == GameState::PAUSED))
     {
-        bandOne->setY(bandOne->scenePos().y() - 10);
-        bandTwo->setY(bandTwo->scenePos().y() - 10);
-        //togglePause();
+        togglePause();
     }
     if (e->key() == Qt::Key_R && _state == GameState::PLAYING)
     {
         reset();
         menuDuel();
-        
-        
-    }
-    if (e->key() == Qt::Key_C)
-    {
-        //toggleColliders();
     }
 }
 
@@ -301,16 +265,17 @@ void Game::togglePause()
 {
     if (_state == GameState::PLAYING)
     {
+        paused->setVisible(true);
         _engine.stop();
         _state = GameState::PAUSED;
     }
     else if (_state == GameState::PAUSED)
     {
+        paused->setVisible(false);
         _engine.start();
         _state = GameState::PLAYING;
     }
 }
-
 
 
 void Game::updateFPS()
@@ -388,10 +353,22 @@ void Game::clearHittedPeg() {
         Peg* tmp = static_cast<Peg*>(PegBox[i]->GetUserData());
         if (tmp->getHitted()) {
             tmp->setVisible(false);
-            //world2d->DestroyBody(PegBox[i]);
             PegBox[i]->DestroyFixture(PegBox[i]->GetFixtureList());
             
         }
     }
 
+}
+
+void Game::addMolt() {
+    _redPegHit++; 
+    molt[_redPegHit]->setVisible(true); 
+    if (_redPegHit == 9)
+        molt_x[0]->setVisible(true);
+    else if(_redPegHit == 14) 
+        molt_x[1]->setVisible(true);
+    else if (_redPegHit == 18)//18
+        molt_x[2]->setVisible(true);
+    else if (_redPegHit == 21)
+        molt_x[3]->setVisible(true);
 }
