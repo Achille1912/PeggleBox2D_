@@ -10,7 +10,7 @@ RESPONSABILITA':
 	-Hud				Nulla al momento
 	-MyContactListener		Nulla al momento
 	-Sounds				Gestione dei suoni
-	-Vec2D				Nulla al momento
+	
 
 
 suddivisione lavoro:

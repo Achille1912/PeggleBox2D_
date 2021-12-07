@@ -218,19 +218,13 @@ void Game::mouseMoveEvent(QMouseEvent* e)
 
     currPos = QPoint(mapToScene(e->pos()).x(), mapToScene(e->pos()).y());
     setMouseTracking(true);
-   
-    QPointF center(960,100);
-    //QPointF itemPos((midPos.x() - cannon->scenePos().x()), (midPos.y() - cannon->scenePos().y()));
-    double dot = center.x() * currPos.x() + center.y() * currPos.y();  
-    double det = center.x() * currPos.x() - center.y() * currPos.y();
-   //double angle = atan2(det, dot);
-    //double angle = atan2(currPos.y(), midPos.x()) - atan2(midPos.y(), currPos.x());
-    double angle = atanf((currPos.y() - center.y())/ (currPos.x() - center.x()));
-    cannon->setTransformOriginPoint(QPoint(0,-110));
-    cannon->setRotation((double)(angle*180.0/3.14)-90.0);
-    double angolo = (angle * 180.0 / 3.14) - 90.0;
-    printf("%f", angolo);
-    printf("\n");
+
+    QPointF center(720, 100);
+    QLineF v1(center, QPoint(720, 500));
+    QLineF v2(center, currPos);
+
+    cannon->setTransformOriginPoint(QPoint(30, -65));
+    cannon->setRotation(-v1.angleTo(v2));
 }
 
 void Game::wheelEvent(QWheelEvent* e)

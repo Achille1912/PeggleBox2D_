@@ -34,7 +34,8 @@ void LevelBuilder::load(const QString& level_name)
 		Game::instance()->remainingBallPixmap->setScale(1.8);
 		Game::instance()->fitInView(level, Qt::KeepAspectRatio);
 		Game::instance()->cannon = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("cannon")));
-		Game::instance()->cannon->setPos((Game::instance()->sceneRect().width() / 2)-20, 230);
+		Game::instance()->cannon->setScale(1.5);
+		Game::instance()->cannon->setPos((Game::instance()->sceneRect().width() / 2)-(32), 205);
 		double screenHeight = Game::instance()->sceneRect().height();
 		Game::instance()->bandOne= Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("band")));
 		Game::instance()->bandOne->setZValue(-2);
