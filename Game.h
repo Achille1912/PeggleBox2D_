@@ -30,7 +30,7 @@ enum class GameState
 // game parameters
 static int GAME_FPS = 60;
 
-static float timeStep = 1.0f / 60.0f;
+static float timeStep = 1.0f / 45.0f;
 static int32 velocityIterations = 8;
 static int32 positionIterations = 2;
 }
