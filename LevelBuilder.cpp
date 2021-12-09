@@ -87,7 +87,7 @@ void LevelBuilder::load(const QString& level_name)
 
  // CREATE PHYSICS WORLD
 	//
-		b2Vec2 gravity(0.0f, 10.0f);
+		b2Vec2 gravity(0.0f, 25.0f);
 		Game::instance()->setWorld2d(new b2World(gravity));
 		//MyContactListener myContactListenerInstance;
 		//Game::instance()->getWorld2d()->SetContactListener(&myContactListenerInstance);
@@ -114,7 +114,7 @@ void LevelBuilder::load(const QString& level_name)
 
 			// Fixture
 		b2FixtureDef shapeFixtureDef;
-		shapeFixtureDef.restitution = 1;
+		shapeFixtureDef.restitution = 0;
 		shapeFixtureDef.shape = &pegShape;
 		shapeFixtureDef.density = 13.0f;
 
@@ -185,7 +185,7 @@ void LevelBuilder::load(const QString& level_name)
 
 			// Fixture
 		b2FixtureDef ballFixtureDef;
-		ballFixtureDef.restitution = 0.2;
+		ballFixtureDef.restitution = 0.7;
 		ballFixtureDef.shape = &ballShape;
 		ballFixtureDef.density = 50.0f;
 
@@ -240,7 +240,7 @@ void LevelBuilder::load(const QString& level_name)
 
 		// Fixture
 		b2FixtureDef panelFixture;
-		panelFixture.restitution = 0.6;
+		panelFixture.restitution = 0;
 		panelFixture.shape = &panelShape;
 		panelFixture.density = 50.0f;
 
@@ -255,8 +255,8 @@ void LevelBuilder::load(const QString& level_name)
 		bd.type = b2_staticBody;
 		shape.SetAsBox(161 / 30.0, .3 / 30.0);
 		fdf.shape = &shape;
-		fdf.restitution = 0.5;
-		fdf.density = 50;
+		fdf.restitution =0;
+		fdf.density = 20.0;
 		// Left side
 		bd.position.Set(142/30.0, 475/30.0);
 		bd.angle = 20 * 3.14 / 180;

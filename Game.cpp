@@ -192,9 +192,10 @@ void Game::mousePressEvent(QMouseEvent* e)
 
         currPos = QPoint(mapToScene(e->pos()).x(), mapToScene(e->pos()).y());
         double t = pow((4*(-((currPos.y()-midPos.y())* (currPos.y() - midPos.y()))+1-((currPos.x()-midPos.x())* (currPos.x() - midPos.x())))),(1/4))/36;
- 
-        MasterPegBox->SetLinearVelocity(b2Vec2((currPos.x()-midPos.x())/50, (currPos.y()-midPos.y())/50));
-  
+        QVector2D p = QVector2D(currPos.x() - midPos.x(), currPos.y() - midPos.y());
+        p.normalize();
+        MasterPegBox->SetLinearVelocity(b2Vec2(p.x() * 12, p.y()*12));
+        
     }
 
     if (e->button() == Qt::RightButton)
