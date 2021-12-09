@@ -114,6 +114,7 @@ public:
     void addMolt();
     void printRemainingBall(int b);
     void clearHittedPeg();
+    void save();
     b2Vec2 getTrajectoryPoint(b2Vec2& startingPosition, b2Vec2& startingVelocity, float n);
 
 
