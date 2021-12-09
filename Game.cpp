@@ -6,12 +6,15 @@
 #include <QKeyEvent>
 #include <QIcon>
 #include <cmath>
-
+#include <qDebug>
 
 #include "Game.h"
 #include "Peg.h"
 #include "Bucket.h"
 #include "MasterPeg.h"
+#include "QJsonObject"
+#include "QJsonDocument"
+
 
 
 #include "Sounds.h"
@@ -244,6 +247,7 @@ void Game::keyPressEvent(QKeyEvent* e)
     }
     if (e->key() == Qt::Key_P && (_state == GameState::PLAYING || _state == GameState::PAUSED))
     {
+        save();
         togglePause();
     }
     if (e->key() == Qt::Key_R && _state == GameState::PLAYING)
@@ -370,4 +374,29 @@ void Game::addMolt() {
         molt_x[2]->setVisible(true);
     else if (_redPegHit == 21)
         molt_x[3]->setVisible(true);
+}
+
+void Game::save() {
+    QJsonObject recordObject;
+    recordObject.insert("RemainingBall", QJsonValue::fromVariant(remainingBall));
+    recordObject.insert("RedPegHit", QJsonValue::fromVariant(_redPegHit));
+
+    QJsonObject RemainingPeg;
+    for (int i = 0; i < PegBox.size(); i++) {
+        QJsonObject tmp;
+        tmp.insert("X", PegBox[i]->GetPosition().x);
+        tmp.insert("Y", PegBox[i]->GetPosition().y);
+        tmp.insert("Color", static_cast<Peg*>(PegBox[i]->GetUserData())->_color==PegColor::RED?true:false);
+        RemainingPeg.insert(QString::number(i), tmp);
+    }
+    recordObject.insert("RemainingPeg", RemainingPeg);
+
+ 
+    QJsonDocument doc(recordObject);
+    qDebug().noquote() << doc.toJson();
+
+    QFile file("C:/Users/achil/Desktop/Prova.json");
+    file.open(QFile::WriteOnly | QFile::Text | QFile::Truncate);
+    file.write(doc.toJson());
+    file.close();
 }
