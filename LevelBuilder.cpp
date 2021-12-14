@@ -87,7 +87,7 @@ void LevelBuilder::load(const QString& level_name)
 
  // CREATE PHYSICS WORLD
 	//
-		b2Vec2 gravity(0.0f, 25.0f);
+		b2Vec2 gravity(0.0f, 0.0f);
 		Game::instance()->setWorld2d(new b2World(gravity));
 		//MyContactListener myContactListenerInstance;
 		//Game::instance()->getWorld2d()->SetContactListener(&myContactListenerInstance);
@@ -190,9 +190,11 @@ void LevelBuilder::load(const QString& level_name)
 		ballFixtureDef.density = 50.0f;
 
 		Game::instance()->getMasterPegBox()->CreateFixture(&ballFixtureDef);
+		Game::instance()->getMasterPegBox()->SetLinearVelocity(b2Vec2(0, 0));
+		Game::instance()->getMasterPegBox()->SetAngularVelocity(0);
 
 
-	// CREATE MASTER PEG
+	// CREATE BUCKET
 
 		// Definition
 		b2BodyDef bucketDef;

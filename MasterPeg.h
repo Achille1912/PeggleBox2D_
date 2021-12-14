@@ -22,5 +22,5 @@ public:
 
     void advance(b2Body* box);
 
-
+    void moveTo(QPointF p) { this->setPos(p); }
 };

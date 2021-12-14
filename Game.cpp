@@ -225,7 +225,11 @@ void Game::mouseMoveEvent(QMouseEvent* e)
 
     QPointF center(720, 100);
     QLineF v1(center, QPoint(720, 500));
+
     QLineF v2(center, currPos);
+    v2.setLength(200.0);
+    //masterPegGraphic->moveTo(v2.p2());
+    MasterPegBox->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), MasterPegBox->GetAngle());
 
     cannon->setTransformOriginPoint(QPoint(30, -65));
     cannon->setRotation(-v1.angleTo(v2));
@@ -400,3 +404,4 @@ void Game::save() {
     file.write(doc.toJson());
     file.close();
 }
+
