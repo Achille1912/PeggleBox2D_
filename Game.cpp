@@ -148,8 +148,12 @@ void Game::nextFrame()
         remainingBall--;
         printf("%d",remainingBall);
         printRemainingBall(remainingBall);
+        QPointF center(720, 100);
 
-        MasterPegBox->SetTransform(b2Vec2((sceneRect().width() / 2) / 30.0, 0 / 30.0), MasterPegBox->GetAngle());
+
+        QLineF v2(center, QCursor::pos());
+        v2.setLength(200.0);
+        MasterPegBox->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), MasterPegBox->GetAngle());
         MasterPegBox->SetLinearVelocity(b2Vec2(0, 0));
         MasterPegBox->SetAngularVelocity(0);
         world2d->SetGravity(b2Vec2(0, 0));

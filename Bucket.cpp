@@ -28,7 +28,16 @@ void Bucket::goal() {
    
     Game::instance()->printRemainingBall(Game::instance()->remainingBall);
 
-    Game::instance()->getMasterPegBox()->SetTransform(b2Vec2((Game::instance()->sceneRect().width() / 2) / 30.0, 0 / 30.0), Game::instance()->getMasterPegBox()->GetAngle());
+
+    QPointF center(720, 100);
+   
+
+    QLineF v2(center, QCursor::pos());
+    v2.setLength(200.0);
+    if (!(Game::instance()->getMasterPegGraphic()->getFire())) {
+        Game::instance()->getMasterPegBox()->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), Game::instance()->getMasterPegBox()->GetAngle());
+        Game::instance()->getMasterPegGraphic()->setFire(false);
+    }
     Game::instance()->getMasterPegBox()->SetLinearVelocity(b2Vec2(0, 0));
     Game::instance()->getMasterPegBox()->SetAngularVelocity(0);
     Game::instance()->Game::instance()->getWorld2d()->SetGravity(b2Vec2(0, 0));
