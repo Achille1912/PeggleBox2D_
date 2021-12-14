@@ -143,6 +143,7 @@ void Game::nextFrame()
 
     if (MasterPegBox->GetPosition().y > 35)
     {
+        masterPegGraphic->setFire(false);
         clearHittedPeg();
         remainingBall--;
         printf("%d",remainingBall);
@@ -190,6 +191,7 @@ void Game::mousePressEvent(QMouseEvent* e)
 
     if (e->button()==Qt::LeftButton && _state==GameState::PLAYING)
     {
+        masterPegGraphic->setFire(true);
         world2d->SetGravity(b2Vec2(0, 6.0f));
         QPoint midPos((sceneRect().width() / 2), 0), currPos;
 
@@ -228,8 +230,8 @@ void Game::mouseMoveEvent(QMouseEvent* e)
 
     QLineF v2(center, currPos);
     v2.setLength(200.0);
-    //masterPegGraphic->moveTo(v2.p2());
-    MasterPegBox->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), MasterPegBox->GetAngle());
+    if(!masterPegGraphic->getFire())
+        MasterPegBox->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), MasterPegBox->GetAngle());
 
     cannon->setTransformOriginPoint(QPoint(30, -65));
     cannon->setRotation(-v1.angleTo(v2));
