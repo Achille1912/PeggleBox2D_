@@ -30,7 +30,7 @@ enum class GameState
 // game parameters
 static int GAME_FPS = 60;
 
-static float timeStep = 1.0f / 45.0f;
+static float timeStep = 1.0f / 40.0f;
 static int32 velocityIterations = 8;
 static int32 positionIterations = 2;
 }
@@ -116,6 +116,7 @@ public:
     void clearHittedPeg();
     void save();
     b2Vec2 getTrajectoryPoint(b2Vec2& startingPosition, b2Vec2& startingVelocity, float n);
+   
 
 
     // event handlers
