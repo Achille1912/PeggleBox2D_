@@ -16,11 +16,13 @@ namespace PGG
 class PGG::MasterPeg : public QGraphicsPixmapItem
 {
 private:
-    
+    bool _fire=false;
 public:
     MasterPeg(QPoint pos);
 
     void advance(b2Body* box);
 
-    void moveTo(QPointF p) { this->setPos(p); }
+    void setFire(bool b) { _fire = b; }
+    bool getFire() { return _fire; }
+
 };

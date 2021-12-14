@@ -190,6 +190,7 @@ void Game::mousePressEvent(QMouseEvent* e)
 
     if (e->button()==Qt::LeftButton && _state==GameState::PLAYING)
     {
+        masterPegGraphic->setFire(true);
         world2d->SetGravity(b2Vec2(0, 6.0f));
         QPoint midPos((sceneRect().width() / 2), 0), currPos;
 
