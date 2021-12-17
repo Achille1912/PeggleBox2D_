@@ -11,6 +11,7 @@
 	    <file>sprites/Peggle_Fonts.png</file>
 	    <file>sprites/sprites.png</file>
 	    <file>sprites/scaricati/Peggle2PegglePS3LeftoverGraphic5.png</file>
+		<file>sounds/peghit.wav</file>
         
     </qresource>
     </RCC>

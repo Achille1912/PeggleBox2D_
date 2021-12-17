@@ -1,5 +1,6 @@
 #include "Peg.h"
 #include "Game.h"
+#include "Sounds.h"
 #include "Sprites.h"
 
 using namespace PGG;
@@ -18,6 +19,8 @@ Peg::Peg(QPoint pos, PegColor color= PegColor::BLUE): QGraphicsPixmapItem(0)
 
 
 void Peg::hit() {
+	QSound::play("sounds/peghit.wav");
+	//Sounds::instance()->play("peghit");
 	_hitted = true;
 	//Game::instance()->Hudd()->addScore(10, pos());
 	if (_color == PegColor::BLUE) {
@@ -38,7 +41,7 @@ void Peg::hit() {
 		}
 	}
 
-	printf("Score: ");
+	/*printf("Score: ");
 	printf("%d", Game::instance()->getScore());
-	printf("\n");
+	printf("\n");*/
 }
