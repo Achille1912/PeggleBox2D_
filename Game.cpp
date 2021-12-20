@@ -84,6 +84,15 @@ void Game::init()
     _world->addPixmap(QPixmap(Sprites::instance()->get("peggle_title")));
 }
 
+void Game::mode()
+{
+    _world->clear();
+    _state = GameState::MENU_DUEL;
+    showNormal();
+    fitInView(_world->addPixmap(QPixmap(Sprites::instance()->get("main_menu"))), Qt::KeepAspectRatio);
+
+}
+
 void Game::menuDuel()
 {
     _world->clear();
@@ -112,6 +121,7 @@ void Game::play() //in gioco
     //ENGINE START
 
     _state = GameState::PLAYING;
+    setMouseTracking(true);
 }
 
 void Game::nextFrame()
@@ -131,7 +141,7 @@ void Game::nextFrame()
            // if is Bucket
           }else if (edge->contact->GetFixtureA()->GetBody()->GetType() == b2BodyType::b2_kinematicBody){
               Bucket* tmp = static_cast<Bucket*>(edge->contact->GetFixtureA()->GetBody()->GetUserData());
-              tmp->goal();
+              //tmp->goal();
           }
 
       }
@@ -139,41 +149,64 @@ void Game::nextFrame()
 
     //master peg
    
-    masterPegGraphic->advance(MasterPegBox);
+    if(!simulation)
+        masterPegGraphic->advance(MasterPegBox);
 
     if (MasterPegBox->GetPosition().y > 35)
     {
-        masterPegGraphic->setFire(false);
-        clearHittedPeg();
-        remainingBall--;
-        printf("%d",remainingBall);
-        printRemainingBall(remainingBall);
-        QPointF center(720, 100);
+        if (!simulation) {
+            masterPegGraphic->setFire(false);
+            clearHittedPeg();
+            remainingBall--;
+
+            printRemainingBall(remainingBall);
+            QPointF center(720, 100);
 
 
-        QLineF v2(center, QCursor::pos());
-        v2.setLength(200.0);
-        MasterPegBox->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), MasterPegBox->GetAngle());
-        MasterPegBox->SetLinearVelocity(b2Vec2(0, 0));
-        MasterPegBox->SetAngularVelocity(0);
-        world2d->SetGravity(b2Vec2(0, 0));
-        bandOne->setY(924);
-        bandTwo->setY(924);
+            QLineF v2(center, QCursor::pos());
+            v2.setLength(200.0);
+            MasterPegBox->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), MasterPegBox->GetAngle());
+            MasterPegBox->SetLinearVelocity(b2Vec2(0, 0));
+            MasterPegBox->SetAngularVelocity(0);
+            world2d->SetGravity(b2Vec2(0, 0));
+            bandOne->setY(924);
+            bandTwo->setY(924);
+            //simulation = true;
+        }
+        else {
+            QPointF center(720, 100);
+            QLineF v2(center, QCursor::pos());
+            v2.setLength(200.0);
+            MasterPegBox->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), MasterPegBox->GetAngle());
+            MasterPegBox->SetLinearVelocity(b2Vec2(0, 0));
+            MasterPegBox->SetAngularVelocity(0);
+            world2d->SetGravity(b2Vec2(0, 0));
+            alpha--;
+            if (alpha < -90) {
+                printf("Finitooo");
+            }
+            else {
+                //load
+                fire(alpha);
+            }
+           
+        }
     }
     
 
     //bucket
-    bucketGraphic->advance(BucketBox);
-    if (BucketBox->GetPosition().x >32)
-    {
-        BucketBox->SetLinearVelocity(b2Vec2(-10, 0));
-        
+    if (!simulation) {
+        bucketGraphic->advance(BucketBox);
+        if (BucketBox->GetPosition().x > 32)
+        {
+            BucketBox->SetLinearVelocity(b2Vec2(-10, 0));
+
+        }
+        else if (BucketBox->GetPosition().x < 5)
+        {
+            BucketBox->SetLinearVelocity(b2Vec2(10, 0));
+        }
     }
-    else if (BucketBox->GetPosition().x < 5)
-    {
-        BucketBox->SetLinearVelocity(b2Vec2(10, 0));
-    }
-    
 }
 
 
@@ -190,17 +223,17 @@ void Game::mousePressEvent(QMouseEvent* e)
     if (_state == GameState::MENU_DUEL)
     {
         play();
+        //mode();
         return;
     }
 
     if (e->button()==Qt::LeftButton && _state==GameState::PLAYING)
     {
         masterPegGraphic->setFire(true);
-        world2d->SetGravity(b2Vec2(0, 6.0f));
+        world2d->SetGravity(b2Vec2(0, 25.0f));
         QPoint midPos((sceneRect().width() / 2), 0), currPos;
 
         currPos = QPoint(mapToScene(e->pos()).x(), mapToScene(e->pos()).y());
-        double t = pow((4*(-((currPos.y()-midPos.y())* (currPos.y() - midPos.y()))+1-((currPos.x()-midPos.x())* (currPos.x() - midPos.x())))),(1/4))/36;
         QVector2D p = QVector2D(currPos.x() - midPos.x(), currPos.y() - midPos.y());
         p.normalize();
         MasterPegBox->SetLinearVelocity(b2Vec2(p.x() * 12, p.y()*12));
@@ -234,6 +267,8 @@ void Game::mouseMoveEvent(QMouseEvent* e)
 
     QLineF v2(center, currPos);
     v2.setLength(200.0);
+    //world()->addLine(v2, QPen(Qt::red));
+    
     if(!masterPegGraphic->getFire())
         MasterPegBox->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), MasterPegBox->GetAngle());
 
@@ -264,6 +299,11 @@ void Game::keyPressEvent(QKeyEvent* e)
     {
         reset();
         menuDuel();
+    }
+    if (e->key() == Qt::Key_A && _state == GameState::PLAYING)
+    {
+        //AI();
+        fire(90);
     }
 }
 
@@ -411,3 +451,47 @@ void Game::save() {
     file.close();
 }
 
+void Game::load() {
+    QFile file("Prova.json");
+
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(file.readAll());
+    _redPegHit=jsonDoc.
+
+}
+
+void Game::AI() {
+    //simulation = true;
+    //save();
+    float m = 0;
+    for (int alfa = -90; alfa < 90; alfa++) {
+        m = fire(alfa);
+    }
+}
+float Game::fire(float alfa) {
+    // -90 == 0
+
+    _engine.setInterval(0.001);
+    printf("Ciaoo");
+    simulation = true;
+    alfa = alfa-90;
+    QPoint midPos((sceneRect().width() / 2), 130);
+
+    QLineF p = QLineF(midPos, QPointF((sceneRect().width() / 2), 300));
+    QLineF c = p;
+   world()->addLine(p, QPen(Qt::blue));
+    p.setAngle(alfa);
+   
+
+   world()->addLine(p, QPen(Qt::red));
+
+
+   /* cannon->setTransformOriginPoint(QPoint(30, -65));
+    cannon->setRotation(-c.angleTo(p));
+    if (!masterPegGraphic->getFire())
+        MasterPegBox->SetTransform(b2Vec2(p.p2().x() / 30.0, p.p2().y() / 30.0), MasterPegBox->GetAngle());*/
+    MasterPegBox->SetLinearVelocity(b2Vec2(p.x2() * 0.05, p.y2() * 0.05));
+    world2d->SetGravity(b2Vec2(0, 25.0f));
+    masterPegGraphic->setFire(true);
+
+    return alfa+90;
+}

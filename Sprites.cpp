@@ -56,6 +56,10 @@ QPixmap Sprites::get(const std::string &id)
     else if (id == "Hud_Unicorn")
         return Hud_Unicorn;
 
+    else if (id == "main_menu")
+        return loadTexture(":/sprites/main_menu.png", QColor(255, 0, 255));
+
+
     else if (id == "player")
         return sprites.copy(403, 82, 9, 12);
     else if (id == "bucket")

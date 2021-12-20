@@ -30,9 +30,11 @@ enum class GameState
 // game parameters
 static int GAME_FPS = 60;
 
-static float timeStep = 1.0f / 40.0f;
+static float timeStep = 1.0f / 60.0f;
 static int32 velocityIterations = 8;
 static int32 positionIterations = 2;
+
+static float alpha = 90;
 }
 
 class PGG::Game : public QGraphicsView
@@ -115,8 +117,10 @@ public:
     void printRemainingBall(int b);
     void clearHittedPeg();
     void save();
+    void load();
     b2Vec2 getTrajectoryPoint(b2Vec2& startingPosition, b2Vec2& startingVelocity, float n);
-   
+    float fire(float alfa);
+    bool simulation = false;
 
 
     // event handlers
@@ -132,11 +136,14 @@ public slots:
 
     void init();
     void reset();
+    void mode();
     void menuDuel();
 
     void buildLevel();
     void play();
     void nextFrame();
+
+    void AI();
 
     void togglePause();
 
