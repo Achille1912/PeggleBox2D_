@@ -131,7 +131,7 @@ void LevelBuilder::load(const QString& level_name)
 			}
 			if (randomRed.find(i) != randomRed.end())
 				color = PegColor::RED;
-			pegDef.position.Set((810 + (100 * k)) / 2 / 30.0, (330 + (120 * j)) / 30.0);
+			pegDef.position.Set((810 + (100 * k)) / 2 / 30.0, (360 + (120 * j)) / 30.0);
 			Game::instance()->PegBox[i] = Game::instance()->getWorld2d()->CreateBody(&pegDef);
 
 			Game::instance()->setPegGraphic( new Peg(QPoint(pegDef.position.x * 30.0, (pegDef.position.y * 30.0)), color));
@@ -153,7 +153,7 @@ void LevelBuilder::load(const QString& level_name)
 			}
 			if (randomRed.find(i) != randomRed.end())
 				color = PegColor::RED;
-			pegDef.position.Set((860 + (100 * k)) / 2 / 30.0, (390 + (120 * j)) / 30.0);
+			pegDef.position.Set((860 + (100 * k)) / 2 / 30.0, (420 + (120 * j)) / 30.0);
 			Game::instance()->PegBox[i] = Game::instance()->getWorld2d()->CreateBody(&pegDef);
 
 			Game::instance()->setPegGraphic( new Peg(QPoint(pegDef.position.x * 30.0, (pegDef.position.y * 30.0)), color));

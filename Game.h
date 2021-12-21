@@ -4,6 +4,7 @@
 #include <QTimer>
 #include <QLabel>
 #include <QPainterPath>
+#include <Map>
 
 #include "Bucket.h"
 #include "Hud.h"
@@ -34,7 +35,7 @@ static float timeStep = 1.0f / 60.0f;
 static int32 velocityIterations = 8;
 static int32 positionIterations = 2;
 
-static float alpha = 90;
+
 }
 
 class PGG::Game : public QGraphicsView
@@ -120,8 +121,10 @@ public:
     void load();
     b2Vec2 getTrajectoryPoint(b2Vec2& startingPosition, b2Vec2& startingVelocity, float n);
     float fire(float alfa);
+    int alpha = 89;
     bool simulation = false;
-
+    int _simulationScore=0;
+    std::vector < std::tuple< int, int > >simulationScore;
 
     // event handlers
     virtual void mousePressEvent(QMouseEvent *e) override;

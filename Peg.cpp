@@ -44,10 +44,10 @@ void Peg::hit() {
 	}
 	else {
 		if (_color == PegColor::BLUE) {
-			Game::instance()->setScore(Game::instance()->getScore() + 100);
+			Game::instance()->_simulationScore+=100;
 		}
 		else {
-			Game::instance()->setScore(Game::instance()->getScore() + 200);
+			Game::instance()->_simulationScore += 200;
 		}
 	}
 
