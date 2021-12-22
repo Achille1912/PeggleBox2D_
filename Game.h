@@ -12,6 +12,7 @@
 #include "Peg.h"
 #include "LevelBuilder.h"
 #include "Hud.h"
+#include "Button.h"
 
 #include "box2d/include/box2d/b2_settings.h"
 #include "box2d/include/box2d/box2d.h"
@@ -22,7 +23,8 @@ class Game;
 
 enum class GameState
 {
-    MENU_DUEL,
+    TITLE,
+    MODE,
     PLAYING,
     PAUSED,
     //gameover
@@ -118,7 +120,8 @@ public:
     void printRemainingBall(int b);
     void clearHittedPeg();
     void save();
-    void load();
+    Button* single_button;
+
     b2Vec2 getTrajectoryPoint(b2Vec2& startingPosition, b2Vec2& startingVelocity, float n);
     float fire(float alfa, bool b);
     int alpha = 89;
@@ -146,7 +149,6 @@ public slots:
     void play();
     void nextFrame();
 
-    void AI();
 
     void togglePause();
 

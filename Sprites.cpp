@@ -46,6 +46,7 @@ Sprites::Sprites() //load in RAM
     peggles = loadTexture(":/sprites/peggles.png", QColor(255, 255, 255));
     fonts = loadTexture(":/sprites/Peggle_Fonts.png");
     sprites = loadTexture(":/sprites/sprites.png");
+    gameMode_buttons = loadTexture(":/sprites/gameMode_buttons.png", QColor(255, 255, 255));
 }
 
 QPixmap Sprites::get(const std::string &id)
@@ -56,8 +57,15 @@ QPixmap Sprites::get(const std::string &id)
     else if (id == "Hud_Unicorn")
         return Hud_Unicorn;
 
-    else if (id == "main_menu")
-        return loadTexture(":/sprites/main_menu.png", QColor(255, 0, 255));
+    else if (id == "gameMode")
+        return loadTexture(":/sprites/gameMode.png", QColor(255, 0, 255));
+    else if (id == "single_button")
+        return gameMode_buttons.copy(QRect(0,254,211,127));
+    else if (id == "duel_button")
+        return gameMode_buttons.copy(QRect(0, 128, 211, 127));
+    else if (id == "cpu_button")
+        return gameMode_buttons.copy(QRect(0, 0, 211, 127));
+
 
 
     else if (id == "player")

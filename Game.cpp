@@ -17,6 +17,7 @@
 #include "MasterPeg.h"
 #include "QJsonObject"
 #include "QJsonDocument"
+#include "Button.h"
 
 
 
@@ -90,26 +91,28 @@ void Game::init()
     //altro
 
     _world->addPixmap(QPixmap(Sprites::instance()->get("peggle_title")));
+    _state = GameState::TITLE;
 }
 
 void Game::mode()
 {
     _world->clear();
-    _state = GameState::MENU_DUEL;
-    showNormal();
-    fitInView(_world->addPixmap(QPixmap(Sprites::instance()->get("main_menu"))), Qt::KeepAspectRatio);
+    _state = GameState::MODE;
 
+    fitInView(_world->addPixmap(QPixmap(Sprites::instance()->get("gameMode"))), Qt::KeepAspectRatio);
+     single_button = new Button(QRect(100, 200,300 ,150), ButtonType::SINGLE);
+    Button* duel_button = new Button(QRect(370, 200, 300, 150), ButtonType::DUEL);
+    Button* cpu_button = new Button(QRect(650, 200, 300, 150), ButtonType::CPU);
+    showNormal();
 }
 
 void Game::menuDuel()
 {
     _world->clear();
-    _state = GameState::MENU_DUEL;
+    _state = GameState::TITLE;
     showNormal();
     fitInView(_world->addPixmap(QPixmap(Sprites::instance()->get("peggle_title"))), Qt::KeepAspectRatio);
 
-    //dopo aver scelto tutti i parametri del duello
-    //click sulla apposito bottone per andare in PLAYING
 }
 
 void Game::buildLevel()
@@ -121,19 +124,22 @@ void Game::buildLevel()
 
 void Game::play() //in gioco
 {
+    
     showFullScreen();
+    
 
     buildLevel();
+    
     _engine.start();
-
-    //ENGINE START
-
+   
     _state = GameState::PLAYING;
     setMouseTracking(true);
+    
 }
 
 void Game::nextFrame()
 {
+    
     world2d->Step(timeStep, velocityIterations, positionIterations); //sarebbe l'advance
 
     
@@ -265,19 +271,19 @@ void Game::nextFrame()
 // EVENTI
 void Game::mousePressEvent(QMouseEvent* e)
 {
+   
     if (!simulation) {
-        if (_state != GameState::PLAYING && _state != GameState::PAUSED && _state != GameState::MENU_DUEL)
+        if (_state ==GameState::TITLE)
         {
-            menuDuel();
+            mode();
             return;
         }
 
-        if (_state == GameState::MENU_DUEL)
+        if (_state == GameState::MODE)
         {
             play();
-            //mode();
-            return;
         }
+
 
         if (e->button() == Qt::LeftButton && _state == GameState::PLAYING)
         {
@@ -298,7 +304,7 @@ void Game::mousePressEvent(QMouseEvent* e)
             world2d->SetGravity(b2Vec2(0, 10.0f));
         }
     }
-
+    
 }
 
 void Game::mouseReleaseEvent(QMouseEvent* e)
@@ -310,24 +316,26 @@ void Game::mouseReleaseEvent(QMouseEvent* e)
 
 void Game::mouseMoveEvent(QMouseEvent* e)
 {
-    if (!simulation) {
-        QPointF midPos((sceneRect().width() / 2), 0), currPos;
+    if (_state==GameState::PLAYING ){
+        if (!simulation) {
+            QPointF midPos((sceneRect().width() / 2), 0), currPos;
 
-        currPos = QPoint(mapToScene(e->pos()).x(), mapToScene(e->pos()).y());
-        setMouseTracking(true);
+                currPos = QPoint(mapToScene(e->pos()).x(), mapToScene(e->pos()).y());
+                setMouseTracking(true);
 
-        QPointF center(720, 100);
-        QLineF v1(center, QPoint(720, 500));
+                QPointF center(720, 100);
+                QLineF v1(center, QPoint(720, 500));
 
-        QLineF v2(center, currPos);
-        v2.setLength(200.0);
-        //world()->addLine(v2, QPen(Qt::red));
+                QLineF v2(center, currPos);
+                v2.setLength(200.0);
+            //world()->addLine(v2, QPen(Qt::red));
 
-        if (!masterPegGraphic->getFire())
-            MasterPegBox->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), MasterPegBox->GetAngle());
+            if (!masterPegGraphic->getFire())
+                MasterPegBox->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), MasterPegBox->GetAngle());
 
-        cannon->setTransformOriginPoint(QPoint(30, -65));
-        cannon->setRotation(-v1.angleTo(v2));
+            cannon->setTransformOriginPoint(QPoint(30, -65));
+            cannon->setRotation(-v1.angleTo(v2));
+        }
     }
 }
 
@@ -341,7 +349,7 @@ void Game::wheelEvent(QWheelEvent* e)
 
 void Game::keyPressEvent(QKeyEvent* e)
 {
-    if (e->key() == Qt::Key_S && _state == GameState::MENU_DUEL)
+    if (e->key() == Qt::Key_S && _state == GameState::TITLE)
     {
         play();
     }
@@ -511,27 +519,6 @@ void Game::save() {
     file.close();
 }
 
-void Game::load() {
-   /* QFile file("Prova.json");
-
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(file.readAll());
-  
-    
-    QJsonObject rootObject = jsonDoc.object();
-    QJsonObject obj1Data = rootObject["obj1"].toObject();
-    QJsonArray arrayData = obj1Data["array"].toArray();
-    QString description = arrayData[1].toObject()["description"].toString();
-    qDebug() << description;*/
-}
-
-void Game::AI() {
-    //simulation = true;
-    //save();
-    float m = 0;
-    for (int alfa = -90; alfa < 90; alfa++) {
-        m = fire(alfa, false);
-    }
-}
 float Game::fire(float alfa, bool b) {
     if (b) {
 

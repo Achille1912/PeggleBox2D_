@@ -13,7 +13,9 @@
 	<file>sprites/scaricati/Peggle2PegglePS3LeftoverGraphic5.png</file>
 	<file>sprites/choose_character.png</file>
 	<file>sprites/mainMenu.png</file>
-
+	<file>sprites/gameMode.png</file>
+	<file>sprites/gameMode_buttons.png</file>
+	
 	<file>sounds/peghit.wav</file>
         
     </qresource>
