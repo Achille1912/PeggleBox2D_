@@ -24,8 +24,9 @@ public:
     ButtonType _buttonType;
     Button(QRect pos, ButtonType bt);
 
-
+    
     // override
     virtual void mousePressEvent(QMouseEvent* e) override;
-  
+    bool eventFilter(QObject* object, QEvent* event) override;
+
 };

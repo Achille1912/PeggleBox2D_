@@ -25,14 +25,24 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 	Game::instance()->world()->addWidget(this);
 }
 
+bool Button::eventFilter(QObject* object, QEvent* event)
+{
+	printf("Catturato");
+	if (object == Game::instance() && event->type() == QEvent::GraphicsSceneMousePress) {
+		QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+		printf("Catturato");
+		return true;
+	}
+	return false;
+}
 
  void Button::mousePressEvent(QMouseEvent* e) {
-	 
+	 printf("Ciao");
 	 if (_buttonType == ButtonType::SINGLE) {
-		 Game::instance()->play();
+		 printf("Ciao");
 	 }
 	 else if (_buttonType == ButtonType::DUEL) {
-		 printf("Ciaoo");
+		 Game::instance()->play();
 	 }
 	 else if (_buttonType == ButtonType::CPU) {
 		 printf("Ciaoo");
