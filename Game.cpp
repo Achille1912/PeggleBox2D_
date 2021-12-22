@@ -27,6 +27,7 @@
 #include "box2d/include/box2d/box2d.h"
 
 using namespace PGG;
+int ciao = -45;
 
 bool sortbysec(const std::tuple<int, int>& a,
     const std::tuple<int, int>& b)
@@ -178,7 +179,7 @@ void Game::nextFrame()
             world2d->SetGravity(b2Vec2(0, 0));
             bandOne->setY(924);
             bandTwo->setY(924);
-            //simulation = true;
+            
         }
         else {
             QPointF center(720, 100);
@@ -192,7 +193,7 @@ void Game::nextFrame()
             if (alpha < -89) {
                 
                 printf("Finitooo");
-                _engine.setInterval(1000 / GAME_FPS);
+                _engine.setInterval(1000/GAME_FPS);
                 masterPegGraphic->setFire(false);
                 BucketBox->SetTransform(b2Vec2((sceneRect().width() / 2) / 30.0, (Game::instance()->sceneRect().height() - 530) / 30.0), MasterPegBox->GetAngle());
 
@@ -211,21 +212,22 @@ void Game::nextFrame()
 
                     QPoint midPos((sceneRect().width() / 2), 130);
 
-                    QLineF p = QLineF(midPos, QPointF((sceneRect().width() / 2), 300));
+                    QLineF p = QLineF(midPos, QPointF((sceneRect().width() / 2), 500));
+                    QLineF f = QLineF(midPos, QPointF((sceneRect().width() / 2), 300));
                     QLineF c = p;
                    
                     printf("%d", std::get<0>(simulationScore[176]));
 
                     p.setAngle((std::get<0>(simulationScore[176])));
-                    
+                    f.setAngle((std::get<0>(simulationScore[176])));
+                    ciao = (std::get<0>(simulationScore[176]));
                     cannon->setTransformOriginPoint(QPoint(30, -65));
                     cannon->setRotation(-c.angleTo(p));
                     if (!masterPegGraphic->getFire())
-                        MasterPegBox->SetTransform(b2Vec2(p.p2().x() / 30.0, p.p2().y() / 30.0), MasterPegBox->GetAngle());
-                    MasterPegBox->SetLinearVelocity(b2Vec2(p.x2() * 0.05, p.y2() * 0.05));
-                    world2d->SetGravity(b2Vec2(0, 25.0f));
+                        MasterPegBox->SetTransform(b2Vec2(f.p2().x() / 30.0, f.p2().y() / 30.0), MasterPegBox->GetAngle());
+                    MasterPegBox->SetLinearVelocity(b2Vec2((p.dx() - (MasterPegBox->GetPosition().x / 30.0)) * 0.05, (p.dy() - (MasterPegBox->GetPosition().y) / 30.0) * 0.05));
                     masterPegGraphic->setFire(true);
-
+                    world2d->SetGravity(b2Vec2(0, 25.0f));
                     
                     
                     world()->addLine(p, QPen(Qt::green));
@@ -235,7 +237,7 @@ void Game::nextFrame()
             else {
                 simulationScore.emplace_back(alpha-90, _simulationScore);
                 _simulationScore = 0;
-                fire(alpha);
+                fire(alpha,false);
                
             }
            
@@ -356,12 +358,12 @@ void Game::keyPressEvent(QKeyEvent* e)
     if (e->key() == Qt::Key_A && _state == GameState::PLAYING)
     {
         alpha = 89;
-        fire(90);
+        fire(90, false);
     }
     if (e->key() == Qt::Key_Z && _state == GameState::PLAYING)
     {
      
-        fire(-1);
+        fire(ciao, true);
     }
 }
 
@@ -527,19 +529,22 @@ void Game::AI() {
     //save();
     float m = 0;
     for (int alfa = -90; alfa < 90; alfa++) {
-        m = fire(alfa);
+        m = fire(alfa, false);
     }
 }
-float Game::fire(float alfa) {
-    if (alfa == -1) {
+float Game::fire(float alfa, bool b) {
+    if (b) {
+
         _engine.setInterval(100);
+       
         QPoint midPos((sceneRect().width() / 2), 130);
 
-        QLineF p = QLineF(midPos, QPointF((sceneRect().width() / 2), 300));
+        QLineF p = QLineF(midPos, QPointF((sceneRect().width() / 2), 500));
+        QLineF f = QLineF(midPos, QPointF((sceneRect().width() / 2), 300));
         QLineF c = p;
         world()->addLine(p, QPen(Qt::blue));
-        p.setAngle(-45-90);
-
+        p.setAngle(alfa);
+        f.setAngle(alfa);
 
         world()->addLine(p, QPen(Qt::red));
 
@@ -547,27 +552,29 @@ float Game::fire(float alfa) {
         cannon->setTransformOriginPoint(QPoint(30, -65));
         cannon->setRotation(-c.angleTo(p));
         if (!masterPegGraphic->getFire())
-            MasterPegBox->SetTransform(b2Vec2(p.p2().x() / 30.0, p.p2().y() / 30.0), MasterPegBox->GetAngle());
-        MasterPegBox->SetLinearVelocity(b2Vec2(p.x2() * 0.05, p.y2() * 0.05));
-        //MasterPegBox->ApplyForceToCenter(b2Vec2(p.x2() , p.y2() ), true);
+            MasterPegBox->SetTransform(b2Vec2(f.p2().x() / 30.0, f.p2().y() / 30.0), MasterPegBox->GetAngle());
+        MasterPegBox->SetLinearVelocity(b2Vec2((p.dx() - (MasterPegBox->GetPosition().x / 30.0)) * 0.05, (p.dy() - (MasterPegBox->GetPosition().y) / 30.0) * 0.05));
         world2d->SetGravity(b2Vec2(0, 25.0f));
         masterPegGraphic->setFire(true);
+
+        
 
     }
     else {
         // -90 == 0
 
-        _engine.setInterval(0.001);
+        _engine.setInterval(0.1);
 
         simulation = true;
         alfa = alfa - 90;
         QPoint midPos((sceneRect().width() / 2), 130);
 
-        QLineF p = QLineF(midPos, QPointF((sceneRect().width() / 2), 300));
+        QLineF p = QLineF(midPos, QPointF((sceneRect().width() / 2), 500));
+        QLineF f = QLineF(midPos, QPointF((sceneRect().width() / 2), 300));
         QLineF c = p;
         world()->addLine(p, QPen(Qt::blue));
         p.setAngle(alfa);
-
+        f.setAngle(alfa);
 
         world()->addLine(p, QPen(Qt::red));
 
@@ -575,8 +582,8 @@ float Game::fire(float alfa) {
         cannon->setTransformOriginPoint(QPoint(30, -65));
         cannon->setRotation(-c.angleTo(p));
         if (!masterPegGraphic->getFire())
-            MasterPegBox->SetTransform(b2Vec2(p.p2().x() / 30.0, p.p2().y() / 30.0), MasterPegBox->GetAngle());
-        MasterPegBox->SetLinearVelocity(b2Vec2(p.x2() * 0.05, p.y2() * 0.05));
+            MasterPegBox->SetTransform(b2Vec2(f.p2().x() / 30.0, f.p2().y() / 30.0), MasterPegBox->GetAngle());
+        MasterPegBox->SetLinearVelocity(b2Vec2((p.dx() - (MasterPegBox->GetPosition().x / 30.0)) * 0.05, (p.dy() - (MasterPegBox->GetPosition().y) / 30.0) * 0.05));
         world2d->SetGravity(b2Vec2(0, 25.0f));
         masterPegGraphic->setFire(true);
     }

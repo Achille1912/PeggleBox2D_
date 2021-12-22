@@ -120,7 +120,7 @@ public:
     void save();
     void load();
     b2Vec2 getTrajectoryPoint(b2Vec2& startingPosition, b2Vec2& startingVelocity, float n);
-    float fire(float alfa);
+    float fire(float alfa, bool b);
     int alpha = 89;
     bool simulation = false;
     int _simulationScore=0;
