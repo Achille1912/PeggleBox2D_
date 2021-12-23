@@ -8,9 +8,15 @@
         <file>sprites/ball.png</file>
         <file>sprites/peggles.png</file>
         <file>sprites/stage_elements.png</file>
-	    <file>sprites/Peggle_Fonts.png</file>
-	    <file>sprites/sprites.png</file>
-	    <file>sprites/scaricati/Peggle2PegglePS3LeftoverGraphic5.png</file>
+	<file>sprites/Peggle_Fonts.png</file>
+	<file>sprites/sprites.png</file>
+	<file>sprites/scaricati/Peggle2PegglePS3LeftoverGraphic5.png</file>
+	<file>sprites/choose_character.png</file>
+	<file>sprites/mainMenu.png</file>
+	<file>sprites/gameMode.png</file>
+	<file>sprites/gameMode_buttons.png</file>
+	
+	<file>sounds/peghit.wav</file>
         
     </qresource>
     </RCC>

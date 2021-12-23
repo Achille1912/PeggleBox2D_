@@ -4,6 +4,7 @@
 #include <QTimer>
 #include <QLabel>
 #include <QPainterPath>
+#include <Map>
 
 #include "Bucket.h"
 #include "Hud.h"
@@ -11,6 +12,7 @@
 #include "Peg.h"
 #include "LevelBuilder.h"
 #include "Hud.h"
+#include "Button.h"
 
 #include "box2d/include/box2d/b2_settings.h"
 #include "box2d/include/box2d/box2d.h"
@@ -21,7 +23,8 @@ class Game;
 
 enum class GameState
 {
-    MENU_DUEL,
+    TITLE,
+    MODE,
     PLAYING,
     PAUSED,
     //gameover
@@ -30,9 +33,11 @@ enum class GameState
 // game parameters
 static int GAME_FPS = 60;
 
-static float timeStep = 1.0f / 40.0f;
+static float timeStep = 1.0f / 60.0f;
 static int32 velocityIterations = 8;
 static int32 positionIterations = 2;
+
+
 }
 
 class PGG::Game : public QGraphicsView
@@ -115,9 +120,14 @@ public:
     void printRemainingBall(int b);
     void clearHittedPeg();
     void save();
-    b2Vec2 getTrajectoryPoint(b2Vec2& startingPosition, b2Vec2& startingVelocity, float n);
-   
+    Button* single_button;
 
+    b2Vec2 getTrajectoryPoint(b2Vec2& startingPosition, b2Vec2& startingVelocity, float n);
+    float fire(float alfa, bool b);
+    int alpha = 89;
+    bool simulation = false;
+    int _simulationScore=0;
+    std::vector < std::tuple< int, int > >simulationScore;
 
     // event handlers
     virtual void mousePressEvent(QMouseEvent *e) override;
@@ -132,11 +142,13 @@ public slots:
 
     void init();
     void reset();
+    void mode();
     void menuDuel();
 
     void buildLevel();
     void play();
     void nextFrame();
+
 
     void togglePause();
 

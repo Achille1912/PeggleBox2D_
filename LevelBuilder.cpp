@@ -35,7 +35,7 @@ void LevelBuilder::load(const QString& level_name)
 		Game::instance()->fitInView(level, Qt::KeepAspectRatio);
 		Game::instance()->cannon = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("cannon")));
 		Game::instance()->cannon->setScale(1.5);
-		Game::instance()->cannon->setPos((Game::instance()->sceneRect().width() / 2)-(32), 205);
+		Game::instance()->cannon->setPos((Game::instance()->sceneRect().width() / 2)-(20), 205);
 		double screenHeight = Game::instance()->sceneRect().height();
 		Game::instance()->bandOne= Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("band")));
 		Game::instance()->bandOne->setZValue(-2);
@@ -131,7 +131,7 @@ void LevelBuilder::load(const QString& level_name)
 			}
 			if (randomRed.find(i) != randomRed.end())
 				color = PegColor::RED;
-			pegDef.position.Set((810 + (100 * k)) / 2 / 30.0, (330 + (120 * j)) / 30.0);
+			pegDef.position.Set((810 + (100 * k)) / 2 / 30.0, (360 + (120 * j)) / 30.0);
 			Game::instance()->PegBox[i] = Game::instance()->getWorld2d()->CreateBody(&pegDef);
 
 			Game::instance()->setPegGraphic( new Peg(QPoint(pegDef.position.x * 30.0, (pegDef.position.y * 30.0)), color));
@@ -153,7 +153,7 @@ void LevelBuilder::load(const QString& level_name)
 			}
 			if (randomRed.find(i) != randomRed.end())
 				color = PegColor::RED;
-			pegDef.position.Set((860 + (100 * k)) / 2 / 30.0, (390 + (120 * j)) / 30.0);
+			pegDef.position.Set((860 + (100 * k)) / 2 / 30.0, (420 + (120 * j)) / 30.0);
 			Game::instance()->PegBox[i] = Game::instance()->getWorld2d()->CreateBody(&pegDef);
 
 			Game::instance()->setPegGraphic( new Peg(QPoint(pegDef.position.x * 30.0, (pegDef.position.y * 30.0)), color));
