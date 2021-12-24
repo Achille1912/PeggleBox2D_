@@ -98,11 +98,38 @@ void Game::mode()
 {
     _world->clear();
     _state = GameState::MODE;
+    background = _world->addPixmap(QPixmap(Sprites::instance()->get("gameMode")));
+    fitInView(background, Qt::KeepAspectRatio);
+    setSceneRect(0, 0, background->sceneBoundingRect().width(), background->sceneBoundingRect().height());
 
-    fitInView(_world->addPixmap(QPixmap(Sprites::instance()->get("gameMode"))), Qt::KeepAspectRatio);
-     single_button = new Button(QRect(100, 200,300 ,150), ButtonType::SINGLE);
-    Button* duel_button = new Button(QRect(370, 200, 300, 150), ButtonType::DUEL);
-    Button* cpu_button = new Button(QRect(650, 200, 300, 150), ButtonType::CPU);
+     new Button(QRect(100, 200,300 ,150), ButtonType::SINGLE);
+     new Button(QRect(370, 200, 300, 150), ButtonType::DUEL);
+     new Button(QRect(650, 200, 300, 150), ButtonType::CPU);
+    showNormal();
+}
+
+void Game::select_single_character() {
+    _world->clear();
+    _state = GameState::SELECT_SINGLE_CHARACTER;
+
+    background=_world->addPixmap(QPixmap(Sprites::instance()->get("select_character")));
+    fitInView(background, Qt::KeepAspectRatio);
+    new Button(QRect(80, 100, 89, 89), ButtonType::UNICORN);
+    new Button(QRect(80, 200, 89, 89), ButtonType::BEAVER);
+    new Button(QRect(80, 300, 89, 89), ButtonType::CAT);
+
+    new Button(QRect(200, 100, 89, 89), ButtonType::ALIEN);
+    new Button(QRect(200, 200, 89, 89), ButtonType::CRAB);
+    new Button(QRect(200, 300, 89, 89), ButtonType::PUMPKIN);
+
+    new Button(QRect(320, 100, 89, 89), ButtonType::FLOWER);
+    new Button(QRect(320, 200, 89, 89), ButtonType::DRAGON);
+    new Button(QRect(320, 300, 89, 89), ButtonType::OWL);
+
+
+    //Button* duel_button = new Button(QRect(370, 200, 300, 150), ButtonType::DUEL);
+    //Button* cpu_button = new Button(QRect(650, 200, 300, 150), ButtonType::CPU);
+    setSceneRect(0, 0, background->sceneBoundingRect().width(), background->sceneBoundingRect().height());
     showNormal();
 }
 
@@ -279,7 +306,7 @@ void Game::mousePressEvent(QMouseEvent* e)
             return;
         }
 
-        if (_state == GameState::MODE)
+        if (_state == GameState::MODE|| _state == GameState::SELECT_SINGLE_CHARACTER)
         {
 
             QGraphicsView::mousePressEvent(e);
@@ -380,6 +407,7 @@ void Game::keyPressEvent(QKeyEvent* e)
 void Game::resizeEvent(QResizeEvent* e)
 {
     fitInView(0, 0, sceneRect().width(), sceneRect().height(), Qt::KeepAspectRatio);
+   
     QGraphicsView::resizeEvent(e);
 }
 

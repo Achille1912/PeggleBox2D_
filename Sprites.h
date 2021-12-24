@@ -18,6 +18,7 @@ private:
     QPixmap fonts;
     QPixmap sprites;
     QPixmap gameMode_buttons;
+    QPixmap character_buttons;
 
     //da fare nella classe Hud
     QPixmap Hud_Unicorn;

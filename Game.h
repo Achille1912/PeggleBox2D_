@@ -25,6 +25,7 @@ enum class GameState
 {
     TITLE,
     MODE,
+    SELECT_SINGLE_CHARACTER,
     PLAYING,
     PAUSED,
     //gameover
@@ -65,6 +66,7 @@ private:
     b2Body* BucketBox;
     
     // graphic obj
+    QGraphicsPixmapItem* background;
     Peg* pegGraphic;
     MasterPeg* masterPegGraphic;
     Bucket* bucketGraphic;
@@ -122,7 +124,7 @@ public:
     void printRemainingBall(int b);
     void clearHittedPeg();
     void save();
-    Button* single_button;
+    
 
     b2Vec2 getTrajectoryPoint(b2Vec2& startingPosition, b2Vec2& startingVelocity, float n);
     float fire(float alfa, bool b);
@@ -146,6 +148,7 @@ public slots:
     void reset();
     void mode();
     void menuDuel();
+    void select_single_character();
 
     void buildLevel();
     void play();

@@ -12,6 +12,16 @@ namespace PGG
         SINGLE,
         DUEL,
         CPU,
+
+        UNICORN,
+        BEAVER,
+        CAT,
+        ALIEN,
+        CRAB,
+        PUMPKIN,
+        FLOWER,
+        DRAGON,
+        OWL
     };
 }
 
@@ -28,6 +38,7 @@ public:
     
     // override
     virtual void mousePressEvent(QMouseEvent* e) override;
+    
 signals:
     void clicked();
     

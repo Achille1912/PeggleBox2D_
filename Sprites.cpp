@@ -47,6 +47,7 @@ Sprites::Sprites() //load in RAM
     fonts = loadTexture(":/sprites/Peggle_Fonts.png");
     sprites = loadTexture(":/sprites/sprites.png");
     gameMode_buttons = loadTexture(":/sprites/gameMode_buttons.png", QColor(255, 255, 255));
+    character_buttons= loadTexture(":/sprites/character_buttons.png", QColor(255, 255, 255));
 }
 
 QPixmap Sprites::get(const std::string &id)
@@ -59,6 +60,9 @@ QPixmap Sprites::get(const std::string &id)
 
     else if (id == "gameMode")
         return loadTexture(":/sprites/gameMode.png", QColor(255, 0, 255));
+    else if (id == "select_character")
+        return loadTexture(":/sprites/select_single_character.png", QColor(255, 0, 255));
+
     else if (id == "single_button")
         return gameMode_buttons.copy(QRect(0,254,211,127));
     else if (id == "duel_button")
@@ -66,6 +70,24 @@ QPixmap Sprites::get(const std::string &id)
     else if (id == "cpu_button")
         return gameMode_buttons.copy(QRect(0, 0, 211, 127));
 
+    else if (id == "unicorn_button")
+        return character_buttons.copy(QRect(0, 729, 89, 90));
+    else if (id == "owl_button")
+        return character_buttons.copy(QRect(0, 547, 89, 90));
+    else if (id == "dragon_button")
+        return character_buttons.copy(QRect(0, 365, 89, 90));
+    else if (id == "alien_button")
+        return character_buttons.copy(QRect(0, 0, 89, 90));
+    else if (id == "cat_button")
+        return character_buttons.copy(QRect(0, 183, 89, 90));
+    else if (id == "flower_button")
+        return character_buttons.copy(QRect(0, 456, 89, 90));
+    else if (id == "pumpkin_button")
+        return character_buttons.copy(QRect(0, 638, 89, 90));
+    else if (id == "crab_button")
+        return character_buttons.copy(QRect(0, 274, 89, 90));
+    else if (id == "beaver_button")
+        return character_buttons.copy(QRect(0, 92, 89, 90));
 
 
     else if (id == "player")

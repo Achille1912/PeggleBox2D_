@@ -15,7 +15,8 @@
 	<file>sprites/mainMenu.png</file>
 	<file>sprites/gameMode.png</file>
 	<file>sprites/gameMode_buttons.png</file>
-	
+	<file>sprites/character_buttons.png</file>
+	<file>sprites/select_single_character.png</file>
 	<file>sounds/peghit.wav</file>
         
     </qresource>
