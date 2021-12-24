@@ -114,6 +114,8 @@ public:
 
     void setBucketBox(b2Body* b) { BucketBox = b; }
     void setBucketGraphic(Bucket* b) { bucketGraphic = b; }
+
+    void setState(GameState State) { _state = State; }
     
     // utility
     void addMolt();
@@ -137,9 +139,9 @@ public:
     virtual void keyPressEvent(QKeyEvent *e) override;
     virtual void resizeEvent(QResizeEvent* e) override;
 
-
+   
 public slots:
-
+   
     void init();
     void reset();
     void mode();

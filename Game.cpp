@@ -271,7 +271,7 @@ void Game::nextFrame()
 // EVENTI
 void Game::mousePressEvent(QMouseEvent* e)
 {
-   
+    
     if (!simulation) {
         if (_state ==GameState::TITLE)
         {
@@ -281,7 +281,10 @@ void Game::mousePressEvent(QMouseEvent* e)
 
         if (_state == GameState::MODE)
         {
-            play();
+
+            QGraphicsView::mousePressEvent(e);
+            
+
         }
 
 
@@ -304,7 +307,6 @@ void Game::mousePressEvent(QMouseEvent* e)
             world2d->SetGravity(b2Vec2(0, 10.0f));
         }
     }
-    
 }
 
 void Game::mouseReleaseEvent(QMouseEvent* e)

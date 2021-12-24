@@ -11,6 +11,9 @@ using namespace PGG;
 
 Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 {
+
+	connect(this, SIGNAL(clicked()), this, SLOT(slotLabelClicked()), Qt::QueuedConnection);
+
 	_buttonType = bt;
 	if (_buttonType == ButtonType::SINGLE) {
 		setPixmap(QPixmap(Sprites::instance()->get("single_button")));
@@ -25,27 +28,25 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 	Game::instance()->world()->addWidget(this);
 }
 
-bool Button::eventFilter(QObject* object, QEvent* event)
-{
-	printf("Catturato");
-	if (object == Game::instance() && event->type() == QEvent::GraphicsSceneMousePress) {
-		QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
-		printf("Catturato");
-		return true;
-	}
-	return false;
-}
 
- void Button::mousePressEvent(QMouseEvent* e) {
-	 printf("Ciao");
+ 
+
+
+
+ void Button::slotLabelClicked()   // Implementation of Slot which will consume signal
+ {
 	 if (_buttonType == ButtonType::SINGLE) {
-		 printf("Ciao");
-	 }
-	 else if (_buttonType == ButtonType::DUEL) {
 		 Game::instance()->play();
 	 }
-	 else if (_buttonType == ButtonType::CPU) {
-		 printf("Ciaoo");
+	 else if (_buttonType == ButtonType::DUEL) {
+
+		 printf("DUEL");
 	 }
-	 
-}
+	 else if (_buttonType == ButtonType::CPU) {
+		 printf("CPU");
+	 }
+ }
+
+ void Button::mousePressEvent(QMouseEvent* e) {
+	 emit clicked();
+ }
