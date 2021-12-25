@@ -48,6 +48,8 @@ Sprites::Sprites() //load in RAM
     sprites = loadTexture(":/sprites/sprites.png");
     gameMode_buttons = loadTexture(":/sprites/gameMode_buttons.png", QColor(255, 255, 255));
     character_buttons= loadTexture(":/sprites/character_buttons.png", QColor(255, 255, 255));
+    action_buttons= loadTexture(":/sprites/action_buttons.png", QColor(255, 255, 255));
+    character_face= loadTexture(":/sprites/character_face.png", QColor(255, 255, 255));
 }
 
 QPixmap Sprites::get(const std::string &id)
@@ -89,11 +91,19 @@ QPixmap Sprites::get(const std::string &id)
     else if (id == "beaver_button")
         return character_buttons.copy(QRect(0, 92, 89, 90));
 
+    else if (id == "main_menu_button")
+        return action_buttons.copy(QRect(0, 0, 155, 55));
+    else if (id == "play_now_button")
+        return action_buttons.copy(QRect(0, 57, 155, 54));
 
     else if (id == "player")
         return sprites.copy(403, 82, 9, 12);
     else if (id == "bucket")
         return stage_elements.copy(bucket);
+    else if (id == "unicorn_face_right")
+        return character_face.copy(0, 0, 66, 89);
+    else if (id == "unicorn_face_left")
+        return character_face.copy(0, 91, 66, 89);
 
     // Remaining Balls
     else if (id == "0")

@@ -11,7 +11,7 @@ using namespace PGG;
 
 Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 {
-_buttonType = bt;
+	_buttonType = bt;
 	connect(this, SIGNAL(clicked()), this, SLOT(slotLabelClicked()), Qt::QueuedConnection);
 
 	
@@ -22,6 +22,9 @@ _buttonType = bt;
 	}
 	else if (_buttonType == ButtonType::CPU) {
 		setPixmap(QPixmap(Sprites::instance()->get("cpu_button")));
+	}
+	else if (_buttonType == ButtonType::MAIN_MENU) {
+		setPixmap(QPixmap(Sprites::instance()->get("main_menu_button")));
 	}
 	else if (_buttonType == ButtonType::UNICORN) {
 		setPixmap(QPixmap(Sprites::instance()->get("unicorn_button")));
@@ -50,6 +53,9 @@ _buttonType = bt;
 	else if (_buttonType == ButtonType::OWL) {
 		setPixmap(QPixmap(Sprites::instance()->get("owl_button")));
 	}
+	else if (_buttonType == ButtonType::PLAY_NOW) {
+		setPixmap(QPixmap(Sprites::instance()->get("play_now_button")));
+	}
 	setGeometry(pos);
 	setStyleSheet("background-color: transparent;");
 	Game::instance()->world()->addWidget(this);
@@ -69,23 +75,100 @@ _buttonType = bt;
 	 else if (_buttonType == ButtonType::DUEL) {
 
 		 printf("DUEL");
+		 
 	 }
 	 else if (_buttonType == ButtonType::CPU) {
 		 printf("CPU");
 	 }
-	 else if (_buttonType == ButtonType::ALIEN) {
-		 //setWindowOpacity(0.5);
-		 printf("Alien");
+	 else if (_buttonType == ButtonType::MAIN_MENU) {
+		 Game::instance()->menuDuel();
 	 }
+
 	 else if (_buttonType == ButtonType::UNICORN) {
-		 //setWindowOpacity(0.5);
-		 printf("Unicorn");
+		 for (auto el : (Game::instance()->world()->children())) {
+			 if (dynamic_cast<Button*>(el))
+				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
+		 }
+		 setWindowOpacity(0.5);
+		 Game::instance()->setCharacter(Character::UNICORN);
+	 }
+	 else if (_buttonType == ButtonType::BEAVER) {
+		 for (auto el : (Game::instance()->world()->children())) {
+			 if (dynamic_cast<Button*>(el))
+				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
+		 }
+			 
+		 
+		 Game::instance()->setCharacter(Character::BEAVER);
+		 setWindowOpacity(0.5);
+
+	 }
+	 else if (_buttonType == ButtonType::CAT) {
+		 for (auto el : (Game::instance()->world()->children())) {
+			 if (dynamic_cast<Button*>(el))
+				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
+		 }
+		 Game::instance()->setCharacter(Character::CAT);
+		 setWindowOpacity(0.5);
+	 }
+	 else if (_buttonType == ButtonType::ALIEN) {
+		 for (auto el : (Game::instance()->world()->children())) {
+			 if (dynamic_cast<Button*>(el))
+				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
+		 }
+		 Game::instance()->setCharacter(Character::ALIEN);
+		 setWindowOpacity(0.5);
+	 }
+	 else if (_buttonType == ButtonType::CRAB) {
+		 for (auto el : (Game::instance()->world()->children())) {
+			 if (dynamic_cast<Button*>(el))
+				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
+		 }
+		 Game::instance()->setCharacter(Character::CRAB);
+		 setWindowOpacity(0.5);
+	 }
+	 else if (_buttonType == ButtonType::PUMPKIN) {
+		 for (auto el : (Game::instance()->world()->children())) {
+			 if (dynamic_cast<Button*>(el))
+				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
+		 }
+		 Game::instance()->setCharacter(Character::PUMPKIN);
+		 setWindowOpacity(0.5);
+	 }
+	 else if (_buttonType == ButtonType::FLOWER) {
+		 for (auto el : (Game::instance()->world()->children())) {
+			 if (dynamic_cast<Button*>(el))
+				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
+		 }
+		 Game::instance()->setCharacter(Character::FLOWER);
+		 setWindowOpacity(0.5);
+	 }
+	 else if (_buttonType == ButtonType::DRAGON) {
+		 for (auto el : (Game::instance()->world()->children())) {
+			 if (dynamic_cast<Button*>(el))
+				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
+		 }
+		 Game::instance()->setCharacter(Character::DRAGON);
+		 setWindowOpacity(0.5);
+	 }
+	 else if (_buttonType == ButtonType::OWL) {
+		 for (auto el : (Game::instance()->world()->children())) {
+			 if (dynamic_cast<Button*>(el))
+				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
+		 }
+		 Game::instance()->setCharacter(Character::OWL);
+		 setWindowOpacity(0.5);
+	 }
+	 else if (_buttonType == ButtonType::PLAY_NOW) {
+		 if (Game::instance()->getCharacter() != Character::NONE)
+			 Game::instance()->play();
 	 }
 
 	 
  }
 
  void Button::mousePressEvent(QMouseEvent* e) {
+	 QLabel::mousePressEvent(e);
 	 emit clicked();
  }
 

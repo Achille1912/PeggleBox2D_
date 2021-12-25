@@ -72,6 +72,7 @@ Game::Game() : QGraphicsView()
     //_hud = new HUD(width(), height(), this);
     _score = 0;
     _redPegHit = -1;
+    _character = Character::NONE;
 
     reset();
     init();
@@ -105,6 +106,8 @@ void Game::mode()
      new Button(QRect(100, 200,300 ,150), ButtonType::SINGLE);
      new Button(QRect(370, 200, 300, 150), ButtonType::DUEL);
      new Button(QRect(650, 200, 300, 150), ButtonType::CPU);
+
+     new Button(QRect(((sceneRect().width()/2)-78), 500, 500, 150), ButtonType::MAIN_MENU);
     showNormal();
 }
 
@@ -126,11 +129,11 @@ void Game::select_single_character() {
     new Button(QRect(320, 200, 89, 89), ButtonType::DRAGON);
     new Button(QRect(320, 300, 89, 89), ButtonType::OWL);
 
-
+    new Button(QRect(((sceneRect().width() / 4) - 75), 480, 500, 150), ButtonType::PLAY_NOW);
     //Button* duel_button = new Button(QRect(370, 200, 300, 150), ButtonType::DUEL);
     //Button* cpu_button = new Button(QRect(650, 200, 300, 150), ButtonType::CPU);
     setSceneRect(0, 0, background->sceneBoundingRect().width(), background->sceneBoundingRect().height());
-    showNormal();
+    //showNormal();
 }
 
 void Game::menuDuel()
@@ -147,6 +150,7 @@ void Game::buildLevel()
     _world->clear();
     
     _builder->load("level_1");
+
 }
 
 void Game::play() //in gioco
@@ -348,9 +352,13 @@ void Game::mouseMoveEvent(QMouseEvent* e)
     if (_state==GameState::PLAYING ){
         if (!simulation) {
             QPointF midPos((sceneRect().width() / 2), 0), currPos;
-
+                
                 currPos = QPoint(mapToScene(e->pos()).x(), mapToScene(e->pos()).y());
                 setMouseTracking(true);
+                if (currPos.x() < midPos.x())
+                    character_face->setPixmap(QPixmap(Sprites::instance()->get("unicorn_face_left")));
+                else
+                    character_face->setPixmap(QPixmap(Sprites::instance()->get("unicorn_face_right")));
 
                 QPointF center(720, 100);
                 QLineF v1(center, QPoint(720, 500));

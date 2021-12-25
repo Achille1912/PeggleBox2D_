@@ -19,6 +19,8 @@ private:
     QPixmap sprites;
     QPixmap gameMode_buttons;
     QPixmap character_buttons;
+    QPixmap action_buttons;
+    QPixmap character_face;
 
     //da fare nella classe Hud
     QPixmap Hud_Unicorn;

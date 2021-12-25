@@ -12,6 +12,8 @@ namespace PGG
         SINGLE,
         DUEL,
         CPU,
+        MAIN_MENU,
+        PLAY_NOW,
 
         UNICORN,
         BEAVER,

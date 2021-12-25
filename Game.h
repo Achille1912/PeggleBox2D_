@@ -31,6 +31,20 @@ enum class GameState
     //gameover
 };
 
+enum class Character
+{
+    UNICORN,
+    BEAVER,
+    CAT,
+    ALIEN,
+    CRAB,
+    PUMPKIN,
+    FLOWER,
+    DRAGON,
+    OWL,
+    NONE
+};
+
 // game parameters
 static int GAME_FPS = 60;
 
@@ -49,6 +63,7 @@ private:
     // game attributes
     QTimer _engine;
     GameState _state;
+    Character _character;
     QGraphicsScene *_world;
     HUD* _hud;
     LevelBuilder* _builder;
@@ -82,13 +97,14 @@ public:
     int remainingBall = 9;
     QGraphicsPixmapItem* remainingBallPixmap;
     QGraphicsPixmapItem* paused;
-    QGraphicsPixmapItem* bjorn;
+    QGraphicsPixmapItem* character_face;
 
     // getters
     b2World* getWorld2d() { return world2d; }
     QGraphicsScene* world() { return _world; }
     HUD* Hudd() { return _hud; }
     int getScore() { return _score; }
+    Character getCharacter() { return _character; }
 
     QVector<b2Body*>getPegBox() { return PegBox; }
     Peg* getPegGraphic() { return pegGraphic; }
@@ -108,6 +124,7 @@ public:
     // setters
     void setWorld2d(b2World* b) { world2d = b; }
     void setScore(int s) { _score = s; }
+    void setCharacter(Character c) { _character = c; }
     
     void setPegGraphic(Peg* p) { pegGraphic = p; }
 

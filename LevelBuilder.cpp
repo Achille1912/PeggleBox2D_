@@ -24,10 +24,10 @@ void LevelBuilder::load(const QString& level_name)
 {
 	if (level_name == "level_1")
 	{
-
-		
 	// BACKGROUND
 		QGraphicsPixmapItem* level = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("Hud_Unicorn")));
+		Game::instance()->setSceneRect(0, 0, level->sceneBoundingRect().width(), level->sceneBoundingRect().height());
+
 		Game::instance()->centerOn(level);
 		Game::instance()->remainingBallPixmap = Game::instance()->world()->addPixmap(Sprites::instance()->get("9"));
 		Game::instance()->remainingBallPixmap->setPos(QPoint(45, 180));
@@ -79,10 +79,10 @@ void LevelBuilder::load(const QString& level_name)
 		Game::instance()->paused->setVisible(false);
 		Game::instance()->paused->setZValue(10);
 
-
-		Game::instance()->bjorn = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("unicorn")));
-		Game::instance()->bjorn->setScale(1.6);
-		Game::instance()->bjorn->setPos(660,70);
+		if(Game::instance()->getCharacter()==Character::UNICORN)
+			Game::instance()->character_face = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("unicorn_face_right")));
+		Game::instance()->character_face->setScale(1.6);
+		Game::instance()->character_face->setPos(662,70);
 
 
  // CREATE PHYSICS WORLD
