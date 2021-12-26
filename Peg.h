@@ -26,4 +26,6 @@ public:
     Peg(QPoint pos, PegColor color);
     void hit();
     bool getHitted() { return _hitted; }
+    void changeColor(PegColor color);
+
 };

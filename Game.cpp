@@ -7,7 +7,7 @@
 #include <QIcon>
 #include <cmath>
 #include <qDebug>
-
+#include <set>
 
 
 
@@ -73,6 +73,7 @@ Game::Game() : QGraphicsView()
     _score = 0;
     _redPegHit = -1;
     _character = Character::NONE;
+    _power = false;
 
     reset();
     init();
@@ -181,6 +182,7 @@ void Game::nextFrame()
           // if is a Peg
           if (edge->contact->GetFixtureA()->GetBody()->GetType() == b2BodyType::b2_staticBody) {
               Peg* tmp = static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData());
+              
               if (!tmp->getHitted())
                   tmp->hit();
            // if is Bucket
@@ -191,34 +193,35 @@ void Game::nextFrame()
 
       }
     }
+  if (getPower() && _character == Character::BEAVER) {
+      for (b2ContactEdge* edge = secondMasterPegBox->GetContactList(); edge; edge = edge->next)
+      {
+
+          if (edge->contact->IsTouching() && static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData())) {
+              // if is a Peg
+              if (edge->contact->GetFixtureA()->GetBody()->GetType() == b2BodyType::b2_staticBody) {
+                  Peg* tmp = static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData());
+                  if (!tmp->getHitted())
+                      tmp->hit();
+                 
+              }
+          }
+      }
+  }
+
+          
+  
 
     //master peg
    
-    if(!simulation)
-        masterPegGraphic->advance(MasterPegBox);
-
-    if (MasterPegBox->GetPosition().y > 35)
+  if (!simulation) {
+      masterPegGraphic->advance(MasterPegBox);
+      bucketGraphic->advance(BucketBox);
+      if(_power&&getCharacter()==Character::UNICORN)
+        secondMasterPegGraphics->advance(secondMasterPegBox);
+  }
+    if (MasterPegBox->GetPosition().y > 35&&simulation)
     {
-        if (!simulation) {
-            masterPegGraphic->setFire(false);
-            clearHittedPeg();
-            remainingBall--;
-            printf("%d", getScore());
-            printRemainingBall(remainingBall);
-            QPointF center(720, 100);
-
-
-            QLineF v2(center, QCursor::pos());
-            v2.setLength(200.0);
-            MasterPegBox->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), MasterPegBox->GetAngle());
-            MasterPegBox->SetLinearVelocity(b2Vec2(0, 0));
-            MasterPegBox->SetAngularVelocity(0);
-            world2d->SetGravity(b2Vec2(0, 0));
-            bandOne->setY(924);
-            bandTwo->setY(924);
-            
-        }
-        else {
             QPointF center(720, 100);
             QLineF v2(center, QCursor::pos());
             v2.setLength(200.0);
@@ -275,26 +278,12 @@ void Game::nextFrame()
                 simulationScore.emplace_back(alpha-90, _simulationScore);
                 _simulationScore = 0;
                 fire(alpha,false);
-               
             }
-           
-        }
     }
     
 
-    //bucket
-    if (!simulation) {
-        bucketGraphic->advance(BucketBox);
-        if (BucketBox->GetPosition().x > 32)
-        {
-            BucketBox->SetLinearVelocity(b2Vec2(-10, 0));
 
-        }
-        else if (BucketBox->GetPosition().x < 5)
-        {
-            BucketBox->SetLinearVelocity(b2Vec2(10, 0));
-        }
-    }
+       
 }
 
 
@@ -311,13 +300,8 @@ void Game::mousePressEvent(QMouseEvent* e)
         }
 
         if (_state == GameState::MODE|| _state == GameState::SELECT_SINGLE_CHARACTER)
-        {
-
             QGraphicsView::mousePressEvent(e);
-            
-
-        }
-
+        
 
         if (e->button() == Qt::LeftButton && _state == GameState::PLAYING)
         {
@@ -355,11 +339,11 @@ void Game::mouseMoveEvent(QMouseEvent* e)
                 
                 currPos = QPoint(mapToScene(e->pos()).x(), mapToScene(e->pos()).y());
                 setMouseTracking(true);
-                if (currPos.x() < midPos.x())
+                /*if (currPos.x() < midPos.x())
                     character_face->setPixmap(QPixmap(Sprites::instance()->get("unicorn_face_left")));
                 else
                     character_face->setPixmap(QPixmap(Sprites::instance()->get("unicorn_face_right")));
-
+                    */
                 QPointF center(720, 100);
                 QLineF v1(center, QPoint(720, 500));
 
@@ -516,6 +500,16 @@ void Game::clearHittedPeg() {
             
         }
     }
+    if (restoreGreen) {
+
+        int i = 0;
+
+        do {
+            i = rand() % 95;
+        } while (static_cast<Peg*>(PegBox[i]->GetUserData())->_color == PegColor::RED && (static_cast<Peg*>(PegBox[i]->GetUserData())->getHitted()) && !(static_cast<Peg*>(PegBox[i]->GetUserData())->isVisible()));
+        static_cast<Peg*>(PegBox[i]->GetUserData())->changeColor(PegColor::GREEN);
+    }
+    
 
 }
 
@@ -614,3 +608,70 @@ float Game::fire(float alfa, bool b) {
     }
     return alfa;
 }
+
+
+void Game::activePower() {
+    setPower(true);
+    switch (_character) {
+    case Character::FLOWER:
+    {
+        int twenty = (25 - Game::instance()->getRedPegHit()) * 20 / 100;
+        int c = 0;
+        for (int i = 0; i < 95; i++) {
+            if (static_cast<Peg*>(Game::instance()->PegBox[i]->GetUserData())->_color == PegColor::RED && c < twenty && !static_cast<Peg*>(Game::instance()->PegBox[i]->GetUserData())->getHitted()) {
+                printf("Twenty");
+                static_cast<Peg*>(Game::instance()->PegBox[i]->GetUserData())->hit();
+                c++;
+            }
+        }
+        Game::instance()->setPower(false);
+    }
+    break;
+    case Character::ALIEN:
+    {
+        QPoint centerCircle(masterPegGraphic->pos().x(), masterPegGraphic->pos().y());
+        QList<QGraphicsItem*> list = (world()->items(QRectF(centerCircle.x(), centerCircle.y(), 20, 20)));
+        for (auto el : list) {
+            if ((dynamic_cast<Peg*>(el)))
+                (dynamic_cast<Peg*>(el))->hit();
+        }
+        Game::instance()->setPower(false);
+    }
+    break;
+    case Character::BEAVER:
+    {
+        b2BodyDef ballDef;
+        ballDef.type = b2_dynamicBody;
+        ballDef.linearDamping = 0;
+        ballDef.position.Set(getMasterPegGraphic()->pos().x() / 30.0, getMasterPegGraphic()->pos().y() / 30.0);
+
+        secondMasterPegBox = world2d->CreateBody(&ballDef);
+
+        secondMasterPegGraphics = new MasterPeg(QPoint(ballDef.position.x * 30.0, ballDef.position.y * 30.0));
+
+        secondMasterPegBox->SetUserData((secondMasterPegGraphics));
+
+        // Shape
+        b2CircleShape ballShape;
+        ballShape.m_p.Set(0, 0);
+        ballShape.m_radius = 0.2;
+
+        // Fixture
+        b2FixtureDef ballFixtureDef;
+        ballFixtureDef.restitution = 0.7;
+        ballFixtureDef.shape = &ballShape;
+        ballFixtureDef.density = 50.0f;
+
+        secondMasterPegBox->CreateFixture(&ballFixtureDef);
+        secondMasterPegBox->SetLinearVelocity(b2Vec2(5, -5));
+        secondMasterPegBox->SetAngularVelocity(0);
+        world2d->SetGravity(b2Vec2(0, 25.0f));
+        break;
+
+    }
+        case Character::DRAGON:
+            
+        break;
+    }
+}
+

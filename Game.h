@@ -69,6 +69,7 @@ private:
     LevelBuilder* _builder;
     int _score;
     int _redPegHit;
+    bool _power;
 
     // FPS measuring and display
     int _frame_count;
@@ -105,6 +106,8 @@ public:
     HUD* Hudd() { return _hud; }
     int getScore() { return _score; }
     Character getCharacter() { return _character; }
+    bool getPower() { return _power; }
+    int getRedPegHit() { return _redPegHit; }
 
     QVector<b2Body*>getPegBox() { return PegBox; }
     Peg* getPegGraphic() { return pegGraphic; }
@@ -125,6 +128,7 @@ public:
     void setWorld2d(b2World* b) { world2d = b; }
     void setScore(int s) { _score = s; }
     void setCharacter(Character c) { _character = c; }
+    void setPower(bool b) { _power=b; }
     
     void setPegGraphic(Peg* p) { pegGraphic = p; }
 
@@ -141,7 +145,10 @@ public:
     void printRemainingBall(int b);
     void clearHittedPeg();
     void save();
-    
+    void activePower();
+    bool restoreGreen = false;
+    MasterPeg* secondMasterPegGraphics;
+    b2Body* secondMasterPegBox;
 
     b2Vec2 getTrajectoryPoint(b2Vec2& startingPosition, b2Vec2& startingVelocity, float n);
     float fire(float alfa, bool b);

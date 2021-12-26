@@ -18,6 +18,10 @@ Bucket::Bucket(QPoint pos) : QGraphicsPixmapItem(0)
 void Bucket::advance(b2Body* box) {
 
 	this->setPos(box->GetPosition().x * 30.0, box->GetPosition().y * 30.0);
+    if (box->GetPosition().x > 32)
+        box->SetLinearVelocity(b2Vec2(-15, 0));
+    else if (box->GetPosition().x < 5)
+        box->SetLinearVelocity(b2Vec2(15, 0));
 
 }
 

@@ -11,8 +11,14 @@ Peg::Peg(QPoint pos, PegColor color= PegColor::BLUE): QGraphicsPixmapItem(0)
 {
 	_hitted = false;
 	setPos(pos);
-	color==PegColor::BLUE?setPixmap(Sprites::instance()->get("peg_blue").scaled(30, 30)): setPixmap(Sprites::instance()->get("peg_red").scaled(30, 30));
 	_color = color;
+	if (_color == PegColor::BLUE)
+		setPixmap(Sprites::instance()->get("peg_blue").scaled(30, 30));
+	else if (_color == PegColor::RED)
+		setPixmap(Sprites::instance()->get("peg_red").scaled(30, 30));
+	else
+		setPixmap(Sprites::instance()->get("peg_green").scaled(30, 30));
+	
 	Game::instance()->world()->addItem(this);
 
 }
@@ -32,10 +38,21 @@ void Peg::hit() {
 				Game::instance()->bandTwo->setY(Game::instance()->bandTwo->scenePos().y() - 40);
 			}
 		}
-		else {
+		else if (_color == PegColor::RED) {
 			setPixmap(Sprites::instance()->get("peg_red_hit").scaled(30, 30));
 			Game::instance()->setScore(Game::instance()->getScore() + 200);
 			Game::instance()->addMolt();
+			if (Game::instance()->bandOne->scenePos().y() >= 300) {
+				Game::instance()->bandOne->setY(Game::instance()->bandOne->scenePos().y() - 50);
+				Game::instance()->bandTwo->setY(Game::instance()->bandTwo->scenePos().y() - 50);
+			}
+		}
+			
+		else {
+			setPixmap(Sprites::instance()->get("peg_green_hit").scaled(30, 30));
+			Game::instance()->setScore(Game::instance()->getScore() + 200);
+			Game::instance()->activePower();
+			Game::instance()->restoreGreen = true;
 			if (Game::instance()->bandOne->scenePos().y() >= 300) {
 				Game::instance()->bandOne->setY(Game::instance()->bandOne->scenePos().y() - 50);
 				Game::instance()->bandTwo->setY(Game::instance()->bandTwo->scenePos().y() - 50);
@@ -53,4 +70,11 @@ void Peg::hit() {
 		}
 	}
 
+}
+
+
+
+void Peg::changeColor(PegColor color) {
+	_color = color;
+	setPixmap(Sprites::instance()->get("peg_green").scaled(30, 30));
 }

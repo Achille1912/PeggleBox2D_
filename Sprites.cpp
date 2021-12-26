@@ -137,11 +137,14 @@ QPixmap Sprites::get(const std::string &id)
         return peggles.copy(pegle);
     else if (id == "peg_red_hit")
         return peggles.copy(moveBy(pegle, 1, 0, 200));
+    else if (id == "peg_green_hit")
+        return peggles.copy(QRect(405, 0, 200, 200));
     else if (id == "peg_blue")
         return peggles.copy(moveBy(pegle, 0, 1, 0, 200));
     else if (id == "peg_red")
         return peggles.copy(moveBy(pegle, 1, 1, 200, 200));
-
+    else if (id == "peg_green")
+        return peggles.copy(QRect(405,204,200,200));
 
     else if (id == "band")
         return sprites.copy(91, 528, 15, 422);

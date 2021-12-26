@@ -79,10 +79,10 @@ void LevelBuilder::load(const QString& level_name)
 		Game::instance()->paused->setVisible(false);
 		Game::instance()->paused->setZValue(10);
 
-		if(Game::instance()->getCharacter()==Character::UNICORN)
+		/*if (Game::instance()->getCharacter() == Character::UNICORN)
 			Game::instance()->character_face = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("unicorn_face_right")));
 		Game::instance()->character_face->setScale(1.6);
-		Game::instance()->character_face->setPos(662,70);
+		Game::instance()->character_face->setPos(662,70);*/
 
 
  // CREATE PHYSICS WORLD
@@ -163,7 +163,11 @@ void LevelBuilder::load(const QString& level_name)
 			Game::instance()->PegBox[i]->SetUserData(Game::instance()->getPegGraphic());
 			k++;
 		}
-
+		int random = rand() % 95;
+		do {
+			random = rand() % 95;
+		} while (static_cast<Peg*>(Game::instance()->PegBox[random]->GetUserData())->_color != PegColor::RED);
+		static_cast<Peg*>(Game::instance()->PegBox[random]->GetUserData())->changeColor(PegColor::GREEN);
 
 	// CREATE MASTER PEG
 			// Definition
