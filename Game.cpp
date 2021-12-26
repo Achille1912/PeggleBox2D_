@@ -72,6 +72,7 @@ Game::Game() : QGraphicsView()
     //_hud = new HUD(width(), height(), this);
     _score = 0;
     _redPegHit = -1;
+    _character = Character::NONE;
 
     reset();
     init();
@@ -98,12 +99,41 @@ void Game::mode()
 {
     _world->clear();
     _state = GameState::MODE;
+    background = _world->addPixmap(QPixmap(Sprites::instance()->get("gameMode")));
+    fitInView(background, Qt::KeepAspectRatio);
+    setSceneRect(0, 0, background->sceneBoundingRect().width(), background->sceneBoundingRect().height());
 
-    fitInView(_world->addPixmap(QPixmap(Sprites::instance()->get("gameMode"))), Qt::KeepAspectRatio);
-     single_button = new Button(QRect(100, 200,300 ,150), ButtonType::SINGLE);
-    Button* duel_button = new Button(QRect(370, 200, 300, 150), ButtonType::DUEL);
-    Button* cpu_button = new Button(QRect(650, 200, 300, 150), ButtonType::CPU);
+     new Button(QRect(100, 200,300 ,150), ButtonType::SINGLE);
+     new Button(QRect(370, 200, 300, 150), ButtonType::DUEL);
+     new Button(QRect(650, 200, 300, 150), ButtonType::CPU);
+
+     new Button(QRect(((sceneRect().width()/2)-78), 500, 500, 150), ButtonType::MAIN_MENU);
     showNormal();
+}
+
+void Game::select_single_character() {
+    _world->clear();
+    _state = GameState::SELECT_SINGLE_CHARACTER;
+
+    background=_world->addPixmap(QPixmap(Sprites::instance()->get("select_character")));
+    fitInView(background, Qt::KeepAspectRatio);
+    new Button(QRect(80, 100, 89, 89), ButtonType::UNICORN);
+    new Button(QRect(80, 200, 89, 89), ButtonType::BEAVER);
+    new Button(QRect(80, 300, 89, 89), ButtonType::CAT);
+
+    new Button(QRect(200, 100, 89, 89), ButtonType::ALIEN);
+    new Button(QRect(200, 200, 89, 89), ButtonType::CRAB);
+    new Button(QRect(200, 300, 89, 89), ButtonType::PUMPKIN);
+
+    new Button(QRect(320, 100, 89, 89), ButtonType::FLOWER);
+    new Button(QRect(320, 200, 89, 89), ButtonType::DRAGON);
+    new Button(QRect(320, 300, 89, 89), ButtonType::OWL);
+
+    new Button(QRect(((sceneRect().width() / 4) - 75), 480, 500, 150), ButtonType::PLAY_NOW);
+    //Button* duel_button = new Button(QRect(370, 200, 300, 150), ButtonType::DUEL);
+    //Button* cpu_button = new Button(QRect(650, 200, 300, 150), ButtonType::CPU);
+    setSceneRect(0, 0, background->sceneBoundingRect().width(), background->sceneBoundingRect().height());
+    //showNormal();
 }
 
 void Game::menuDuel()
@@ -120,6 +150,7 @@ void Game::buildLevel()
     _world->clear();
     
     _builder->load("level_1");
+
 }
 
 void Game::play() //in gioco
@@ -271,7 +302,7 @@ void Game::nextFrame()
 // EVENTI
 void Game::mousePressEvent(QMouseEvent* e)
 {
-   
+    
     if (!simulation) {
         if (_state ==GameState::TITLE)
         {
@@ -279,9 +310,12 @@ void Game::mousePressEvent(QMouseEvent* e)
             return;
         }
 
-        if (_state == GameState::MODE)
+        if (_state == GameState::MODE|| _state == GameState::SELECT_SINGLE_CHARACTER)
         {
-            play();
+
+            QGraphicsView::mousePressEvent(e);
+            
+
         }
 
 
@@ -304,7 +338,6 @@ void Game::mousePressEvent(QMouseEvent* e)
             world2d->SetGravity(b2Vec2(0, 10.0f));
         }
     }
-    
 }
 
 void Game::mouseReleaseEvent(QMouseEvent* e)
@@ -319,9 +352,13 @@ void Game::mouseMoveEvent(QMouseEvent* e)
     if (_state==GameState::PLAYING ){
         if (!simulation) {
             QPointF midPos((sceneRect().width() / 2), 0), currPos;
-
+                
                 currPos = QPoint(mapToScene(e->pos()).x(), mapToScene(e->pos()).y());
                 setMouseTracking(true);
+                if (currPos.x() < midPos.x())
+                    character_face->setPixmap(QPixmap(Sprites::instance()->get("unicorn_face_left")));
+                else
+                    character_face->setPixmap(QPixmap(Sprites::instance()->get("unicorn_face_right")));
 
                 QPointF center(720, 100);
                 QLineF v1(center, QPoint(720, 500));
@@ -378,6 +415,7 @@ void Game::keyPressEvent(QKeyEvent* e)
 void Game::resizeEvent(QResizeEvent* e)
 {
     fitInView(0, 0, sceneRect().width(), sceneRect().height(), Qt::KeepAspectRatio);
+   
     QGraphicsView::resizeEvent(e);
 }
 

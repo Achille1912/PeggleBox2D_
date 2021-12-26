@@ -12,11 +12,24 @@ namespace PGG
         SINGLE,
         DUEL,
         CPU,
+        MAIN_MENU,
+        PLAY_NOW,
+
+        UNICORN,
+        BEAVER,
+        CAT,
+        ALIEN,
+        CRAB,
+        PUMPKIN,
+        FLOWER,
+        DRAGON,
+        OWL
     };
 }
 
 class PGG::Button : public QLabel
 {
+    Q_OBJECT
 private:
 
     
@@ -27,6 +40,11 @@ public:
     
     // override
     virtual void mousePressEvent(QMouseEvent* e) override;
-    bool eventFilter(QObject* object, QEvent* event) override;
+    
+signals:
+    void clicked();
+    
+public slots:
+    void slotLabelClicked();
 
 };

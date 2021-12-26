@@ -25,9 +25,24 @@ enum class GameState
 {
     TITLE,
     MODE,
+    SELECT_SINGLE_CHARACTER,
     PLAYING,
     PAUSED,
     //gameover
+};
+
+enum class Character
+{
+    UNICORN,
+    BEAVER,
+    CAT,
+    ALIEN,
+    CRAB,
+    PUMPKIN,
+    FLOWER,
+    DRAGON,
+    OWL,
+    NONE
 };
 
 // game parameters
@@ -48,6 +63,7 @@ private:
     // game attributes
     QTimer _engine;
     GameState _state;
+    Character _character;
     QGraphicsScene *_world;
     HUD* _hud;
     LevelBuilder* _builder;
@@ -65,6 +81,7 @@ private:
     b2Body* BucketBox;
     
     // graphic obj
+    QGraphicsPixmapItem* background;
     Peg* pegGraphic;
     MasterPeg* masterPegGraphic;
     Bucket* bucketGraphic;
@@ -80,13 +97,14 @@ public:
     int remainingBall = 9;
     QGraphicsPixmapItem* remainingBallPixmap;
     QGraphicsPixmapItem* paused;
-    QGraphicsPixmapItem* bjorn;
+    QGraphicsPixmapItem* character_face;
 
     // getters
     b2World* getWorld2d() { return world2d; }
     QGraphicsScene* world() { return _world; }
     HUD* Hudd() { return _hud; }
     int getScore() { return _score; }
+    Character getCharacter() { return _character; }
 
     QVector<b2Body*>getPegBox() { return PegBox; }
     Peg* getPegGraphic() { return pegGraphic; }
@@ -106,6 +124,7 @@ public:
     // setters
     void setWorld2d(b2World* b) { world2d = b; }
     void setScore(int s) { _score = s; }
+    void setCharacter(Character c) { _character = c; }
     
     void setPegGraphic(Peg* p) { pegGraphic = p; }
 
@@ -114,13 +133,15 @@ public:
 
     void setBucketBox(b2Body* b) { BucketBox = b; }
     void setBucketGraphic(Bucket* b) { bucketGraphic = b; }
+
+    void setState(GameState State) { _state = State; }
     
     // utility
     void addMolt();
     void printRemainingBall(int b);
     void clearHittedPeg();
     void save();
-    Button* single_button;
+    
 
     b2Vec2 getTrajectoryPoint(b2Vec2& startingPosition, b2Vec2& startingVelocity, float n);
     float fire(float alfa, bool b);
@@ -137,13 +158,14 @@ public:
     virtual void keyPressEvent(QKeyEvent *e) override;
     virtual void resizeEvent(QResizeEvent* e) override;
 
-
+   
 public slots:
-
+   
     void init();
     void reset();
     void mode();
     void menuDuel();
+    void select_single_character();
 
     void buildLevel();
     void play();
