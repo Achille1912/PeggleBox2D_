@@ -79,10 +79,49 @@ void LevelBuilder::load(const QString& level_name)
 		Game::instance()->paused->setVisible(false);
 		Game::instance()->paused->setZValue(10);
 
-		/*if (Game::instance()->getCharacter() == Character::UNICORN)
-			Game::instance()->character_face = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("unicorn_face_right")));
+		switch (Game::instance()->getCharacter()) {
+			case Character::UNICORN:
+					Game::instance()->character_face = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("unicorn_face_right")));
+				break;
+			case Character::BEAVER:
+					Game::instance()->character_face = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("beaver_face_right")));
+				break;
+			case Character::CRAB:
+					Game::instance()->character_face = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("crab_face_right")));
+				break;
+			case Character::FLOWER:
+				Game::instance()->character_face = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("flower_face_right")));
+				break;
+			case Character::PUMPKIN:
+				Game::instance()->character_face = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("pumpkin_face_right")));
+				break;
+			case Character::ALIEN:
+				Game::instance()->character_face = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("alien_face_right")));
+				break;
+			case Character::OWL:
+				Game::instance()->character_face = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("owl_face_right")));
+				break;
+			case Character::DRAGON:
+				Game::instance()->character_face = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("dragon_face_right")));
+				break;
+		}
+			
 		Game::instance()->character_face->setScale(1.6);
-		Game::instance()->character_face->setPos(662,70);*/
+		Game::instance()->character_face->setPos(720-Game::instance()->character_face->sceneBoundingRect().width()/2,68);
+
+		Game::instance()->scoreGraphics.resize(6);
+		for (auto el : Game::instance()->scoreGraphics) {
+			el = new QGraphicsPixmapItem();
+			el->setPixmap(QPixmap(Sprites::instance()->get("0-score")));
+			el->setY(13);
+			el->setX(352);
+		}
+		/*Game::instance()->scoreGraphics[0]->setX(352);
+		Game::instance()->getScoreGraphics()[1]->setX(400);
+		Game::instance()->getScoreGraphics()[2]->setX(450);
+		Game::instance()->getScoreGraphics()[3]->setX(500);
+		Game::instance()->getScoreGraphics()[4]->setX(550);
+		Game::instance()->getScoreGraphics()[5]->setX(600);*/
 
 
  // CREATE PHYSICS WORLD
@@ -197,6 +236,7 @@ void LevelBuilder::load(const QString& level_name)
 		Game::instance()->getMasterPegBox()->SetLinearVelocity(b2Vec2(0, 0));
 		Game::instance()->getMasterPegBox()->SetAngularVelocity(0);
 
+		Game::instance()->getMasterPegGraphic()->setVisible(false);
 
 	// CREATE BUCKET
 

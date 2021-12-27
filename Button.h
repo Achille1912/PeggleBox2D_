@@ -40,7 +40,7 @@ public:
     
     // override
     virtual void mousePressEvent(QMouseEvent* e) override;
-    
+ 
 signals:
     void clicked();
     

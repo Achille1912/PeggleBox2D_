@@ -66,7 +66,7 @@ QPixmap Sprites::get(const std::string &id)
         return loadTexture(":/sprites/select_single_character.png", QColor(255, 0, 255));
 
     else if (id == "single_button")
-        return gameMode_buttons.copy(QRect(0,254,211,127));
+        return gameMode_buttons.copy(QRect(0, 254, 211, 127));
     else if (id == "duel_button")
         return gameMode_buttons.copy(QRect(0, 128, 211, 127));
     else if (id == "cpu_button")
@@ -96,14 +96,44 @@ QPixmap Sprites::get(const std::string &id)
     else if (id == "play_now_button")
         return action_buttons.copy(QRect(0, 57, 155, 54));
 
-    else if (id == "player")
-        return sprites.copy(403, 82, 9, 12);
+    else if (id == "master_peg")
+        return sprites.copy(343, 10, 54, 54);
+    else if (id == "master_peg_fired")
+        return sprites.copy(424, 77, 22, 22);
     else if (id == "bucket")
         return stage_elements.copy(bucket);
     else if (id == "unicorn_face_right")
         return character_face.copy(0, 0, 66, 89);
     else if (id == "unicorn_face_left")
-        return character_face.copy(0, 91, 66, 89);
+        return character_face.copy(0, 98, 66, 89);
+    else if (id == "beaver_face_right")
+        return character_face.copy(0, 257, 92, 79);
+    else if (id == "beaver_face_left")
+        return character_face.copy(0, 180, 92, 79);
+    else if (id == "crab_face_right")
+        return character_face.copy(0, 421, 66, 84);
+    else if (id == "crab_face_left")
+        return character_face.copy(0, 339, 66, 84);
+    else if (id == "flower_face_right")
+        return character_face.copy(0, 590, 86, 83);
+    else if (id == "flower_face_left")
+        return character_face.copy(0, 507, 86, 83);
+    else if (id == "pumpkin_face_right")
+        return character_face.copy(0, 757, 83, 80);
+    else if (id == "pumpkin_face_left")
+        return character_face.copy(0, 675, 83, 80);
+    else if (id == "alien_face_right")
+        return character_face.copy(0, 921, 72, 82);
+    else if (id == "alien_face_left")
+        return character_face.copy(0, 839, 72, 82);
+    else if (id == "owl_face_right")
+        return character_face.copy(0, 1101, 89, 96);
+    else if (id == "owl_face_left")
+        return character_face.copy(0, 1006, 89, 96);
+    else if (id == "dragon_face_right")
+        return character_face.copy(0, 1298, 79, 95);
+    else if (id == "dragon_face_left")
+        return character_face.copy(0, 1200, 79, 95);
 
     // Remaining Balls
     else if (id == "0")
@@ -130,8 +160,11 @@ QPixmap Sprites::get(const std::string &id)
         return (fonts.copy(478, 305, 52, 54).transformed(QTransform().scale(-1, 1)));
 
     else if (id == "cannon")
-        return sprites.copy(385, 390, 51, 64);
-
+        return sprites.copy(384, 327, 50, 80);
+    else if (id == "cannon_without_ball")
+    return sprites.copy(384, 327, 50, 50);
+    else if (id == "cannon_fired")
+    return sprites.copy(459, 327, 50, 100);
 
     else if (id == "peg_blue_hit")
         return peggles.copy(pegle);
@@ -158,6 +191,9 @@ QPixmap Sprites::get(const std::string &id)
         return sprites.copy(673, 364, 25, 20);
     else if (id == "molt-x10")
         return sprites.copy(673, 384, 25, 20);
+
+    else if (id == "0-score")
+        return fonts.copy(796, 327, 17, 26);
 
     else if (id == "paused")
         return sprites.copy(700, 1258, 230, 59);

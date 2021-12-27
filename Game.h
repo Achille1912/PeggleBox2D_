@@ -86,6 +86,7 @@ private:
     Peg* pegGraphic;
     MasterPeg* masterPegGraphic;
     Bucket* bucketGraphic;
+    
 
     // singleton
     static Game *_uniqueInstance;
@@ -94,6 +95,7 @@ private:
 public:
     static Game *instance();
     QVector<b2Body*> PegBox;
+    QVector< QGraphicsPixmapItem*> scoreGraphics;
     QGraphicsPixmapItem* cannon;
     int remainingBall = 9;
     QGraphicsPixmapItem* remainingBallPixmap;
@@ -111,6 +113,7 @@ public:
 
     QVector<b2Body*>getPegBox() { return PegBox; }
     Peg* getPegGraphic() { return pegGraphic; }
+    
    
     b2Body* getMasterPegBox() { return MasterPegBox; }
     MasterPeg* getMasterPegGraphic() { return masterPegGraphic; }
@@ -130,6 +133,7 @@ public:
     void setCharacter(Character c) { _character = c; }
     void setPower(bool b) { _power=b; }
     
+    
     void setPegGraphic(Peg* p) { pegGraphic = p; }
 
     void setMasterPegBox(b2Body* b) { MasterPegBox = b; }
@@ -146,6 +150,8 @@ public:
     void clearHittedPeg();
     void save();
     void activePower();
+    QVector<int> getScoreNumbers(int x, QVector<int> vec);
+    void printScore();
     bool restoreGreen = false;
     MasterPeg* secondMasterPegGraphics;
     b2Body* secondMasterPegBox;

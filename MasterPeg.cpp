@@ -14,7 +14,7 @@ bool sortbysec(const std::tuple<int, int>& a,
 MasterPeg::MasterPeg(QPoint pos) : QGraphicsPixmapItem(0)
 {
 	setPos(pos);
-	setPixmap(Sprites::instance()->get("player").scaled(18, 18));
+	setPixmap(Sprites::instance()->get("master_peg").scaled(20, 20));
 	Game::instance()->world()->addItem(this);
 
 }
@@ -47,8 +47,11 @@ void MasterPeg::advance(b2Body* box) {
                     break;
                 case Character::DRAGON:
                 {
+                    Game::instance()->cannon->setPixmap(Sprites::instance()->get("cannon_fired"));
+                    Game::instance()->getMasterPegGraphic()->setPixmap(Sprites::instance()->get("master_peg_fired").scaled(20, 20));
+                    Game::instance()->getMasterPegGraphic()->setVisible(false);
                     box->GetFixtureList()->SetSensor(true);
-                    //cambia texture
+                    
                     Game::instance()->setPower(false);
                     this->setFire(false);
                     Game::instance()->clearHittedPeg();
@@ -71,6 +74,7 @@ void MasterPeg::advance(b2Body* box) {
                     break;
                 }
             }
+            Game::instance()->getMasterPegGraphic()->setPixmap(Sprites::instance()->get("master_peg").scaled(20, 20));
             box->GetFixtureList()->SetSensor(false);
             this->setFire(false);
             Game::instance()->clearHittedPeg();
@@ -88,6 +92,8 @@ void MasterPeg::advance(b2Body* box) {
             Game::instance()->getWorld2d()->SetGravity(b2Vec2(0, 0));
             Game::instance()->bandOne->setY(924);
             Game::instance()->bandTwo->setY(924);
+            Game::instance()->getMasterPegGraphic()->setVisible(false);
+            Game::instance()->cannon->setPixmap(Sprites::instance()->get("cannon"));
 
         }
         /*else {

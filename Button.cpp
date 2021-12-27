@@ -171,4 +171,3 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 	 QLabel::mousePressEvent(e);
 	 emit clicked();
  }
-

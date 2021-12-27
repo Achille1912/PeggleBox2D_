@@ -174,7 +174,6 @@ void Game::nextFrame()
     
     world2d->Step(timeStep, velocityIterations, positionIterations); //sarebbe l'advance
 
-    
   for (b2ContactEdge* edge = MasterPegBox->GetContactList(); edge; edge = edge->next)
     {
       
@@ -208,6 +207,8 @@ void Game::nextFrame()
           }
       }
   }
+
+
 
           
   
@@ -313,7 +314,8 @@ void Game::mousePressEvent(QMouseEvent* e)
             QVector2D p = QVector2D(currPos.x() - midPos.x(), currPos.y() - midPos.y());
             p.normalize();
             MasterPegBox->SetLinearVelocity(b2Vec2(p.x() * 12, p.y() * 12));
-
+            masterPegGraphic->setVisible(true);
+            cannon->setPixmap(Sprites::instance()->get("cannon_without_ball"));
         }
 
         if (e->button() == Qt::RightButton)
@@ -339,11 +341,58 @@ void Game::mouseMoveEvent(QMouseEvent* e)
                 
                 currPos = QPoint(mapToScene(e->pos()).x(), mapToScene(e->pos()).y());
                 setMouseTracking(true);
-                /*if (currPos.x() < midPos.x())
-                    character_face->setPixmap(QPixmap(Sprites::instance()->get("unicorn_face_left")));
-                else
-                    character_face->setPixmap(QPixmap(Sprites::instance()->get("unicorn_face_right")));
-                    */
+               
+                    switch (_character) {
+                    case Character::UNICORN:
+                        if (currPos.x() < midPos.x()) 
+                            character_face->setPixmap(QPixmap(Sprites::instance()->get("unicorn_face_left")));
+                        else
+                            character_face->setPixmap(QPixmap(Sprites::instance()->get("unicorn_face_right")));
+                        break;
+                    case Character::BEAVER:
+                        if (currPos.x() < midPos.x())
+                            character_face->setPixmap(QPixmap(Sprites::instance()->get("beaver_face_left")));
+                        else
+                            character_face->setPixmap(QPixmap(Sprites::instance()->get("beaver_face_right")));
+                        break;
+                    case Character::CRAB:
+                        if (currPos.x() < midPos.x())
+                            character_face->setPixmap(QPixmap(Sprites::instance()->get("crab_face_left")));
+                        else
+                            character_face->setPixmap(QPixmap(Sprites::instance()->get("crab_face_right")));
+                        break;
+                    case Character::FLOWER:
+                        if (currPos.x() < midPos.x())
+                            character_face->setPixmap(QPixmap(Sprites::instance()->get("flower_face_left")));
+                        else
+                            character_face->setPixmap(QPixmap(Sprites::instance()->get("flower_face_right")));
+                        break;
+                    case Character::PUMPKIN:
+                        if (currPos.x() < midPos.x())
+                            character_face->setPixmap(QPixmap(Sprites::instance()->get("pumpkin_face_left")));
+                        else
+                            character_face->setPixmap(QPixmap(Sprites::instance()->get("pumpkin_face_right")));
+                        break;
+                    case Character::ALIEN:
+                        if (currPos.x() < midPos.x())
+                            character_face->setPixmap(QPixmap(Sprites::instance()->get("alien_face_left")));
+                        else
+                            character_face->setPixmap(QPixmap(Sprites::instance()->get("alien_face_right")));
+                        break;
+                    case Character::OWL:
+                        if (currPos.x() < midPos.x())
+                            character_face->setPixmap(QPixmap(Sprites::instance()->get("owl_face_left")));
+                        else
+                            character_face->setPixmap(QPixmap(Sprites::instance()->get("owl_face_right")));
+                        break;
+                    case Character::DRAGON:
+                        if (currPos.x() < midPos.x())
+                            character_face->setPixmap(QPixmap(Sprites::instance()->get("dragon_face_left")));
+                        else
+                            character_face->setPixmap(QPixmap(Sprites::instance()->get("dragon_face_right")));
+                        break;
+                    }
+                                   
                 QPointF center(720, 100);
                 QLineF v1(center, QPoint(720, 500));
 
@@ -675,3 +724,20 @@ void Game::activePower() {
     }
 }
 
+QVector<int> Game::getScoreNumbers(int x, QVector<int> vec) {
+    
+    if (x >= 10)
+        getScoreNumbers(x / 10, vec);
+
+    int digit = x % 10;
+    
+    vec.push_back(digit);
+    return vec;
+}
+
+void Game::printScore() {
+    QVector<int> arr;
+    getScoreNumbers(_score, arr);
+    std::string tmp = "";
+    
+}
