@@ -39,7 +39,7 @@ void MasterPeg::advance(b2Body* box) {
                     }
                     return;
                 }
-                    break;
+                break;
                 case Character::PUMPKIN:
                     box->SetTransform(b2Vec2(box->GetPosition().x, 0), box->GetAngle());
                     Game::instance()->setPower(false);
@@ -51,12 +51,14 @@ void MasterPeg::advance(b2Body* box) {
                     Game::instance()->getMasterPegGraphic()->setPixmap(Sprites::instance()->get("master_peg_fired").scaled(20, 20));
                     Game::instance()->getMasterPegGraphic()->setVisible(false);
                     box->GetFixtureList()->SetSensor(true);
-                    
+
                     Game::instance()->setPower(false);
                     this->setFire(false);
                     Game::instance()->clearHittedPeg();
                     Game::instance()->remainingBall--;
+                    
                     printf("%d", Game::instance()->getScore());
+
                     Game::instance()->printRemainingBall(Game::instance()->remainingBall);
                     QPointF center(720, 100);
 
@@ -69,11 +71,74 @@ void MasterPeg::advance(b2Body* box) {
                     Game::instance()->getWorld2d()->SetGravity(b2Vec2(0, 0));
                     Game::instance()->bandOne->setY(924);
                     Game::instance()->bandTwo->setY(924);
+
                     return;
                 }
-                    break;
+                break;
                 }
             }
+            if (Game::instance()->getGameMode() == GameMode::DUEL || Game::instance()->getGameMode() == GameMode::CPU) {
+                if (Game::instance()->turn == true) {
+                    Game::instance()->turn = false;
+                    switch (Game::instance()->getSecondCharacter()) {
+                    case Character::UNICORN:
+                        Game::instance()->character_face->setPixmap(QPixmap(Sprites::instance()->get("unicorn_face_right")));
+                        break;
+                    case Character::BEAVER:
+                        Game::instance()->character_face->setPixmap(QPixmap(Sprites::instance()->get("beaver_face_right")));
+                        break;
+                    case Character::CRAB:
+                        Game::instance()->character_face->setPixmap(QPixmap(Sprites::instance()->get("crab_face_right")));
+                        break;
+                    case Character::FLOWER:
+                        Game::instance()->character_face->setPixmap(QPixmap(Sprites::instance()->get("flower_face_right")));
+                        break;
+                    case Character::PUMPKIN:
+                        Game::instance()->character_face->setPixmap(QPixmap(Sprites::instance()->get("pumpkin_face_right")));
+                        break;
+                    case Character::ALIEN:
+                        Game::instance()->character_face->setPixmap(QPixmap(Sprites::instance()->get("alien_face_right")));
+                        break;
+                    case Character::OWL:
+                        Game::instance()->character_face->setPixmap(QPixmap(Sprites::instance()->get("owl_face_right")));
+                        break;
+                    case Character::DRAGON:
+                        Game::instance()->character_face->setPixmap(QPixmap(Sprites::instance()->get("dragon_face_right")));
+                        break;
+                    }
+                }
+                else {
+                    Game::instance()->turn = true;
+                    switch (Game::instance()->getCharacter()) {
+                    case Character::UNICORN:
+                        Game::instance()->character_face->setPixmap(QPixmap(Sprites::instance()->get("unicorn_face_right")));
+                        break;
+                    case Character::BEAVER:
+                        Game::instance()->character_face->setPixmap(QPixmap(Sprites::instance()->get("beaver_face_right")));
+                        break;
+                    case Character::CRAB:
+                        Game::instance()->character_face->setPixmap(QPixmap(Sprites::instance()->get("crab_face_right")));
+                        break;
+                    case Character::FLOWER:
+                        Game::instance()->character_face->setPixmap(QPixmap(Sprites::instance()->get("flower_face_right")));
+                        break;
+                    case Character::PUMPKIN:
+                        Game::instance()->character_face->setPixmap(QPixmap(Sprites::instance()->get("pumpkin_face_right")));
+                        break;
+                    case Character::ALIEN:
+                        Game::instance()->character_face->setPixmap(QPixmap(Sprites::instance()->get("alien_face_right")));
+                        break;
+                    case Character::OWL:
+                        Game::instance()->character_face->setPixmap(QPixmap(Sprites::instance()->get("owl_face_right")));
+                        break;
+                    case Character::DRAGON:
+                        Game::instance()->character_face->setPixmap(QPixmap(Sprites::instance()->get("dragon_face_right")));
+                        break;
+                    }
+                }
+            }
+
+            
             Game::instance()->getMasterPegGraphic()->setPixmap(Sprites::instance()->get("master_peg").scaled(20, 20));
             box->GetFixtureList()->SetSensor(false);
             this->setFire(false);
@@ -95,6 +160,30 @@ void MasterPeg::advance(b2Body* box) {
             Game::instance()->getMasterPegGraphic()->setVisible(false);
             Game::instance()->cannon->setPixmap(Sprites::instance()->get("cannon"));
 
+
+
+            if (Game::instance()->getGameMode() == GameMode::CPU && !(Game::instance()->turn)) {
+               
+                int alfa = rand() % 181;
+                QPoint midPos((Game::instance()->sceneRect().width() / 2), 130);
+
+                QLineF p = QLineF(midPos, QPointF((Game::instance()->sceneRect().width() / 2), 500));
+                QLineF f = QLineF(midPos, QPointF((Game::instance()->sceneRect().width() / 2), 300));
+                QLineF c = p;
+
+                p.setAngle(-alfa);
+                f.setAngle(-alfa);
+
+                Game::instance()->cannon->setTransformOriginPoint(QPoint(30, -65));
+                Game::instance()->cannon->setRotation(-c.angleTo(p));
+                if (!Game::instance()->getMasterPegGraphic()->getFire())
+                    Game::instance()->getMasterPegBox()->SetTransform(b2Vec2(f.p2().x() / 30.0, f.p2().y() / 30.0), Game::instance()->getMasterPegBox()->GetAngle());
+                Game::instance()->getMasterPegBox()->SetLinearVelocity(b2Vec2((p.dx() - (Game::instance()->getMasterPegBox()->GetPosition().x / 30.0)) * 0.05, (p.dy() - (Game::instance()->getMasterPegBox()->GetPosition().y) / 30.0) * 0.05));
+                Game::instance()->getWorld2d()->SetGravity(b2Vec2(0, 25.0f));
+                Game::instance()->getMasterPegGraphic()->setFire(true);
+                Game::instance()->getMasterPegGraphic()->setVisible(true);
+                Game::instance()->cannon->setPixmap(Sprites::instance()->get("cannon_without_ball"));
+            }
         }
         /*else {
             printf("Prova");

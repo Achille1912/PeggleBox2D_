@@ -26,6 +26,21 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 	else if (_buttonType == ButtonType::MAIN_MENU) {
 		setPixmap(QPixmap(Sprites::instance()->get("main_menu_button")));
 	}
+	else if (_buttonType == ButtonType::RETURN) {
+		setPixmap(QPixmap(Sprites::instance()->get("return_button")));
+	}
+	else if (_buttonType == ButtonType::NORMAL_MODE) {
+		setPixmap(QPixmap(Sprites::instance()->get("normal_mode_button")));
+	}
+	else if (_buttonType == ButtonType::HARD_MODE) {
+		setPixmap(QPixmap(Sprites::instance()->get("hard_mode_button")));
+	}
+	else if (_buttonType == ButtonType::CONTINUE) {
+		setPixmap(QPixmap(Sprites::instance()->get("continue_button")));
+	}
+	else if (_buttonType == ButtonType::NEXT) {
+		setPixmap(QPixmap(Sprites::instance()->get("next_button")));
+	}
 	else if (_buttonType == ButtonType::UNICORN) {
 		setPixmap(QPixmap(Sprites::instance()->get("unicorn_button")));
 	}
@@ -67,21 +82,38 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 
 
 
- void Button::slotLabelClicked()   // Implementation of Slot which will consume signal
+ void Button::slotLabelClicked()   
  {
 	 if (_buttonType == ButtonType::SINGLE) {
-		 Game::instance()->select_single_character();
+		 Game::instance()->setGameMode(GameMode::SINGLE);
+		 Game::instance()->getWindow()->load("select_single_character");
 	 }
 	 else if (_buttonType == ButtonType::DUEL) {
-
-		 printf("DUEL");
+		 Game::instance()->setGameMode(GameMode::DUEL);
+		 Game::instance()->getWindow()->load("select_first_character");
 		 
 	 }
 	 else if (_buttonType == ButtonType::CPU) {
-		 printf("CPU");
+		 Game::instance()->setGameMode(GameMode::CPU);
+		 Game::instance()->getWindow()->load("select_difficulty");
 	 }
 	 else if (_buttonType == ButtonType::MAIN_MENU) {
 		 Game::instance()->menuDuel();
+	 }
+	 else if (_buttonType == ButtonType::NEXT) {
+		 if(Game::instance()->getCharacter()!=Character::NONE)
+			 Game::instance()->getWindow()->load("select_second_character");
+	 }
+	 else if (_buttonType == ButtonType::CONTINUE) {
+		 Game::instance()->getWindow()->load("select_first_character");
+	 }
+	 else if (_buttonType == ButtonType::NORMAL_MODE) {
+		 setWindowOpacity(0.5);
+		 Game::instance()->hardMode=false;
+	 }
+	 else if (_buttonType == ButtonType::HARD_MODE) {
+		 setWindowOpacity(0.5);
+		 Game::instance()->hardMode = true;
 	 }
 
 	 else if (_buttonType == ButtonType::UNICORN) {
@@ -90,7 +122,9 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
 		 }
 		 setWindowOpacity(0.5);
-		 Game::instance()->setCharacter(Character::UNICORN);
+		 Game::instance()->getState()==GameState::SELECT_SECOND_CHARACTER? 
+			 Game::instance()->setSecondCharacter(Character::UNICORN):
+			 Game::instance()->setCharacter(Character::UNICORN);
 	 }
 	 else if (_buttonType == ButtonType::BEAVER) {
 		 for (auto el : (Game::instance()->world()->children())) {
@@ -99,7 +133,9 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 		 }
 			 
 		 
-		 Game::instance()->setCharacter(Character::BEAVER);
+		 Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
+			 Game::instance()->setSecondCharacter(Character::BEAVER) :
+			 Game::instance()->setCharacter(Character::BEAVER);
 		 setWindowOpacity(0.5);
 
 	 }
@@ -108,7 +144,9 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 			 if (dynamic_cast<Button*>(el))
 				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
 		 }
-		 Game::instance()->setCharacter(Character::CAT);
+		 Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
+			 Game::instance()->setSecondCharacter(Character::CAT) :
+			 Game::instance()->setCharacter(Character::CAT);
 		 setWindowOpacity(0.5);
 	 }
 	 else if (_buttonType == ButtonType::ALIEN) {
@@ -116,7 +154,9 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 			 if (dynamic_cast<Button*>(el))
 				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
 		 }
-		 Game::instance()->setCharacter(Character::ALIEN);
+		 Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
+			 Game::instance()->setSecondCharacter(Character::ALIEN) :
+			 Game::instance()->setCharacter(Character::ALIEN);
 		 setWindowOpacity(0.5);
 	 }
 	 else if (_buttonType == ButtonType::CRAB) {
@@ -124,7 +164,9 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 			 if (dynamic_cast<Button*>(el))
 				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
 		 }
-		 Game::instance()->setCharacter(Character::CRAB);
+		 Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
+			 Game::instance()->setSecondCharacter(Character::CRAB) :
+			 Game::instance()->setCharacter(Character::CRAB);
 		 setWindowOpacity(0.5);
 	 }
 	 else if (_buttonType == ButtonType::PUMPKIN) {
@@ -132,7 +174,9 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 			 if (dynamic_cast<Button*>(el))
 				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
 		 }
-		 Game::instance()->setCharacter(Character::PUMPKIN);
+		 Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
+			 Game::instance()->setSecondCharacter(Character::PUMPKIN) :
+			 Game::instance()->setCharacter(Character::PUMPKIN);		 
 		 setWindowOpacity(0.5);
 	 }
 	 else if (_buttonType == ButtonType::FLOWER) {
@@ -140,7 +184,9 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 			 if (dynamic_cast<Button*>(el))
 				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
 		 }
-		 Game::instance()->setCharacter(Character::FLOWER);
+		 Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
+			 Game::instance()->setSecondCharacter(Character::FLOWER) :
+			 Game::instance()->setCharacter(Character::FLOWER);
 		 setWindowOpacity(0.5);
 	 }
 	 else if (_buttonType == ButtonType::DRAGON) {
@@ -148,7 +194,9 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 			 if (dynamic_cast<Button*>(el))
 				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
 		 }
-		 Game::instance()->setCharacter(Character::DRAGON);
+		 Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
+			 Game::instance()->setSecondCharacter(Character::DRAGON) :
+			 Game::instance()->setCharacter(Character::DRAGON);
 		 setWindowOpacity(0.5);
 	 }
 	 else if (_buttonType == ButtonType::OWL) {
@@ -156,15 +204,28 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 			 if (dynamic_cast<Button*>(el))
 				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
 		 }
-		 Game::instance()->setCharacter(Character::OWL);
+		 Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
+			 Game::instance()->setSecondCharacter(Character::OWL) :
+			 Game::instance()->setCharacter(Character::OWL);
 		 setWindowOpacity(0.5);
 	 }
 	 else if (_buttonType == ButtonType::PLAY_NOW) {
-		 if (Game::instance()->getCharacter() != Character::NONE)
-			 Game::instance()->play();
+		 if (Game::instance()->getState() != GameState::SELECT_SECOND_CHARACTER) {
+			 if (Game::instance()->getCharacter() != Character::NONE)
+				 Game::instance()->play();
+		 }
+		 else {
+			 if (Game::instance()->getSecondCharacter() != Character::NONE)
+				 Game::instance()->play();
+		 }
 	 }
-
-	 
+	 else if (_buttonType == ButtonType::NEXT) {
+	 if (Game::instance()->getCharacter() != Character::NONE)
+		 Game::instance()->play();
+	 }
+	 else if (_buttonType == ButtonType::RETURN) {
+		 Game::instance()->init();
+	 }
  }
 
  void Button::mousePressEvent(QMouseEvent* e) {

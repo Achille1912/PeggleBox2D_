@@ -64,6 +64,8 @@ QPixmap Sprites::get(const std::string &id)
         return loadTexture(":/sprites/gameMode.png", QColor(255, 0, 255));
     else if (id == "select_character")
         return loadTexture(":/sprites/select_single_character.png", QColor(255, 0, 255));
+    else if (id == "select_difficulty")
+        return loadTexture(":/sprites/select_difficulty.png", QColor(255, 0, 255));
 
     else if (id == "single_button")
         return gameMode_buttons.copy(QRect(0, 254, 211, 127));
@@ -71,6 +73,10 @@ QPixmap Sprites::get(const std::string &id)
         return gameMode_buttons.copy(QRect(0, 128, 211, 127));
     else if (id == "cpu_button")
         return gameMode_buttons.copy(QRect(0, 0, 211, 127));
+    else if (id == "normal_mode_button")
+        return gameMode_buttons.copy(QRect(0, 514, 211, 127));
+    else if (id == "hard_mode_button")
+        return gameMode_buttons.copy(QRect(0, 384, 211, 127));
 
     else if (id == "unicorn_button")
         return character_buttons.copy(QRect(0, 729, 89, 90));
@@ -95,6 +101,12 @@ QPixmap Sprites::get(const std::string &id)
         return action_buttons.copy(QRect(0, 0, 155, 55));
     else if (id == "play_now_button")
         return action_buttons.copy(QRect(0, 57, 155, 54));
+    else if (id == "continue_button")
+        return action_buttons.copy(QRect(0, 175, 155, 54));
+    else if (id == "next_button")
+        return action_buttons.copy(QRect(0, 237, 155, 54));
+    else if (id == "return_button")
+        return action_buttons.copy(QRect(0, 116, 155, 54));
 
     else if (id == "master_peg")
         return sprites.copy(343, 10, 54, 54);
@@ -157,7 +169,7 @@ QPixmap Sprites::get(const std::string &id)
     else if (id == "9")
         return fonts.copy(moveBy(remainingBallNumber, 1, 0, (35 * 8)));
     else if (id == "10")
-        return (fonts.copy(478, 305, 52, 54).transformed(QTransform().scale(-1, 1)));
+    return (fonts.copy(5, 296, 47, 40));
 
     else if (id == "cannon")
         return sprites.copy(384, 327, 50, 80);
@@ -193,7 +205,25 @@ QPixmap Sprites::get(const std::string &id)
         return sprites.copy(673, 384, 25, 20);
 
     else if (id == "0-score")
-        return fonts.copy(796, 327, 17, 26);
+        return fonts.copy(794, 327, 22, 26);
+    else if (id == "1-score")
+    return fonts.copy(816, 327, 22, 26);
+    else if (id == "2-score")
+    return fonts.copy(838, 327, 22, 26);
+    else if (id == "3-score")
+    return fonts.copy(860, 327, 22, 26);
+    else if (id == "4-score")
+    return fonts.copy(882, 327, 22, 26);
+    else if (id == "5-score")
+    return fonts.copy(904, 327, 22, 26);
+    else if (id == "6-score")
+    return fonts.copy(926, 327, 22, 26);
+    else if (id == "7-score")
+    return fonts.copy(948, 327, 22, 26);
+    else if (id == "8-score")
+    return fonts.copy(970, 327, 22, 26);
+    else if (id == "9-score")
+    return fonts.copy(992, 327, 22, 26);
 
     else if (id == "paused")
         return sprites.copy(700, 1258, 230, 59);

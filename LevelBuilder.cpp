@@ -27,11 +27,11 @@ void LevelBuilder::load(const QString& level_name)
 	// BACKGROUND
 		QGraphicsPixmapItem* level = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("Hud_Unicorn")));
 		Game::instance()->setSceneRect(0, 0, level->sceneBoundingRect().width(), level->sceneBoundingRect().height());
-
+		
 		Game::instance()->centerOn(level);
-		Game::instance()->remainingBallPixmap = Game::instance()->world()->addPixmap(Sprites::instance()->get("9"));
-		Game::instance()->remainingBallPixmap->setPos(QPoint(45, 180));
+		Game::instance()->remainingBallPixmap = Game::instance()->world()->addPixmap(Sprites::instance()->get("10"));
 		Game::instance()->remainingBallPixmap->setScale(1.8);
+		Game::instance()->remainingBallPixmap->setPos(QPoint(55 - Game::instance()->remainingBallPixmap->boundingRect().width()/2, 180));
 		Game::instance()->fitInView(level, Qt::KeepAspectRatio);
 		Game::instance()->cannon = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("cannon")));
 		Game::instance()->cannon->setScale(1.5);
@@ -110,18 +110,23 @@ void LevelBuilder::load(const QString& level_name)
 		Game::instance()->character_face->setPos(720-Game::instance()->character_face->sceneBoundingRect().width()/2,68);
 
 		Game::instance()->scoreGraphics.resize(6);
-		for (auto el : Game::instance()->scoreGraphics) {
-			el = new QGraphicsPixmapItem();
-			el->setPixmap(QPixmap(Sprites::instance()->get("0-score")));
-			el->setY(13);
-			el->setX(352);
+		for (int i = 0; i < 6; i++) {
+			Game::instance()->scoreGraphics[i]= new QGraphicsPixmapItem();
+			Game::instance()->scoreGraphics[i]->setPixmap(QPixmap(Sprites::instance()->get("0-score")).scaled(50,50));
+			Game::instance()->scoreGraphics[i]->setY(15);
+			Game::instance()->scoreGraphics[i]->setX(500 - (i * 50));
+			Game::instance()->world()->addItem(Game::instance()->scoreGraphics[i]);
 		}
-		/*Game::instance()->scoreGraphics[0]->setX(352);
-		Game::instance()->getScoreGraphics()[1]->setX(400);
-		Game::instance()->getScoreGraphics()[2]->setX(450);
-		Game::instance()->getScoreGraphics()[3]->setX(500);
-		Game::instance()->getScoreGraphics()[4]->setX(550);
-		Game::instance()->getScoreGraphics()[5]->setX(600);*/
+
+		Game::instance()->scoreGraphicsTwo.resize(6);
+		for (int i = 0; i < 6; i++) {
+			Game::instance()->scoreGraphicsTwo[i] = new QGraphicsPixmapItem();
+			Game::instance()->scoreGraphicsTwo[i]->setPixmap(QPixmap(Sprites::instance()->get("0-score")).scaled(50, 50));
+			Game::instance()->scoreGraphicsTwo[i]->setY(15);
+			Game::instance()->scoreGraphicsTwo[i]->setX(1150 - (i * 50));
+			Game::instance()->world()->addItem(Game::instance()->scoreGraphicsTwo[i]);
+		}
+
 
 
  // CREATE PHYSICS WORLD
@@ -248,7 +253,7 @@ void LevelBuilder::load(const QString& level_name)
 		
 		Game::instance()->setBucketBox(Game::instance()->getWorld2d()->CreateBody(&bucketDef));
 
-		Game::instance()->setBucketGraphic(new Bucket(QPoint(bucketDef.position.x * 30.0, bucketDef.position.y * 30.0)));
+		Game::instance()->setBucketGraphic(new Bucket(QPoint((bucketDef.position.x-20) * 30.0, bucketDef.position.y * 30.0)));
 
 		// Shape
 		b2PolygonShape groundShape;

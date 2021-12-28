@@ -14,6 +14,11 @@ namespace PGG
         CPU,
         MAIN_MENU,
         PLAY_NOW,
+        NEXT,
+        CONTINUE,
+        NORMAL_MODE,
+        HARD_MODE,
+        RETURN,
 
         UNICORN,
         BEAVER,

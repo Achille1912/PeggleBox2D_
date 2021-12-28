@@ -11,6 +11,7 @@
 #include "MasterPeg.h"
 #include "Peg.h"
 #include "LevelBuilder.h"
+#include "WindowBuilder.h"
 #include "Hud.h"
 #include "Button.h"
 
@@ -26,9 +27,21 @@ enum class GameState
     TITLE,
     MODE,
     SELECT_SINGLE_CHARACTER,
+    SELECT_FIRST_CHARACTER,
+    SELECT_SECOND_CHARACTER,
+    SELECT_DIFFICULTY,
     PLAYING,
     PAUSED,
-    //gameover
+    RESULT_SINGLE,
+    RESULT_DOUBLE
+  
+};
+enum class GameMode
+{
+   SINGLE,
+   DUEL,
+   CPU
+
 };
 
 enum class Character
@@ -63,11 +76,15 @@ private:
     // game attributes
     QTimer _engine;
     GameState _state;
+    GameMode _mode;
     Character _character;
+    Character _secondCharacter;
     QGraphicsScene *_world;
     HUD* _hud;
     LevelBuilder* _builder;
+    WindowBuilder* _window;
     int _score;
+    int _secondScore;
     int _redPegHit;
     bool _power;
 
@@ -96,8 +113,9 @@ public:
     static Game *instance();
     QVector<b2Body*> PegBox;
     QVector< QGraphicsPixmapItem*> scoreGraphics;
+    QVector< QGraphicsPixmapItem*> scoreGraphicsTwo;
     QGraphicsPixmapItem* cannon;
-    int remainingBall = 9;
+    int remainingBall = 10;
     QGraphicsPixmapItem* remainingBallPixmap;
     QGraphicsPixmapItem* paused;
     QGraphicsPixmapItem* character_face;
@@ -107,9 +125,15 @@ public:
     QGraphicsScene* world() { return _world; }
     HUD* Hudd() { return _hud; }
     int getScore() { return _score; }
+    int getSecondScore() { return _secondScore; }
     Character getCharacter() { return _character; }
     bool getPower() { return _power; }
     int getRedPegHit() { return _redPegHit; }
+    GameState getState() { return _state; }
+    Character getSecondCharacter() { return _secondCharacter; }
+    QGraphicsPixmapItem* getBackground() { return background; }
+    WindowBuilder* getWindow() { return _window; }
+    GameMode getGameMode() { return _mode; }
 
     QVector<b2Body*>getPegBox() { return PegBox; }
     Peg* getPegGraphic() { return pegGraphic; }
@@ -130,9 +154,12 @@ public:
     // setters
     void setWorld2d(b2World* b) { world2d = b; }
     void setScore(int s) { _score = s; }
+    void setSecondScore(int s) { _secondScore = s; }
     void setCharacter(Character c) { _character = c; }
+    void setSecondCharacter(Character c) { _secondCharacter = c; }
+    void setBackground(QGraphicsPixmapItem* px) { background = px; }
     void setPower(bool b) { _power=b; }
-    
+    void setGameMode(GameMode gm) { _mode = gm; }
     
     void setPegGraphic(Peg* p) { pegGraphic = p; }
 
@@ -161,7 +188,9 @@ public:
     int alpha = 89;
     bool simulation = false;
     int _simulationScore=0;
+    bool hardMode=false;
     std::vector < std::tuple< int, int > >simulationScore;
+    bool turn = true;
 
     // event handlers
     virtual void mousePressEvent(QMouseEvent *e) override;
@@ -176,17 +205,13 @@ public slots:
    
     void init();
     void reset();
-    void mode();
     void menuDuel();
-    void select_single_character();
 
     void buildLevel();
     void play();
     void nextFrame();
 
-
     void togglePause();
-
 
     void updateFPS();
 };
