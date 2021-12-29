@@ -50,6 +50,7 @@ Sprites::Sprites() //load in RAM
     character_buttons= loadTexture(":/sprites/character_buttons.png", QColor(255, 255, 255));
     action_buttons= loadTexture(":/sprites/action_buttons.png", QColor(255, 255, 255));
     character_face= loadTexture(":/sprites/character_face.png", QColor(255, 255, 255));
+    results_label= loadTexture(":/sprites/results_label.png", QColor(255, 255, 255));
 }
 
 QPixmap Sprites::get(const std::string &id)
@@ -66,6 +67,8 @@ QPixmap Sprites::get(const std::string &id)
         return loadTexture(":/sprites/select_single_character.png", QColor(255, 0, 255));
     else if (id == "select_difficulty")
         return loadTexture(":/sprites/select_difficulty.png", QColor(255, 0, 255));
+    else if (id == "results")
+        return loadTexture(":/sprites/results.png", QColor(255, 0, 255));
 
     else if (id == "single_button")
         return gameMode_buttons.copy(QRect(0, 254, 211, 127));
@@ -107,6 +110,18 @@ QPixmap Sprites::get(const std::string &id)
         return action_buttons.copy(QRect(0, 237, 155, 54));
     else if (id == "return_button")
         return action_buttons.copy(QRect(0, 116, 155, 54));
+    else if (id == "total_score")
+        return results_label.copy(QRect(0, 0, 228, 54));
+    else if (id == "the_winner_is")
+        return results_label.copy(QRect(0, 63, 228, 54));
+    else if (id == "first_player_score")
+        return results_label.copy(QRect(0, 130, 228, 54));
+    else if (id == "second_player_score")
+        return results_label.copy(QRect(0, 190, 228, 54));
+    else if (id == "first_player")
+        return results_label.copy(QRect(0, 315, 228, 54));
+    else if (id == "second_player")
+        return results_label.copy(QRect(0, 250, 228, 54));
 
     else if (id == "master_peg")
         return sprites.copy(343, 10, 54, 54);

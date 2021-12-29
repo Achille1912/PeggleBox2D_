@@ -57,7 +57,7 @@ void MasterPeg::advance(b2Body* box) {
                     Game::instance()->clearHittedPeg();
                     Game::instance()->remainingBall--;
                     
-                    printf("%d", Game::instance()->getScore());
+                    
 
                     Game::instance()->printRemainingBall(Game::instance()->remainingBall);
                     QPointF center(720, 100);
@@ -72,6 +72,8 @@ void MasterPeg::advance(b2Body* box) {
                     Game::instance()->bandOne->setY(924);
                     Game::instance()->bandTwo->setY(924);
 
+
+                   
                     return;
                 }
                 break;
@@ -160,7 +162,11 @@ void MasterPeg::advance(b2Body* box) {
             Game::instance()->getMasterPegGraphic()->setVisible(false);
             Game::instance()->cannon->setPixmap(Sprites::instance()->get("cannon"));
 
+            if (Game::instance()->remainingBall == 0) {
 
+                emit Game::instance()->gameOver();
+                return;
+            }
 
             if (Game::instance()->getGameMode() == GameMode::CPU && !(Game::instance()->turn)) {
                
@@ -184,6 +190,7 @@ void MasterPeg::advance(b2Body* box) {
                 Game::instance()->getMasterPegGraphic()->setVisible(true);
                 Game::instance()->cannon->setPixmap(Sprites::instance()->get("cannon_without_ball"));
             }
+
         }
         /*else {
             printf("Prova");

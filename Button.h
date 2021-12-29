@@ -19,6 +19,12 @@ namespace PGG
         NORMAL_MODE,
         HARD_MODE,
         RETURN,
+        TOTAL_SCORE,
+        THE_WINNER_IS,
+        FIRST_PLAYER_SCORE,
+        SECOND_PLAYER_SCORE,
+        FIRST_PLAYER,
+        SECOND_PLAYER,
 
         UNICORN,
         BEAVER,

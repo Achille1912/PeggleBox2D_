@@ -200,6 +200,8 @@ public:
     virtual void keyPressEvent(QKeyEvent *e) override;
     virtual void resizeEvent(QResizeEvent* e) override;
 
+ signals:
+    void gameOver();
    
 public slots:
    
@@ -214,4 +216,5 @@ public slots:
     void togglePause();
 
     void updateFPS();
+    void gameOverSlot();
 };

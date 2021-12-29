@@ -60,6 +60,8 @@ Game::Game() : QGraphicsView()
     // setup game engine
     QObject::connect(&_engine, SIGNAL(timeout()),
                      this, SLOT(nextFrame()));
+    QObject::connect(this, SIGNAL(gameOver()),
+        this, SLOT(gameOverSlot()), Qt::QueuedConnection);
     _engine.setTimerType(Qt::PreciseTimer);
     _engine.setInterval(1000 / GAME_FPS);
 
@@ -85,8 +87,10 @@ void Game::reset()
 {
     _score = 0;
     _secondScore = 0;
+    remainingBall = 10;
     _redPegHit = -1;
     _character = Character::NONE;
+    _secondCharacter = Character::NONE;
     _power = false;
     _engine.stop();
     _world->clear();
@@ -265,7 +269,7 @@ void Game::mousePressEvent(QMouseEvent* e)
             return;
         }
 
-        if (_state == GameState::MODE || _state == GameState::SELECT_SINGLE_CHARACTER || _state == GameState::SELECT_FIRST_CHARACTER || _state == GameState::SELECT_SECOND_CHARACTER || _state == GameState::SELECT_DIFFICULTY)
+        if (_state == GameState::MODE || _state == GameState::RESULT_DOUBLE||_state == GameState::RESULT_SINGLE|| _state == GameState::SELECT_SINGLE_CHARACTER || _state == GameState::SELECT_FIRST_CHARACTER || _state == GameState::SELECT_SECOND_CHARACTER || _state == GameState::SELECT_DIFFICULTY)
             QGraphicsView::mousePressEvent(e);
         
 
@@ -767,11 +771,19 @@ void Game::printScore() {
         arrTwo.push_back(y % 10);
         y /= 10;
     }
-  
-    for (int i = 0; i < arrOne.length() ; i++) 
-        scoreGraphics[i]->setPixmap(QPixmap(Sprites::instance()->get(std::to_string(arrOne[i]) +"-score")).scaled(50, 50));
-    
-    for (int i = 0; i < arrTwo.length(); i++)
+
+      for (int i = 0; i < arrOne.length(); i++)
+        scoreGraphics[i]->setPixmap(QPixmap(Sprites::instance()->get(std::to_string(arrOne[i]) + "-score")).scaled(50, 50));
+
+     for (int i = 0; i < arrTwo.length(); i++)
         scoreGraphicsTwo[i]->setPixmap(QPixmap(Sprites::instance()->get(std::to_string(arrTwo[i]) + "-score")).scaled(50, 50));
     
+}
+
+void Game::gameOverSlot() {
+    _engine.stop();
+    if(_mode==GameMode::SINGLE)
+        _window->load("result_single");
+    else 
+        _window->load("result_double");
 }

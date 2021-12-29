@@ -29,6 +29,24 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 	else if (_buttonType == ButtonType::RETURN) {
 		setPixmap(QPixmap(Sprites::instance()->get("return_button")));
 	}
+	else if (_buttonType == ButtonType::TOTAL_SCORE) {
+		setPixmap(QPixmap(Sprites::instance()->get("total_score")));
+	}
+	else if (_buttonType == ButtonType::FIRST_PLAYER_SCORE) {
+		setPixmap(QPixmap(Sprites::instance()->get("first_player_score")));
+	}
+	else if (_buttonType == ButtonType::SECOND_PLAYER_SCORE) {
+		setPixmap(QPixmap(Sprites::instance()->get("second_player_score")));
+	}
+	else if (_buttonType == ButtonType::FIRST_PLAYER) {
+		setPixmap(QPixmap(Sprites::instance()->get("first_player")));
+	}
+	else if (_buttonType == ButtonType::SECOND_PLAYER) {
+		setPixmap(QPixmap(Sprites::instance()->get("second_player")));
+	}
+	else if (_buttonType == ButtonType::THE_WINNER_IS) {
+		setPixmap(QPixmap(Sprites::instance()->get("the_winner_is")));
+	}
 	else if (_buttonType == ButtonType::NORMAL_MODE) {
 		setPixmap(QPixmap(Sprites::instance()->get("normal_mode_button")));
 	}
@@ -220,11 +238,12 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 		 }
 	 }
 	 else if (_buttonType == ButtonType::NEXT) {
-	 if (Game::instance()->getCharacter() != Character::NONE)
-		 Game::instance()->play();
+		if (Game::instance()->getCharacter() != Character::NONE)
+			Game::instance()->play();
 	 }
 	 else if (_buttonType == ButtonType::RETURN) {
-		 Game::instance()->init();
+		 Game::instance()->reset();
+		 Game::instance()->menuDuel();
 	 }
  }
 
