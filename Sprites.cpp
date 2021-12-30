@@ -69,6 +69,8 @@ QPixmap Sprites::get(const std::string &id)
         return loadTexture(":/sprites/select_difficulty.png", QColor(255, 0, 255));
     else if (id == "results")
         return loadTexture(":/sprites/results.png", QColor(255, 0, 255));
+     else if (id == "lateral_mp")
+        return loadTexture(":/sprites/lateral_mp.png");
 
     else if (id == "single_button")
         return gameMode_buttons.copy(QRect(0, 254, 211, 127));
