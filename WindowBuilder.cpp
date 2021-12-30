@@ -36,17 +36,17 @@ void WindowBuilder::load(const QString& window_name)
 
         Game::instance()->setBackground(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("select_character"))));
         Game::instance()->fitInView(Game::instance()->getBackground(), Qt::KeepAspectRatio);
-        new Button(QRect(80, 100, 89, 89), ButtonType::UNICORN);
-        new Button(QRect(80, 200, 89, 89), ButtonType::BEAVER);
-        new Button(QRect(80, 300, 89, 89), ButtonType::CAT);
+        new Button(QRect(120, 100, 89, 89), ButtonType::UNICORN);
+        new Button(QRect(120, 200, 89, 89), ButtonType::BEAVER);
+        new Button(QRect(120, 300, 89, 89), ButtonType::OWL);
+        new Button(QRect(120, 400, 89, 89), ButtonType::ALIEN);
 
-        new Button(QRect(200, 100, 89, 89), ButtonType::ALIEN);
-        new Button(QRect(200, 200, 89, 89), ButtonType::CRAB);
-        new Button(QRect(200, 300, 89, 89), ButtonType::PUMPKIN);
 
-        new Button(QRect(320, 100, 89, 89), ButtonType::FLOWER);
-        new Button(QRect(320, 200, 89, 89), ButtonType::DRAGON);
-        new Button(QRect(320, 300, 89, 89), ButtonType::OWL);
+        new Button(QRect(280, 100, 89, 89), ButtonType::FLOWER);
+        new Button(QRect(280, 200, 89, 89), ButtonType::DRAGON);
+        new Button(QRect(280, 300, 89, 89), ButtonType::CRAB);
+        new Button(QRect(280, 400, 89, 89), ButtonType::PUMPKIN);
+        
 
         new Button(QRect(((Game::instance()->sceneRect().width() / 4) - 75), 480, 500, 150), ButtonType::PLAY_NOW);
         Game::instance()->setSceneRect(0, 0, Game::instance()->getBackground()->sceneBoundingRect().width(), Game::instance()->getBackground()->sceneBoundingRect().height());
@@ -73,17 +73,17 @@ void WindowBuilder::load(const QString& window_name)
 
         Game::instance()->setBackground(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("select_character"))));
         Game::instance()->fitInView(Game::instance()->getBackground(), Qt::KeepAspectRatio);
-        new Button(QRect(80, 100, 89, 89), ButtonType::UNICORN);
-        new Button(QRect(80, 200, 89, 89), ButtonType::BEAVER);
-        new Button(QRect(80, 300, 89, 89), ButtonType::CAT);
+        new Button(QRect(120, 100, 89, 89), ButtonType::UNICORN);
+        new Button(QRect(120, 200, 89, 89), ButtonType::BEAVER);
+        new Button(QRect(120, 300, 89, 89), ButtonType::OWL);
+        new Button(QRect(120, 400, 89, 89), ButtonType::ALIEN);
 
-        new Button(QRect(200, 100, 89, 89), ButtonType::ALIEN);
-        new Button(QRect(200, 200, 89, 89), ButtonType::CRAB);
-        new Button(QRect(200, 300, 89, 89), ButtonType::PUMPKIN);
 
-        new Button(QRect(320, 100, 89, 89), ButtonType::FLOWER);
-        new Button(QRect(320, 200, 89, 89), ButtonType::DRAGON);
-        new Button(QRect(320, 300, 89, 89), ButtonType::OWL);
+        new Button(QRect(280, 100, 89, 89), ButtonType::FLOWER);
+        new Button(QRect(280, 200, 89, 89), ButtonType::DRAGON);
+        new Button(QRect(280, 300, 89, 89), ButtonType::CRAB);
+        new Button(QRect(280, 400, 89, 89), ButtonType::PUMPKIN);
+        
 
         new Button(QRect(((Game::instance()->sceneRect().width() / 4) - 75), 480, 500, 150), ButtonType::NEXT);
         Game::instance()->setSceneRect(0, 0, Game::instance()->getBackground()->sceneBoundingRect().width(), Game::instance()->getBackground()->sceneBoundingRect().height());
@@ -96,18 +96,17 @@ void WindowBuilder::load(const QString& window_name)
         Game::instance()->setBackground(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("select_character"))));
         Game::instance()->fitInView(Game::instance()->getBackground(), Qt::KeepAspectRatio);
 
+        new Button(QRect(120, 100, 89, 89), ButtonType::UNICORN);
+        new Button(QRect(120, 200, 89, 89), ButtonType::BEAVER);
+        new Button(QRect(120, 300, 89, 89), ButtonType::OWL);
+        new Button(QRect(120, 400, 89, 89), ButtonType::ALIEN);
 
-        new Button(QRect(80, 100, 89, 89), ButtonType::UNICORN);
-        new Button(QRect(80, 200, 89, 89), ButtonType::BEAVER);
-        new Button(QRect(80, 300, 89, 89), ButtonType::CAT);
 
-        new Button(QRect(200, 100, 89, 89), ButtonType::ALIEN);
-        new Button(QRect(200, 200, 89, 89), ButtonType::CRAB);
-        new Button(QRect(200, 300, 89, 89), ButtonType::PUMPKIN);
-
-        new Button(QRect(320, 100, 89, 89), ButtonType::FLOWER);
-        new Button(QRect(320, 200, 89, 89), ButtonType::DRAGON);
-        new Button(QRect(320, 300, 89, 89), ButtonType::OWL);
+        new Button(QRect(280, 100, 89, 89), ButtonType::FLOWER);
+        new Button(QRect(280, 200, 89, 89), ButtonType::DRAGON);
+        new Button(QRect(280, 300, 89, 89), ButtonType::CRAB);
+        new Button(QRect(280, 400, 89, 89), ButtonType::PUMPKIN);
+        
 
         new Button(QRect(((Game::instance()->sceneRect().width() / 2) - 75), 480, 500, 150), ButtonType::PLAY_NOW);
         Game::instance()->setSceneRect(0, 0, Game::instance()->getBackground()->sceneBoundingRect().width(), Game::instance()->getBackground()->sceneBoundingRect().height());

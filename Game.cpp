@@ -91,6 +91,7 @@ void Game::reset()
     _redPegHit = -1;
     _character = Character::NONE;
     _secondCharacter = Character::NONE;
+    restoreGreen = false;
     _power = false;
     _engine.stop();
     _world->clear();
@@ -283,10 +284,7 @@ void Game::mousePressEvent(QMouseEvent* e)
         }
 
         if (e->button() == Qt::RightButton)
-        {
             _engine.setInterval(5);
-            world2d->SetGravity(b2Vec2(0, 10.0f));
-        }
     }
 }
 
@@ -576,9 +574,9 @@ void Game::clearHittedPeg() {
             i = rand() % 95;
         } while (static_cast<Peg*>(PegBox[i]->GetUserData())->_color == PegColor::RED && (static_cast<Peg*>(PegBox[i]->GetUserData())->getHitted()) && !(static_cast<Peg*>(PegBox[i]->GetUserData())->isVisible()));
         static_cast<Peg*>(PegBox[i]->GetUserData())->changeColor(PegColor::GREEN);
+        restoreGreen = false;
     }
     
-
 }
 
 void Game::addMolt() {
@@ -698,7 +696,7 @@ void Game::activePower() {
     case Character::ALIEN:
     {
         QPoint centerCircle(masterPegGraphic->pos().x(), masterPegGraphic->pos().y());
-        QList<QGraphicsItem*> list = (world()->items(QRectF(centerCircle.x(), centerCircle.y(), 20, 20)));
+        QList<QGraphicsItem*> list = (world()->items(QRect(centerCircle.x(), centerCircle.y(), 20, 20)));
         for (auto el : list) {
             if ((dynamic_cast<Peg*>(el)))
                 (dynamic_cast<Peg*>(el))->hit();
@@ -737,9 +735,7 @@ void Game::activePower() {
         break;
 
     }
-        case Character::DRAGON:
-            
-        break;
+
     }
 }
 
