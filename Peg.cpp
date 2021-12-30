@@ -57,7 +57,7 @@ void Peg::hit() {
 			Game::instance()->turn ?
 			Game::instance()->setScore(Game::instance()->getScore() + 200) :
 				Game::instance()->setSecondScore(Game::instance()->getSecondScore() + 200);
-			Game::instance()->activePower();
+			Game::instance()->activePower(Game::instance()->getCharacter());
 			Game::instance()->restoreGreen = true;
 			if (Game::instance()->bandOne->scenePos().y() >= 300) {
 				Game::instance()->bandOne->setY(Game::instance()->bandOne->scenePos().y() - 50);

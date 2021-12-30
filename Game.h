@@ -55,6 +55,7 @@ enum class Character
     FLOWER,
     DRAGON,
     OWL,
+    RABBIT,
     NONE
 };
 
@@ -177,7 +178,7 @@ public:
     void printRemainingBall(int b);
     void clearHittedPeg();
     void save();
-    void activePower();
+    void activePower(Character c);
     QVector<int> getScoreNumbers(int x, QVector<int> vec);
     void printScore();
     bool restoreGreen = false;

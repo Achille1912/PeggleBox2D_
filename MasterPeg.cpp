@@ -40,6 +40,17 @@ void MasterPeg::advance(b2Body* box) {
                     return;
                 }
                 break;
+                case Character::RABBIT:
+                {
+                    if (Game::instance()->secondMasterPegBox->GetPosition().y > 35)
+                    {
+                        Game::instance()->secondMasterPegGraphics->setVisible(false);
+                        Game::instance()->secondMasterPegBox->DestroyFixture(Game::instance()->secondMasterPegBox->GetFixtureList());
+                        Game::instance()->setPower(false);
+                    }
+                    return;
+                }
+                break;
                 case Character::PUMPKIN:
                     box->SetTransform(b2Vec2(box->GetPosition().x, 0), box->GetAngle());
                     Game::instance()->setPower(false);

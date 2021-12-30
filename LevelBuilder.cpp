@@ -111,6 +111,9 @@ void LevelBuilder::load(const QString& level_name)
 			case Character::DRAGON:
 				Game::instance()->character_face = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("dragon_face_right")));
 				break;
+			case Character::RABBIT:
+				Game::instance()->character_face = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("rabbit_face_right")));
+				break;
 		}
 			
 		Game::instance()->character_face->setScale(1.6);

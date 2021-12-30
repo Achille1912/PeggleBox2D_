@@ -44,7 +44,7 @@ void WindowBuilder::load(const QString& window_name)
 
         new Button(QRect(280, 100, 89, 89), ButtonType::FLOWER);
         new Button(QRect(280, 200, 89, 89), ButtonType::DRAGON);
-        new Button(QRect(280, 300, 89, 89), ButtonType::CRAB);
+        new Button(QRect(280, 300, 89, 89), ButtonType::RABBIT);
         new Button(QRect(280, 400, 89, 89), ButtonType::PUMPKIN);
         
 
@@ -81,7 +81,7 @@ void WindowBuilder::load(const QString& window_name)
 
         new Button(QRect(280, 100, 89, 89), ButtonType::FLOWER);
         new Button(QRect(280, 200, 89, 89), ButtonType::DRAGON);
-        new Button(QRect(280, 300, 89, 89), ButtonType::CRAB);
+        new Button(QRect(280, 300, 89, 89), ButtonType::RABBIT);
         new Button(QRect(280, 400, 89, 89), ButtonType::PUMPKIN);
         
 
@@ -104,7 +104,7 @@ void WindowBuilder::load(const QString& window_name)
 
         new Button(QRect(280, 100, 89, 89), ButtonType::FLOWER);
         new Button(QRect(280, 200, 89, 89), ButtonType::DRAGON);
-        new Button(QRect(280, 300, 89, 89), ButtonType::CRAB);
+        new Button(QRect(280, 300, 89, 89), ButtonType::RABBIT);
         new Button(QRect(280, 400, 89, 89), ButtonType::PUMPKIN);
         
 
