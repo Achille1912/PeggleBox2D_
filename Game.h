@@ -112,6 +112,7 @@ private:
 public:
     static Game *instance();
     QVector<b2Body*> PegBox;
+    QVector<QGraphicsPixmapItem*> lateral_mp;
     QVector< QGraphicsPixmapItem*> scoreGraphics;
     QVector< QGraphicsPixmapItem*> scoreGraphicsTwo;
     QGraphicsPixmapItem* cannon;

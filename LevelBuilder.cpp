@@ -46,6 +46,13 @@ void LevelBuilder::load(const QString& level_name)
 		Game::instance()->bandTwo->setPos(110, 924);
 		Game::instance()->bandTwo->setScale(1.5);
 		
+		Game::instance()->lateral_mp.resize(10);
+		for (int i = 0; i < 10; i++) {
+			Game::instance()->lateral_mp[i]= Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("lateral_mp")));
+			Game::instance()->lateral_mp[i]->setX(55);
+			Game::instance()->lateral_mp[i]->setY(450 + (i * 35));
+
+		}
 
 		Game::instance()->molt_x.resize(4);
 		Game::instance()->molt_x[0] = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("molt-x2")));

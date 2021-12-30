@@ -57,7 +57,7 @@ void MasterPeg::advance(b2Body* box) {
                     Game::instance()->clearHittedPeg();
                     Game::instance()->remainingBall--;
                     
-                    
+                    Game::instance()->lateral_mp[9 - (Game::instance()->remainingBall)]->setVisible(false);
 
                     Game::instance()->printRemainingBall(Game::instance()->remainingBall);
                     QPointF center(720, 100);
@@ -146,7 +146,8 @@ void MasterPeg::advance(b2Body* box) {
             this->setFire(false);
             Game::instance()->clearHittedPeg();
             Game::instance()->remainingBall--;
-            printf("%d", Game::instance()->getScore());
+            Game::instance()->lateral_mp[9 - (Game::instance()->remainingBall)]->setVisible(false);
+
             Game::instance()->printRemainingBall(Game::instance()->remainingBall);
             QPointF center(720, 100);
 
