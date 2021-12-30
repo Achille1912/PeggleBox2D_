@@ -19,6 +19,11 @@
 	<file>sprites/select_single_character.png</file>
 	<file>sprites/action_buttons.png</file>
 	<file>sprites/character_face.png</file>
+	<file>sprites/select_difficulty.png</file>
+	<file>sprites/results.png</file>
+	<file>sprites/results_label.png</file>
+	<file>sprites/lateral_mp.png</file>
+
 	<file>sounds/peghit.wav</file>
         
     </qresource>

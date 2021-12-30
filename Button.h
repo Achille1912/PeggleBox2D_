@@ -14,6 +14,17 @@ namespace PGG
         CPU,
         MAIN_MENU,
         PLAY_NOW,
+        NEXT,
+        CONTINUE,
+        NORMAL_MODE,
+        HARD_MODE,
+        RETURN,
+        TOTAL_SCORE,
+        THE_WINNER_IS,
+        FIRST_PLAYER_SCORE,
+        SECOND_PLAYER_SCORE,
+        FIRST_PLAYER,
+        SECOND_PLAYER,
 
         UNICORN,
         BEAVER,
@@ -40,7 +51,7 @@ public:
     
     // override
     virtual void mousePressEvent(QMouseEvent* e) override;
-    
+ 
 signals:
     void clicked();
     

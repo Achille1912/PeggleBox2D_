@@ -50,6 +50,7 @@ Sprites::Sprites() //load in RAM
     character_buttons= loadTexture(":/sprites/character_buttons.png", QColor(255, 255, 255));
     action_buttons= loadTexture(":/sprites/action_buttons.png", QColor(255, 255, 255));
     character_face= loadTexture(":/sprites/character_face.png", QColor(255, 255, 255));
+    results_label= loadTexture(":/sprites/results_label.png", QColor(255, 255, 255));
 }
 
 QPixmap Sprites::get(const std::string &id)
@@ -64,13 +65,23 @@ QPixmap Sprites::get(const std::string &id)
         return loadTexture(":/sprites/gameMode.png", QColor(255, 0, 255));
     else if (id == "select_character")
         return loadTexture(":/sprites/select_single_character.png", QColor(255, 0, 255));
+    else if (id == "select_difficulty")
+        return loadTexture(":/sprites/select_difficulty.png", QColor(255, 0, 255));
+    else if (id == "results")
+        return loadTexture(":/sprites/results.png", QColor(255, 0, 255));
+     else if (id == "lateral_mp")
+        return loadTexture(":/sprites/lateral_mp.png");
 
     else if (id == "single_button")
-        return gameMode_buttons.copy(QRect(0,254,211,127));
+        return gameMode_buttons.copy(QRect(0, 254, 211, 127));
     else if (id == "duel_button")
         return gameMode_buttons.copy(QRect(0, 128, 211, 127));
     else if (id == "cpu_button")
         return gameMode_buttons.copy(QRect(0, 0, 211, 127));
+    else if (id == "normal_mode_button")
+        return gameMode_buttons.copy(QRect(0, 514, 211, 127));
+    else if (id == "hard_mode_button")
+        return gameMode_buttons.copy(QRect(0, 384, 211, 127));
 
     else if (id == "unicorn_button")
         return character_buttons.copy(QRect(0, 729, 89, 90));
@@ -95,15 +106,63 @@ QPixmap Sprites::get(const std::string &id)
         return action_buttons.copy(QRect(0, 0, 155, 55));
     else if (id == "play_now_button")
         return action_buttons.copy(QRect(0, 57, 155, 54));
+    else if (id == "continue_button")
+        return action_buttons.copy(QRect(0, 175, 155, 54));
+    else if (id == "next_button")
+        return action_buttons.copy(QRect(0, 237, 155, 54));
+    else if (id == "return_button")
+        return action_buttons.copy(QRect(0, 116, 155, 54));
+    else if (id == "total_score")
+        return results_label.copy(QRect(0, 0, 228, 54));
+    else if (id == "the_winner_is")
+        return results_label.copy(QRect(0, 63, 228, 54));
+    else if (id == "first_player_score")
+        return results_label.copy(QRect(0, 130, 228, 54));
+    else if (id == "second_player_score")
+        return results_label.copy(QRect(0, 190, 228, 54));
+    else if (id == "first_player")
+        return results_label.copy(QRect(0, 315, 228, 54));
+    else if (id == "second_player")
+        return results_label.copy(QRect(0, 250, 228, 54));
 
-    else if (id == "player")
-        return sprites.copy(403, 82, 9, 12);
+    else if (id == "master_peg")
+        return sprites.copy(343, 10, 54, 54);
+    else if (id == "master_peg_fired")
+        return sprites.copy(424, 77, 22, 22);
     else if (id == "bucket")
         return stage_elements.copy(bucket);
     else if (id == "unicorn_face_right")
         return character_face.copy(0, 0, 66, 89);
     else if (id == "unicorn_face_left")
-        return character_face.copy(0, 91, 66, 89);
+        return character_face.copy(0, 98, 66, 89);
+    else if (id == "beaver_face_right")
+        return character_face.copy(0, 257, 92, 79);
+    else if (id == "beaver_face_left")
+        return character_face.copy(0, 180, 92, 79);
+    else if (id == "crab_face_right")
+        return character_face.copy(0, 421, 66, 84);
+    else if (id == "crab_face_left")
+        return character_face.copy(0, 339, 66, 84);
+    else if (id == "flower_face_right")
+        return character_face.copy(0, 590, 86, 83);
+    else if (id == "flower_face_left")
+        return character_face.copy(0, 507, 86, 83);
+    else if (id == "pumpkin_face_right")
+        return character_face.copy(0, 757, 83, 80);
+    else if (id == "pumpkin_face_left")
+        return character_face.copy(0, 675, 83, 80);
+    else if (id == "alien_face_right")
+        return character_face.copy(0, 921, 72, 82);
+    else if (id == "alien_face_left")
+        return character_face.copy(0, 839, 72, 82);
+    else if (id == "owl_face_right")
+        return character_face.copy(0, 1101, 89, 96);
+    else if (id == "owl_face_left")
+        return character_face.copy(0, 1006, 89, 96);
+    else if (id == "dragon_face_right")
+        return character_face.copy(0, 1298, 79, 95);
+    else if (id == "dragon_face_left")
+        return character_face.copy(0, 1200, 79, 95);
 
     // Remaining Balls
     else if (id == "0")
@@ -127,21 +186,27 @@ QPixmap Sprites::get(const std::string &id)
     else if (id == "9")
         return fonts.copy(moveBy(remainingBallNumber, 1, 0, (35 * 8)));
     else if (id == "10")
-        return (fonts.copy(478, 305, 52, 54).transformed(QTransform().scale(-1, 1)));
+    return (fonts.copy(5, 296, 47, 40));
 
     else if (id == "cannon")
-        return sprites.copy(385, 390, 51, 64);
-
+        return sprites.copy(384, 327, 50, 80);
+    else if (id == "cannon_without_ball")
+    return sprites.copy(384, 327, 50, 50);
+    else if (id == "cannon_fired")
+    return sprites.copy(459, 327, 50, 100);
 
     else if (id == "peg_blue_hit")
         return peggles.copy(pegle);
     else if (id == "peg_red_hit")
         return peggles.copy(moveBy(pegle, 1, 0, 200));
+    else if (id == "peg_green_hit")
+        return peggles.copy(QRect(405, 0, 200, 200));
     else if (id == "peg_blue")
         return peggles.copy(moveBy(pegle, 0, 1, 0, 200));
     else if (id == "peg_red")
         return peggles.copy(moveBy(pegle, 1, 1, 200, 200));
-
+    else if (id == "peg_green")
+        return peggles.copy(QRect(405,204,200,200));
 
     else if (id == "band")
         return sprites.copy(91, 528, 15, 422);
@@ -155,6 +220,27 @@ QPixmap Sprites::get(const std::string &id)
         return sprites.copy(673, 364, 25, 20);
     else if (id == "molt-x10")
         return sprites.copy(673, 384, 25, 20);
+
+    else if (id == "0-score")
+        return fonts.copy(794, 327, 22, 26);
+    else if (id == "1-score")
+    return fonts.copy(816, 327, 22, 26);
+    else if (id == "2-score")
+    return fonts.copy(838, 327, 22, 26);
+    else if (id == "3-score")
+    return fonts.copy(860, 327, 22, 26);
+    else if (id == "4-score")
+    return fonts.copy(882, 327, 22, 26);
+    else if (id == "5-score")
+    return fonts.copy(904, 327, 22, 26);
+    else if (id == "6-score")
+    return fonts.copy(926, 327, 22, 26);
+    else if (id == "7-score")
+    return fonts.copy(948, 327, 22, 26);
+    else if (id == "8-score")
+    return fonts.copy(970, 327, 22, 26);
+    else if (id == "9-score")
+    return fonts.copy(992, 327, 22, 26);
 
     else if (id == "paused")
         return sprites.copy(700, 1258, 230, 59);

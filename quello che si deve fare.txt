@@ -1,8 +1,9 @@
 OBIETTIVO: LIVELLO 1 e basta. però che funziona tutto, quindi al momento solo peg circolari, punteggio, moltiplicatore, palline rimaste, bucket, sprites etc...
 
 RESPONSABILITA':
-	-Game				Fisica, Logica, AI, Schermate
+	-Game				Fisica, Logica, AI
 	-LevelBuilder			Costruzione del mondo
+	-WindowBuilder			Creazione delle Finestre
 	-Peg				Creazione dei Peg
 	-MasterPeg			Creazione della Master Peg e movimento grafico
 	-Bucket				Creazione del Bucket e movimento grafico
