@@ -176,11 +176,6 @@ void Game::nextFrame()
       }
   }
 
-
-
-          
-  
-
     //master peg
    
   if (!simulation) {
@@ -237,8 +232,7 @@ void Game::nextFrame()
                     MasterPegBox->SetLinearVelocity(b2Vec2((p.dx() - (MasterPegBox->GetPosition().x / 30.0)) * 0.05, (p.dy() - (MasterPegBox->GetPosition().y) / 30.0) * 0.05));
                     masterPegGraphic->setFire(true);
                     world2d->SetGravity(b2Vec2(0, 25.0f));
-                    
-                    
+
                     world()->addLine(p, QPen(Qt::green));
                 }
                 simulation = false;
@@ -250,8 +244,6 @@ void Game::nextFrame()
             }
     }
     
-
-
        
 }
 
@@ -307,7 +299,7 @@ void Game::mouseReleaseEvent(QMouseEvent* e)
 
 void Game::mouseMoveEvent(QMouseEvent* e)
 {
-    if (_state==GameState::PLAYING ){
+    if (_state==GameState::PLAYING){
         if (!simulation) {
             QPointF midPos((sceneRect().width() / 2), 0), currPos;
                 
@@ -423,13 +415,14 @@ void Game::mouseMoveEvent(QMouseEvent* e)
 
                 QLineF v2(center, currPos);
                 v2.setLength(200.0);
-            //world()->addLine(v2, QPen(Qt::red));
+                if (currPos.y()>104) {
 
-            if (!masterPegGraphic->getFire())
-                MasterPegBox->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), MasterPegBox->GetAngle());
+                    if (!masterPegGraphic->getFire())
+                        MasterPegBox->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), MasterPegBox->GetAngle());
 
-            cannon->setTransformOriginPoint(QPoint(30, -65));
-            cannon->setRotation(-v1.angleTo(v2));
+                    cannon->setTransformOriginPoint(QPoint(30, -65));
+                    cannon->setRotation(-v1.angleTo(v2));
+                }
         }
     }
 }
