@@ -91,6 +91,7 @@ void Game::reset()
     _redPegHit = -1;
     _character = Character::NONE;
     _secondCharacter = Character::NONE;
+    restoreGreen = false;
     _power = false;
     _engine.stop();
     _world->clear();
@@ -160,7 +161,7 @@ void Game::nextFrame()
 
       }
     }
-  if (getPower() && _character == Character::BEAVER) {
+  if (getPower() && (_character == Character::BEAVER|| _character == Character::RABBIT)) {
       for (b2ContactEdge* edge = secondMasterPegBox->GetContactList(); edge; edge = edge->next)
       {
 
@@ -181,7 +182,7 @@ void Game::nextFrame()
   if (!simulation) {
       masterPegGraphic->advance(MasterPegBox);
       bucketGraphic->advance(BucketBox);
-      if(_power&&getCharacter()==Character::UNICORN)
+      if(_power&&(getCharacter()==Character::BEAVER|| getCharacter() == Character::RABBIT))
         secondMasterPegGraphics->advance(secondMasterPegBox);
   }
     if (MasterPegBox->GetPosition().y > 35&&simulation)
@@ -283,10 +284,7 @@ void Game::mousePressEvent(QMouseEvent* e)
         }
 
         if (e->button() == Qt::RightButton)
-        {
             _engine.setInterval(5);
-            world2d->SetGravity(b2Vec2(0, 10.0f));
-        }
     }
 }
 
@@ -355,6 +353,12 @@ void Game::mouseMoveEvent(QMouseEvent* e)
                         else
                             character_face->setPixmap(QPixmap(Sprites::instance()->get("dragon_face_right")));
                         break;
+                    case Character::RABBIT:
+                        if (currPos.x() < midPos.x())
+                            character_face->setPixmap(QPixmap(Sprites::instance()->get("rabbit_face_left")));
+                        else
+                            character_face->setPixmap(QPixmap(Sprites::instance()->get("rabbit_face_right")));
+                        break;
                     }
                 }
                 else {
@@ -407,6 +411,12 @@ void Game::mouseMoveEvent(QMouseEvent* e)
                         else
                             character_face->setPixmap(QPixmap(Sprites::instance()->get("dragon_face_right")));
                         break;
+                    case Character::RABBIT:
+                        if (currPos.x() < midPos.x())
+                            character_face->setPixmap(QPixmap(Sprites::instance()->get("rabbit_face_left")));
+                        else
+                            character_face->setPixmap(QPixmap(Sprites::instance()->get("rabbit_face_right")));
+                        break;
                     }
                 }
                                    
@@ -423,6 +433,12 @@ void Game::mouseMoveEvent(QMouseEvent* e)
                     cannon->setTransformOriginPoint(QPoint(30, -65));
                     cannon->setRotation(-v1.angleTo(v2));
                 }
+
+
+            /*    for (int i = 0; i < 180; i++) { // three seconds at 60fps
+                    b2Vec2 trajectoryPosition = getTrajectoryPoint(b2Vec2(MasterPegBox->GetPosition().x, MasterPegBox->GetPosition().y), b2Vec2(5,5), i);
+                    world()->addLine(QLineF(masterPegGraphic->pos().x(), masterPegGraphic->pos().y(),(trajectoryPosition.x/30.0) +masterPegGraphic->pos().x(), (trajectoryPosition.y/30.0) + masterPegGraphic->pos().x()), QPen(Qt::red));
+                }*/
         }
     }
 }
@@ -576,9 +592,9 @@ void Game::clearHittedPeg() {
             i = rand() % 95;
         } while (static_cast<Peg*>(PegBox[i]->GetUserData())->_color == PegColor::RED && (static_cast<Peg*>(PegBox[i]->GetUserData())->getHitted()) && !(static_cast<Peg*>(PegBox[i]->GetUserData())->isVisible()));
         static_cast<Peg*>(PegBox[i]->GetUserData())->changeColor(PegColor::GREEN);
+        restoreGreen = false;
     }
     
-
 }
 
 void Game::addMolt() {
@@ -678,9 +694,9 @@ float Game::fire(float alfa, bool b) {
 }
 
 
-void Game::activePower() {
+void Game::activePower(Character c) {
     setPower(true);
-    switch (_character) {
+    switch (c) {
     case Character::FLOWER:
     {
         int twenty = (25 - Game::instance()->getRedPegHit()) * 20 / 100;
@@ -698,7 +714,7 @@ void Game::activePower() {
     case Character::ALIEN:
     {
         QPoint centerCircle(masterPegGraphic->pos().x(), masterPegGraphic->pos().y());
-        QList<QGraphicsItem*> list = (world()->items(QRectF(centerCircle.x(), centerCircle.y(), 20, 20)));
+        QList<QGraphicsItem*> list = (world()->items(QRect(centerCircle.x(), centerCircle.y(), 20, 20)));
         for (auto el : list) {
             if ((dynamic_cast<Peg*>(el)))
                 (dynamic_cast<Peg*>(el))->hit();
@@ -737,9 +753,28 @@ void Game::activePower() {
         break;
 
     }
-        case Character::DRAGON:
-            
-        break;
+
+    case Character::RABBIT:
+    {
+        int  r = rand() % 3;
+        switch (r) {
+        case 0:
+            activePower(Character::ALIEN);
+            break;
+        case 1:
+            activePower(Character::BEAVER);
+            break;
+ 
+        case 2:
+            activePower(Character::FLOWER);
+            break;
+
+
+        }
+
+
+    }
+
     }
 }
 

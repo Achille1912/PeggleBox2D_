@@ -101,6 +101,9 @@ QPixmap Sprites::get(const std::string &id)
         return character_buttons.copy(QRect(0, 274, 89, 90));
     else if (id == "beaver_button")
         return character_buttons.copy(QRect(0, 92, 89, 90));
+    else if (id == "rabbit_button")
+        return character_buttons.copy(QRect(0, 821, 89, 90));
+
 
     else if (id == "main_menu_button")
         return action_buttons.copy(QRect(0, 0, 155, 55));
@@ -163,6 +166,11 @@ QPixmap Sprites::get(const std::string &id)
         return character_face.copy(0, 1298, 79, 95);
     else if (id == "dragon_face_left")
         return character_face.copy(0, 1200, 79, 95);
+    else if (id == "rabbit_face_right")
+        return character_face.copy(0, 1489, 84, 95);
+    else if (id == "rabbit_face_left")
+        return character_face.copy(0, 1396, 84, 95);
+
 
     // Remaining Balls
     else if (id == "0")

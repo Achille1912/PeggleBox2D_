@@ -11,7 +11,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOMOC ON)
 
 # aggiungo eseguibile
-add_executable(Peggle ${my_sources})
+add_executable(Peggle  ${my_sources} resources.qrc)
 
 # verifico l'esistenza delle librerie Qt necessarie
 find_package(Qt5Widgets REQUIRED)

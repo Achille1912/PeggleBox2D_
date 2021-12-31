@@ -34,7 +34,8 @@ namespace PGG
         PUMPKIN,
         FLOWER,
         DRAGON,
-        OWL
+        OWL,
+        RABBIT
     };
 }
 

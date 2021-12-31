@@ -86,6 +86,9 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 	else if (_buttonType == ButtonType::OWL) {
 		setPixmap(QPixmap(Sprites::instance()->get("owl_button")));
 	}
+	else if (_buttonType == ButtonType::RABBIT) {
+		setPixmap(QPixmap(Sprites::instance()->get("rabbit_button")));
+	}
 	else if (_buttonType == ButtonType::PLAY_NOW) {
 		setPixmap(QPixmap(Sprites::instance()->get("play_now_button")));
 	}
@@ -226,6 +229,16 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 			 Game::instance()->setSecondCharacter(Character::OWL) :
 			 Game::instance()->setCharacter(Character::OWL);
 		 setWindowOpacity(0.5);
+	 }
+	 else if (_buttonType == ButtonType::RABBIT) {
+	 for (auto el : (Game::instance()->world()->children())) {
+		 if (dynamic_cast<Button*>(el))
+			 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
+	 }
+	 Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
+		 Game::instance()->setSecondCharacter(Character::RABBIT) :
+		 Game::instance()->setCharacter(Character::RABBIT);
+	 setWindowOpacity(0.5);
 	 }
 	 else if (_buttonType == ButtonType::PLAY_NOW) {
 		 if (Game::instance()->getState() != GameState::SELECT_SECOND_CHARACTER) {
