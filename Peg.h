@@ -19,13 +19,20 @@ enum class PegColor
 class PGG::Peg : public QGraphicsPixmapItem
 {
 private:
-    
+    PegColor _color;
     bool _hitted;
 public:
-    PegColor _color;
     Peg(QPoint pos, PegColor color);
-    void hit();
+
+    // getters
+    PegColor getPegColor() { return _color; }
     bool getHitted() { return _hitted; }
+    // setters
+    void setPegColor(PegColor pg) { _color = pg; }
+    
+
+    void hit();
+    
     void changeColor(PegColor color);
 
 };

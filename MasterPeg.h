@@ -24,5 +24,6 @@ public:
 
     void setFire(bool b) { _fire = b; }
     bool getFire() { return _fire; }
+    void down();
 
 };

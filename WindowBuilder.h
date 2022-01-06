@@ -11,6 +11,5 @@ namespace PGG
 class PGG::WindowBuilder
 {
 public:
-
 	void load(const QString& window_name);
 };

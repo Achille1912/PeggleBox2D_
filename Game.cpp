@@ -93,6 +93,7 @@ void Game::reset()
     _secondCharacter = Character::NONE;
     restoreGreen = false;
     _power = false;
+    turn = true;
     _engine.stop();
     _world->clear();
 
@@ -156,7 +157,7 @@ void Game::nextFrame()
            // if is Bucket
           }else if (edge->contact->GetFixtureA()->GetBody()->GetType() == b2BodyType::b2_kinematicBody){
               Bucket* tmp = static_cast<Bucket*>(edge->contact->GetFixtureA()->GetBody()->GetUserData());
-              //tmp->goal();
+              tmp->goal();
           }
 
       }
@@ -590,7 +591,7 @@ void Game::clearHittedPeg() {
 
         do {
             i = rand() % 95;
-        } while (static_cast<Peg*>(PegBox[i]->GetUserData())->_color == PegColor::RED && (static_cast<Peg*>(PegBox[i]->GetUserData())->getHitted()) && !(static_cast<Peg*>(PegBox[i]->GetUserData())->isVisible()));
+        } while (static_cast<Peg*>(PegBox[i]->GetUserData())->getPegColor() == PegColor::RED && (static_cast<Peg*>(PegBox[i]->GetUserData())->getHitted()) && !(static_cast<Peg*>(PegBox[i]->GetUserData())->isVisible()));
         static_cast<Peg*>(PegBox[i]->GetUserData())->changeColor(PegColor::GREEN);
         restoreGreen = false;
     }
@@ -620,7 +621,7 @@ void Game::save() {
         QJsonObject tmp;
         tmp.insert("X", PegBox[i]->GetPosition().x);
         tmp.insert("Y", PegBox[i]->GetPosition().y);
-        tmp.insert("Color", static_cast<Peg*>(PegBox[i]->GetUserData())->_color==PegColor::RED?true:false);
+        tmp.insert("Color", static_cast<Peg*>(PegBox[i]->GetUserData())->getPegColor()==PegColor::RED?true:false);
         RemainingPeg.insert(QString::number(i), tmp);
     }
     recordObject.insert("RemainingPeg", RemainingPeg);
@@ -702,7 +703,7 @@ void Game::activePower(Character c) {
         int twenty = (25 - Game::instance()->getRedPegHit()) * 20 / 100;
         int c = 0;
         for (int i = 0; i < 95; i++) {
-            if (static_cast<Peg*>(Game::instance()->PegBox[i]->GetUserData())->_color == PegColor::RED && c < twenty && !static_cast<Peg*>(Game::instance()->PegBox[i]->GetUserData())->getHitted()) {
+            if (static_cast<Peg*>(Game::instance()->PegBox[i]->GetUserData())->getPegColor() == PegColor::RED && c < twenty && !static_cast<Peg*>(Game::instance()->PegBox[i]->GetUserData())->getHitted()) {
                 printf("Twenty");
                 static_cast<Peg*>(Game::instance()->PegBox[i]->GetUserData())->hit();
                 c++;
@@ -714,11 +715,22 @@ void Game::activePower(Character c) {
     case Character::ALIEN:
     {
         QPoint centerCircle(masterPegGraphic->pos().x(), masterPegGraphic->pos().y());
-        QList<QGraphicsItem*> list = (world()->items(QRect(centerCircle.x(), centerCircle.y(), 20, 20)));
-        for (auto el : list) {
-            if ((dynamic_cast<Peg*>(el)))
-                (dynamic_cast<Peg*>(el))->hit();
+        QList<QGraphicsItem*> tmp;
+        for (auto el : PegBox) {
+            if (static_cast<Peg*>(el->GetUserData())->getPegColor() == PegColor::GREEN) {
+                for (auto obj : PegBox) {
+                    if (!(static_cast<Peg*>(obj->GetUserData())->getHitted())) {
+                        int x = static_cast<Peg*>(obj->GetUserData())->pos().x() - static_cast<Peg*>(el->GetUserData())->pos().x();
+                        int y = static_cast<Peg*>(obj->GetUserData())->pos().y() - static_cast<Peg*>(el->GetUserData())->pos().y();
+                        int sqrt = std::sqrt((x * x) + (y * y));
+                        if (sqrt <= 100)
+                            static_cast<Peg*>(obj->GetUserData())->hit();
+                    }
+                }
+                
+            }
         }
+        
         Game::instance()->setPower(false);
     }
     break;
@@ -778,11 +790,7 @@ void Game::activePower(Character c) {
     }
 }
 
-QVector<int> Game::getScoreNumbers(int x, QVector<int> vec) {
-    
-    QVector<int> arr;
-    return arr;
-}
+
 
 void Game::printScore() {
     QVector<int> arrOne;

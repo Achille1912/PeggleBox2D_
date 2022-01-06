@@ -43,13 +43,18 @@ class PGG::Button : public QLabel
 {
     Q_OBJECT
 private:
-
+    ButtonType _buttonType;
     
 public:
-    ButtonType _buttonType;
+    
     Button(QRect pos, ButtonType bt);
 
-    
+    // getters
+    ButtonType getButtonType() { return _buttonType; }
+
+    // setters
+    void setButtonType(ButtonType bt) { _buttonType = bt; }
+
     // override
     virtual void mousePressEvent(QMouseEvent* e) override;
  
