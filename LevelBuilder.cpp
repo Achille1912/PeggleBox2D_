@@ -1,6 +1,4 @@
 #include "LevelBuilder.h"
-
-
 #include "Game.h"
 #include "Sprites.h"
 
@@ -13,10 +11,9 @@ using namespace PGG;
 
 // Utility Function
 bool isIn(int x, int arr[]) {
-	for (int i = 0; i < 25; i++) {
+	for (int i = 0; i < 25; i++)
 		if (x == arr[i])
 			return true;
-	}
 	return false;
 }
 
@@ -25,33 +22,35 @@ void LevelBuilder::load(const QString& level_name)
 	if (level_name == "level_1")
 	{
 	// BACKGROUND
+
 		QGraphicsPixmapItem* level = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("Hud_Unicorn")));
 		Game::instance()->setSceneRect(0, 0, level->sceneBoundingRect().width(), level->sceneBoundingRect().height());
-		
 		Game::instance()->centerOn(level);
-		Game::instance()->remainingBallPixmap = Game::instance()->world()->addPixmap(Sprites::instance()->get("10"));
-		Game::instance()->remainingBallPixmap->setScale(1.8);
-		Game::instance()->remainingBallPixmap->setPos(QPoint(55 - Game::instance()->remainingBallPixmap->boundingRect().width()/2, 180));
 		Game::instance()->fitInView(level, Qt::KeepAspectRatio);
-		Game::instance()->cannon = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("cannon")));
-		Game::instance()->cannon->setScale(1.5);
-		Game::instance()->cannon->setPos((Game::instance()->sceneRect().width() / 2)-(20), 205);
+
+		Game::instance()->setRemainingBallPixmap(Game::instance()->world()->addPixmap(Sprites::instance()->get("10")));
+		Game::instance()->getRemainingBallPixmap()->setScale(1.8);
+		Game::instance()->getRemainingBallPixmap()->setPos(QPoint(55 - Game::instance()->getRemainingBallPixmap()->boundingRect().width()/2, 180));
+		
+		Game::instance()->setCannon(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("cannon"))));
+		Game::instance()->getCannon()->setScale(1.5);
+		Game::instance()->getCannon()->setPos((Game::instance()->sceneRect().width() / 2)-(20), 205);
 		double screenHeight = Game::instance()->sceneRect().height();
-		Game::instance()->bandOne= Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("band")));
-		Game::instance()->bandOne->setZValue(-2);
-		Game::instance()->bandOne->setPos(10, 924);
-		Game::instance()->bandOne->setScale(1.5);
-		Game::instance()->bandTwo = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("band").transformed(QTransform().scale(-1, 1))));
-		Game::instance()->bandTwo->setZValue(-2);
-		Game::instance()->bandTwo->setPos(110, 924);
-		Game::instance()->bandTwo->setScale(1.5);
+
+		Game::instance()->setBandOne(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("band"))));
+		Game::instance()->getBandOne()->setZValue(-2);
+		Game::instance()->getBandOne()->setPos(10, 924);
+		Game::instance()->getBandOne()->setScale(1.5);
+		Game::instance()->setBandTwo(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("band").transformed(QTransform().scale(-1, 1)))));
+		Game::instance()->getBandTwo()->setZValue(-2);
+		Game::instance()->getBandTwo()->setPos(110, 924);
+		Game::instance()->getBandTwo()->setScale(1.5);
 		
 		Game::instance()->lateral_mp.resize(10);
 		for (int i = 0; i < 10; i++) {
 			Game::instance()->lateral_mp[i]= Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("lateral_mp")));
 			Game::instance()->lateral_mp[i]->setX(55);
-			Game::instance()->lateral_mp[i]->setY(450 + (i * 35));
-
+			Game::instance()->lateral_mp[i]->setY((int)450 + (i * 35));
 		}
 
 		Game::instance()->molt_x.resize(4);
@@ -61,10 +60,10 @@ void LevelBuilder::load(const QString& level_name)
 		Game::instance()->molt_x[3] = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("molt-x10")));
 		
 		for (int i = 0; i < 4; i++) {
-			
 			Game::instance()->molt_x[i]->setScale(1.8);
 			Game::instance()->molt_x[i]->setVisible(false);
 		}
+
 		Game::instance()->molt_x[0]->setPos(1344, 667);
 		Game::instance()->molt_x[1]->setPos(1344, 543);
 		Game::instance()->molt_x[2]->setPos(1344, 440);
@@ -75,56 +74,56 @@ void LevelBuilder::load(const QString& level_name)
 		for (int i = 0; i < 25; i++) {
 			Game::instance()->molt[i] = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("molt")));
 			Game::instance()->molt[i]->setScale(1.75);
-			Game::instance()->molt[i]->setPos(1325, (915 - (25 * i)));
+			Game::instance()->molt[i]->setPos(1325, ((int)915 - (25 * i)));
 			Game::instance()->molt[i]->setVisible(false);
 			Game::instance()->molt[i]->setZValue(-2);
 		}
 
-		Game::instance()->paused = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("paused")));
-		Game::instance()->paused->setScale(1.5);
-		Game::instance()->paused->setPos(QPointF((720 - (Game::instance()->paused->boundingRect().width()/2 )), 540 - (Game::instance()->paused->boundingRect().height() / 2)));
-		Game::instance()->paused->setVisible(false);
-		Game::instance()->paused->setZValue(10);
+		Game::instance()->setPaused(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("paused"))));
+		Game::instance()->getPaused()->setScale(1.5);
+		Game::instance()->getPaused()->setPos(QPointF((720 - (Game::instance()->getPaused()->boundingRect().width()/2 )), 540 - (Game::instance()->getPaused()->boundingRect().height() / 2)));
+		Game::instance()->getPaused()->setVisible(false);
+		Game::instance()->getPaused()->setZValue(10);
 
 		switch (Game::instance()->getCharacter()) {
 			case Character::UNICORN:
-					Game::instance()->character_face = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("unicorn_face_right")));
+					Game::instance()->setCharacterFace(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("unicorn_face_right"))));
 				break;
 			case Character::BEAVER:
-					Game::instance()->character_face = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("beaver_face_right")));
+					Game::instance()->setCharacterFace(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("beaver_face_right"))));
 				break;
 			case Character::CRAB:
-					Game::instance()->character_face = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("crab_face_right")));
+					Game::instance()->setCharacterFace(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("crab_face_right"))));
 				break;
 			case Character::FLOWER:
-				Game::instance()->character_face = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("flower_face_right")));
+				Game::instance()->setCharacterFace(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("flower_face_right"))));
 				break;
 			case Character::PUMPKIN:
-				Game::instance()->character_face = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("pumpkin_face_right")));
+				Game::instance()->setCharacterFace(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("pumpkin_face_right"))));
 				break;
 			case Character::ALIEN:
-				Game::instance()->character_face = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("alien_face_right")));
+				Game::instance()->setCharacterFace(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("alien_face_right"))));
 				break;
 			case Character::OWL:
-				Game::instance()->character_face = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("owl_face_right")));
+				Game::instance()->setCharacterFace(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("owl_face_right"))));
 				break;
 			case Character::DRAGON:
-				Game::instance()->character_face = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("dragon_face_right")));
+				Game::instance()->setCharacterFace(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("dragon_face_right"))));
 				break;
 			case Character::RABBIT:
-				Game::instance()->character_face = Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("rabbit_face_right")));
+				Game::instance()->setCharacterFace(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("rabbit_face_right"))));
 				break;
 		}
 			
-		Game::instance()->character_face->setScale(1.6);
-		Game::instance()->character_face->setPos(720-Game::instance()->character_face->sceneBoundingRect().width()/2,68);
+		Game::instance()->getCharacterFace()->setScale(1.6);
+		Game::instance()->getCharacterFace()->setPos(720-Game::instance()->getCharacterFace()->sceneBoundingRect().width()/2,68);
 
 		Game::instance()->scoreGraphics.resize(6);
 		for (int i = 0; i < 6; i++) {
 			Game::instance()->scoreGraphics[i]= new QGraphicsPixmapItem();
 			Game::instance()->scoreGraphics[i]->setPixmap(QPixmap(Sprites::instance()->get("0-score")).scaled(50,50));
 			Game::instance()->scoreGraphics[i]->setY(15);
-			Game::instance()->scoreGraphics[i]->setX(500 - (i * 50));
+			Game::instance()->scoreGraphics[i]->setX((int)500 - (i * 50));
 			Game::instance()->world()->addItem(Game::instance()->scoreGraphics[i]);
 		}
 
@@ -133,29 +132,23 @@ void LevelBuilder::load(const QString& level_name)
 			Game::instance()->scoreGraphicsTwo[i] = new QGraphicsPixmapItem();
 			Game::instance()->scoreGraphicsTwo[i]->setPixmap(QPixmap(Sprites::instance()->get("0-score")).scaled(50, 50));
 			Game::instance()->scoreGraphicsTwo[i]->setY(15);
-			Game::instance()->scoreGraphicsTwo[i]->setX(1150 - (i * 50));
+			Game::instance()->scoreGraphicsTwo[i]->setX((int)1150 - (i * 50));
 			Game::instance()->world()->addItem(Game::instance()->scoreGraphicsTwo[i]);
 		}
 
 
-
  // CREATE PHYSICS WORLD
-	//
+	
 		b2Vec2 gravity(0.0f, 0.0f);
 		Game::instance()->setWorld2d(new b2World(gravity));
-		//MyContactListener myContactListenerInstance;
-		//Game::instance()->getWorld2d()->SetContactListener(&myContactListenerInstance);
 		Game::instance()->getWorld2d()->SetAllowSleeping(false);
-
 
 	// CREATE PEGS
 		Game::instance()->PegBox.resize(96);
-
 		std::set<int> randomRed;
-		while (randomRed.size() < 25)
+		while (randomRed.size() < 26)
 			randomRed.insert(rand() % 95);
-		
-	
+
 			// Definition
 		b2BodyDef pegDef;
 		pegDef.type = b2_staticBody;
@@ -185,13 +178,10 @@ void LevelBuilder::load(const QString& level_name)
 			}
 			if (randomRed.find(i) != randomRed.end())
 				color = PegColor::RED;
-			pegDef.position.Set((810 + (100 * k)) / 2 / 30.0, (360 + (120 * j)) / 30.0);
+			pegDef.position.Set((810 + (100 * k)) / 2 / 30.0, ((int)360 + (120 * j)) / 30.0);
 			Game::instance()->PegBox[i] = Game::instance()->getWorld2d()->CreateBody(&pegDef);
-
 			Game::instance()->setPegGraphic( new Peg(QPoint(pegDef.position.x * 30.0, (pegDef.position.y * 30.0)), color));
-
 			Game::instance()->PegBox[i]->CreateFixture(&shapeFixtureDef);
-
 			Game::instance()->PegBox[i]->SetUserData(Game::instance()->getPegGraphic());
 			k++;
 		}
@@ -207,20 +197,17 @@ void LevelBuilder::load(const QString& level_name)
 			}
 			if (randomRed.find(i) != randomRed.end())
 				color = PegColor::RED;
-			pegDef.position.Set((860 + (100 * k)) / 2 / 30.0, (420 + (120 * j)) / 30.0);
+			pegDef.position.Set((860 + (100 * k)) / 2 / 30.0, ((int)420 + (120 * j)) / 30.0);
 			Game::instance()->PegBox[i] = Game::instance()->getWorld2d()->CreateBody(&pegDef);
-
 			Game::instance()->setPegGraphic( new Peg(QPoint(pegDef.position.x * 30.0, (pegDef.position.y * 30.0)), color));
-
 			Game::instance()->PegBox[i]->CreateFixture(&shapeFixtureDef);
-
 			Game::instance()->PegBox[i]->SetUserData(Game::instance()->getPegGraphic());
 			k++;
 		}
 		int random = rand() % 95;
 		do {
 			random = rand() % 95;
-		} while (static_cast<Peg*>(Game::instance()->PegBox[random]->GetUserData())->_color != PegColor::RED);
+		} while (static_cast<Peg*>(Game::instance()->PegBox[random]->GetUserData())->getPegColor() != PegColor::RED);
 		static_cast<Peg*>(Game::instance()->PegBox[random]->GetUserData())->changeColor(PegColor::GREEN);
 
 	// CREATE MASTER PEG
@@ -231,9 +218,7 @@ void LevelBuilder::load(const QString& level_name)
 		ballDef.position.Set((Game::instance()->sceneRect().width() / 2) / 30.0, 0 / 30.0);
 
 		Game::instance()->setMasterPegBox(Game::instance()->getWorld2d()->CreateBody(&ballDef));
-
 		Game::instance()->setMasterPegGraphic(new MasterPeg(QPoint(ballDef.position.x * 30.0, ballDef.position.y * 30.0)));
-
 		Game::instance()->getMasterPegBox()->SetUserData((Game::instance()->getMasterPegGraphic()));
 
 			// Shape
@@ -250,11 +235,9 @@ void LevelBuilder::load(const QString& level_name)
 		Game::instance()->getMasterPegBox()->CreateFixture(&ballFixtureDef);
 		Game::instance()->getMasterPegBox()->SetLinearVelocity(b2Vec2(0, 0));
 		Game::instance()->getMasterPegBox()->SetAngularVelocity(0);
-
 		Game::instance()->getMasterPegGraphic()->setVisible(false);
 
 	// CREATE BUCKET
-
 		// Definition
 		b2BodyDef bucketDef;
 		bucketDef.type = b2_kinematicBody;
@@ -262,7 +245,6 @@ void LevelBuilder::load(const QString& level_name)
 		bucketDef.position.Set((Game::instance()->sceneRect().width() / 2) / 30.0, (screenHeight-50) / 30.0);
 		
 		Game::instance()->setBucketBox(Game::instance()->getWorld2d()->CreateBody(&bucketDef));
-
 		Game::instance()->setBucketGraphic(new Bucket(QPoint((bucketDef.position.x-20) * 30.0, bucketDef.position.y * 30.0)));
 
 		// Shape
@@ -309,7 +291,7 @@ void LevelBuilder::load(const QString& level_name)
 		realPanelRight->CreateFixture(&panelFixture);
 
 
-		// CREATE PLATFORMS
+	// CREATE PLATFORMS
 		b2PolygonShape shape;
 		b2BodyDef bd;
 		b2FixtureDef fdf;
@@ -318,9 +300,11 @@ void LevelBuilder::load(const QString& level_name)
 		fdf.shape = &shape;
 		fdf.restitution =0;
 		fdf.density = 20.0;
+
 		// Left side
-		bd.position.Set(142/30.0, 475/30.0);
 		bd.angle = 20 * 3.14 / 180;
+
+		bd.position.Set(142 / 30.0, 475 / 30.0);
 		b2Body* bodyA = Game::instance()->getWorld2d()->CreateBody(&bd);
 		bodyA->CreateFixture(&fdf);
 
@@ -334,7 +318,7 @@ void LevelBuilder::load(const QString& level_name)
 
 		// Right side
 		bd.angle = -20 * 3.14 / 180;
-		
+
 		bd.position.Set(1295 / 30.0, 400 / 30.0);
 		b2Body* bodyD = Game::instance()->getWorld2d()->CreateBody(&bd);
 		bodyD->CreateFixture(&fdf);

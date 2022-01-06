@@ -8,255 +8,262 @@
 using namespace PGG;
 
 
-
 Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 {
 	_buttonType = bt;
 	connect(this, SIGNAL(clicked()), this, SLOT(slotLabelClicked()), Qt::QueuedConnection);
 
-	
-	if (_buttonType == ButtonType::SINGLE) {
+	switch (_buttonType) {
+	case ButtonType::SINGLE:
 		setPixmap(QPixmap(Sprites::instance()->get("single_button")));
-	}else if (_buttonType == ButtonType::DUEL) {
+		break;
+	case ButtonType::DUEL:
 		setPixmap(QPixmap(Sprites::instance()->get("duel_button")));
-	}
-	else if (_buttonType == ButtonType::CPU) {
+		break;
+	case ButtonType::CPU:
 		setPixmap(QPixmap(Sprites::instance()->get("cpu_button")));
-	}
-	else if (_buttonType == ButtonType::MAIN_MENU) {
+		break;
+	case ButtonType::MAIN_MENU:
 		setPixmap(QPixmap(Sprites::instance()->get("main_menu_button")));
-	}
-	else if (_buttonType == ButtonType::RETURN) {
+		break;
+	case ButtonType::RETURN:
 		setPixmap(QPixmap(Sprites::instance()->get("return_button")));
-	}
-	else if (_buttonType == ButtonType::TOTAL_SCORE) {
+		break;
+	case ButtonType::TOTAL_SCORE:
 		setPixmap(QPixmap(Sprites::instance()->get("total_score")));
-	}
-	else if (_buttonType == ButtonType::FIRST_PLAYER_SCORE) {
+		break;
+	case ButtonType::FIRST_PLAYER_SCORE:
 		setPixmap(QPixmap(Sprites::instance()->get("first_player_score")));
-	}
-	else if (_buttonType == ButtonType::SECOND_PLAYER_SCORE) {
+		break;
+	case ButtonType::SECOND_PLAYER_SCORE:
 		setPixmap(QPixmap(Sprites::instance()->get("second_player_score")));
-	}
-	else if (_buttonType == ButtonType::FIRST_PLAYER) {
+		break;
+	case ButtonType::FIRST_PLAYER:
 		setPixmap(QPixmap(Sprites::instance()->get("first_player")));
-	}
-	else if (_buttonType == ButtonType::SECOND_PLAYER) {
+		break;
+	case ButtonType::SECOND_PLAYER:
 		setPixmap(QPixmap(Sprites::instance()->get("second_player")));
-	}
-	else if (_buttonType == ButtonType::THE_WINNER_IS) {
+		break;
+	case ButtonType::THE_WINNER_IS:
 		setPixmap(QPixmap(Sprites::instance()->get("the_winner_is")));
-	}
-	else if (_buttonType == ButtonType::NORMAL_MODE) {
+		break;
+	case ButtonType::NORMAL_MODE:
 		setPixmap(QPixmap(Sprites::instance()->get("normal_mode_button")));
-	}
-	else if (_buttonType == ButtonType::HARD_MODE) {
+		break;
+	case ButtonType::HARD_MODE:
 		setPixmap(QPixmap(Sprites::instance()->get("hard_mode_button")));
-	}
-	else if (_buttonType == ButtonType::CONTINUE) {
+		break;
+	case ButtonType::CONTINUE:
 		setPixmap(QPixmap(Sprites::instance()->get("continue_button")));
-	}
-	else if (_buttonType == ButtonType::NEXT) {
+		break;
+	case ButtonType::NEXT:
 		setPixmap(QPixmap(Sprites::instance()->get("next_button")));
-	}
-	else if (_buttonType == ButtonType::UNICORN) {
+		break;
+	case ButtonType::UNICORN:
 		setPixmap(QPixmap(Sprites::instance()->get("unicorn_button")));
-	}
-	else if (_buttonType == ButtonType::BEAVER) {
+		break;
+	case ButtonType::BEAVER:
 		setPixmap(QPixmap(Sprites::instance()->get("beaver_button")));
-	}
-	else if (_buttonType == ButtonType::CAT) {
+		break;
+	case ButtonType::CAT:
 		setPixmap(QPixmap(Sprites::instance()->get("cat_button")));
-	}
-	else if (_buttonType == ButtonType::ALIEN) {
+		break;
+	case ButtonType::ALIEN:
 		setPixmap(QPixmap(Sprites::instance()->get("alien_button")));
-	}
-	else if (_buttonType == ButtonType::CRAB) {
+		break;
+	case ButtonType::CRAB:
 		setPixmap(QPixmap(Sprites::instance()->get("crab_button")));
-	}
-	else if (_buttonType == ButtonType::PUMPKIN) {
+		break;
+	case ButtonType::PUMPKIN:
 		setPixmap(QPixmap(Sprites::instance()->get("pumpkin_button")));
-	}
-	else if (_buttonType == ButtonType::FLOWER) {
+		break;
+	case ButtonType::FLOWER:
 		setPixmap(QPixmap(Sprites::instance()->get("flower_button")));
-	}
-	else if (_buttonType == ButtonType::DRAGON) {
+		break;
+	case ButtonType::DRAGON:
 		setPixmap(QPixmap(Sprites::instance()->get("dragon_button")));
-	}
-	else if (_buttonType == ButtonType::OWL) {
+		break;
+	case ButtonType::OWL:
 		setPixmap(QPixmap(Sprites::instance()->get("owl_button")));
-	}
-	else if (_buttonType == ButtonType::RABBIT) {
+		break;
+	case ButtonType::RABBIT:
 		setPixmap(QPixmap(Sprites::instance()->get("rabbit_button")));
-	}
-	else if (_buttonType == ButtonType::PLAY_NOW) {
+		break;
+	case ButtonType::PLAY_NOW:
 		setPixmap(QPixmap(Sprites::instance()->get("play_now_button")));
+		break;
 	}
+
 	setGeometry(pos);
 	setStyleSheet("background-color: transparent;");
 	Game::instance()->world()->addWidget(this);
-	
 }
-
-
- 
-
 
 
  void Button::slotLabelClicked()   
  {
-	 if (_buttonType == ButtonType::SINGLE) {
+	 switch (_buttonType) {
+	 case ButtonType::SINGLE:
 		 Game::instance()->setGameMode(GameMode::SINGLE);
 		 Game::instance()->getWindow()->load("select_single_character");
-	 }
-	 else if (_buttonType == ButtonType::DUEL) {
+		 break;
+
+	 case ButtonType::DUEL:
 		 Game::instance()->setGameMode(GameMode::DUEL);
 		 Game::instance()->getWindow()->load("select_first_character");
-		 
-	 }
-	 else if (_buttonType == ButtonType::CPU) {
+		 break;
+
+	 case ButtonType::CPU:
 		 Game::instance()->setGameMode(GameMode::CPU);
 		 Game::instance()->getWindow()->load("select_difficulty");
-	 }
-	 else if (_buttonType == ButtonType::MAIN_MENU) {
-		 Game::instance()->menuDuel();
-	 }
-	 else if (_buttonType == ButtonType::NEXT) {
-		 if(Game::instance()->getCharacter()!=Character::NONE)
-			 Game::instance()->getWindow()->load("select_second_character");
-	 }
-	 else if (_buttonType == ButtonType::CONTINUE) {
-		 Game::instance()->getWindow()->load("select_first_character");
-	 }
-	 else if (_buttonType == ButtonType::NORMAL_MODE) {
-		 setWindowOpacity(0.5);
-		 Game::instance()->hardMode=false;
-	 }
-	 else if (_buttonType == ButtonType::HARD_MODE) {
-		 setWindowOpacity(0.5);
-		 Game::instance()->hardMode = true;
-	 }
+		 break;
 
-	 else if (_buttonType == ButtonType::UNICORN) {
-		 for (auto el : (Game::instance()->world()->children())) {
-			 if (dynamic_cast<Button*>(el))
-				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
-		 }
+	 case ButtonType::MAIN_MENU:
+		 Game::instance()->menuDuel();
+		 break;
+
+	 case ButtonType::NEXT:
+		 if (Game::instance()->getCharacter() != Character::NONE)
+			 Game::instance()->getWindow()->load("select_second_character");
+		 break;
+
+	 case ButtonType::CONTINUE:
+		 Game::instance()->getWindow()->load("select_first_character");
+		 break;
+
+	 case ButtonType::NORMAL_MODE:
 		 setWindowOpacity(0.5);
-		 Game::instance()->getState()==GameState::SELECT_SECOND_CHARACTER? 
-			 Game::instance()->setSecondCharacter(Character::UNICORN):
-			 Game::instance()->setCharacter(Character::UNICORN);
-	 }
-	 else if (_buttonType == ButtonType::BEAVER) {
-		 for (auto el : (Game::instance()->world()->children())) {
+		 Game::instance()->setHardMode(false);
+		 break;
+
+	 case ButtonType::HARD_MODE:
+		 setWindowOpacity(0.5);
+		 Game::instance()->setHardMode(true);
+		 break;
+
+	 case ButtonType::UNICORN:
+		 for (auto el : (Game::instance()->world()->children())) 
 			 if (dynamic_cast<Button*>(el))
 				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
-		 }
-			 
+
+		 setWindowOpacity(0.5);
+		 Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
+			 Game::instance()->setSecondCharacter(Character::UNICORN) :
+			 Game::instance()->setCharacter(Character::UNICORN);
+		 break;
+
+	 case ButtonType::BEAVER:
+		 for (auto el : (Game::instance()->world()->children()))
+			 if (dynamic_cast<Button*>(el))
+				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
 		 
 		 Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
 			 Game::instance()->setSecondCharacter(Character::BEAVER) :
 			 Game::instance()->setCharacter(Character::BEAVER);
 		 setWindowOpacity(0.5);
+		 break;
 
-	 }
-	 else if (_buttonType == ButtonType::CAT) {
-		 for (auto el : (Game::instance()->world()->children())) {
+	 case ButtonType::CAT:
+		 for (auto el : (Game::instance()->world()->children())) 
 			 if (dynamic_cast<Button*>(el))
 				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
-		 }
+		 
 		 Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
 			 Game::instance()->setSecondCharacter(Character::CAT) :
 			 Game::instance()->setCharacter(Character::CAT);
 		 setWindowOpacity(0.5);
-	 }
-	 else if (_buttonType == ButtonType::ALIEN) {
-		 for (auto el : (Game::instance()->world()->children())) {
+		 break;
+
+	 case ButtonType::ALIEN:
+		 for (auto el : (Game::instance()->world()->children())) 
 			 if (dynamic_cast<Button*>(el))
 				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
-		 }
+		 
 		 Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
 			 Game::instance()->setSecondCharacter(Character::ALIEN) :
 			 Game::instance()->setCharacter(Character::ALIEN);
 		 setWindowOpacity(0.5);
-	 }
-	 else if (_buttonType == ButtonType::CRAB) {
-		 for (auto el : (Game::instance()->world()->children())) {
+		 break;
+
+	 case ButtonType::CRAB:
+		 for (auto el : (Game::instance()->world()->children())) 
 			 if (dynamic_cast<Button*>(el))
 				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
-		 }
+		 
 		 Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
 			 Game::instance()->setSecondCharacter(Character::CRAB) :
 			 Game::instance()->setCharacter(Character::CRAB);
 		 setWindowOpacity(0.5);
-	 }
-	 else if (_buttonType == ButtonType::PUMPKIN) {
-		 for (auto el : (Game::instance()->world()->children())) {
+		 break;
+
+	 case ButtonType::PUMPKIN:
+		 for (auto el : (Game::instance()->world()->children())) 
 			 if (dynamic_cast<Button*>(el))
 				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
-		 }
+		 
 		 Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
 			 Game::instance()->setSecondCharacter(Character::PUMPKIN) :
-			 Game::instance()->setCharacter(Character::PUMPKIN);		 
+			 Game::instance()->setCharacter(Character::PUMPKIN);
 		 setWindowOpacity(0.5);
-	 }
-	 else if (_buttonType == ButtonType::FLOWER) {
-		 for (auto el : (Game::instance()->world()->children())) {
+		 break;
+
+	 case ButtonType::FLOWER:
+		 for (auto el : (Game::instance()->world()->children())) 
 			 if (dynamic_cast<Button*>(el))
 				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
-		 }
+		 
 		 Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
 			 Game::instance()->setSecondCharacter(Character::FLOWER) :
 			 Game::instance()->setCharacter(Character::FLOWER);
 		 setWindowOpacity(0.5);
-	 }
-	 else if (_buttonType == ButtonType::DRAGON) {
-		 for (auto el : (Game::instance()->world()->children())) {
+		 break;
+
+	 case ButtonType::DRAGON:
+		 for (auto el : (Game::instance()->world()->children())) 
 			 if (dynamic_cast<Button*>(el))
 				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
-		 }
+		 
 		 Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
 			 Game::instance()->setSecondCharacter(Character::DRAGON) :
 			 Game::instance()->setCharacter(Character::DRAGON);
 		 setWindowOpacity(0.5);
-	 }
-	 else if (_buttonType == ButtonType::OWL) {
-		 for (auto el : (Game::instance()->world()->children())) {
+		 break;
+
+	 case ButtonType::OWL:
+		 for (auto el : (Game::instance()->world()->children())) 
 			 if (dynamic_cast<Button*>(el))
 				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
-		 }
+		 
 		 Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
 			 Game::instance()->setSecondCharacter(Character::OWL) :
 			 Game::instance()->setCharacter(Character::OWL);
 		 setWindowOpacity(0.5);
-	 }
-	 else if (_buttonType == ButtonType::RABBIT) {
-	 for (auto el : (Game::instance()->world()->children())) {
-		 if (dynamic_cast<Button*>(el))
-			 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
-	 }
-	 Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
-		 Game::instance()->setSecondCharacter(Character::RABBIT) :
-		 Game::instance()->setCharacter(Character::RABBIT);
-	 setWindowOpacity(0.5);
-	 }
-	 else if (_buttonType == ButtonType::PLAY_NOW) {
-		 if (Game::instance()->getState() != GameState::SELECT_SECOND_CHARACTER) {
+		 break;
+
+	 case ButtonType::RABBIT:
+		 for (auto el : (Game::instance()->world()->children())) 
+			 if (dynamic_cast<Button*>(el))
+				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
+		 
+		 Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
+			 Game::instance()->setSecondCharacter(Character::RABBIT) :
+			 Game::instance()->setCharacter(Character::RABBIT);
+		 setWindowOpacity(0.5);
+		 break;
+
+	 case ButtonType::PLAY_NOW:
+		 if (Game::instance()->getState() != GameState::SELECT_SECOND_CHARACTER) 
 			 if (Game::instance()->getCharacter() != Character::NONE)
 				 Game::instance()->play();
-		 }
-		 else {
+		 else 
 			 if (Game::instance()->getSecondCharacter() != Character::NONE)
 				 Game::instance()->play();
-		 }
-	 }
-	 else if (_buttonType == ButtonType::NEXT) {
-		if (Game::instance()->getCharacter() != Character::NONE)
-			Game::instance()->play();
-	 }
-	 else if (_buttonType == ButtonType::RETURN) {
+		 break;
+
+	 case ButtonType::RETURN:
 		 Game::instance()->reset();
 		 Game::instance()->menuDuel();
+		 break;
 	 }
  }
 

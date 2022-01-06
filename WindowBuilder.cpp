@@ -1,6 +1,4 @@
 #include "WindowBuilder.h"
-
-
 #include "Sprites.h"
 #include "Game.h"
 #include <random>
@@ -125,7 +123,7 @@ void WindowBuilder::load(const QString& window_name)
             Game::instance()->scoreGraphics[i] = new QGraphicsPixmapItem();
             Game::instance()->scoreGraphics[i]->setPixmap(QPixmap(Sprites::instance()->get("0-score")).scaled(50, 50));
             Game::instance()->scoreGraphics[i]->setY(300);
-            Game::instance()->scoreGraphics[i]->setX(600 - (i * 50));
+            Game::instance()->scoreGraphics[i]->setX((int)600 - (i * 50));
             Game::instance()->scoreGraphics[i]->setScale(0.5);
             Game::instance()->world()->addItem(Game::instance()->scoreGraphics[i]);
         }
@@ -134,45 +132,45 @@ void WindowBuilder::load(const QString& window_name)
         Game::instance()->setSceneRect(0, 0, Game::instance()->getBackground()->sceneBoundingRect().width(), Game::instance()->getBackground()->sceneBoundingRect().height());
     }
     else if (window_name == "result_double") {
-    Game::instance()->world()->clear();
-    Game::instance()->setState(GameState::RESULT_DOUBLE);
+        Game::instance()->world()->clear();
+        Game::instance()->setState(GameState::RESULT_DOUBLE);
 
-    Game::instance()->setBackground(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("results"))));
-    Game::instance()->fitInView(Game::instance()->getBackground(), Qt::KeepAspectRatio);
-
-
-    new Button(QRect(((Game::instance()->sceneRect().width() / 6) - 110), 150, 250, 89), ButtonType::FIRST_PLAYER_SCORE);
-    new Button(QRect(((Game::instance()->sceneRect().width() / 2) - 110), 150, 250, 89), ButtonType::SECOND_PLAYER_SCORE);
+        Game::instance()->setBackground(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("results"))));
+        Game::instance()->fitInView(Game::instance()->getBackground(), Qt::KeepAspectRatio);
 
 
-    Game::instance()->scoreGraphics.resize(6);
-    for (int i = 0; i < 6; i++) {
-        Game::instance()->scoreGraphics[i] = new QGraphicsPixmapItem();
+        new Button(QRect(((Game::instance()->sceneRect().width() / 6) - 110), 150, 250, 89), ButtonType::FIRST_PLAYER_SCORE);
+        new Button(QRect(((Game::instance()->sceneRect().width() / 2) - 80), 150, 250, 89), ButtonType::SECOND_PLAYER_SCORE);
+
+
+        Game::instance()->scoreGraphics.resize(6);
+        for (int i = 0; i < 6; i++) {
+            Game::instance()->scoreGraphics[i] = new QGraphicsPixmapItem();
         
-        Game::instance()->scoreGraphics[i]->setPixmap(QPixmap(Sprites::instance()->get("0-score")).scaled(50, 50));
-        Game::instance()->scoreGraphics[i]->setY(250);
-        Game::instance()->scoreGraphics[i]->setX(350 - (i * 50));
-        Game::instance()->scoreGraphics[i]->setScale(0.5);
-        Game::instance()->world()->addItem(Game::instance()->scoreGraphics[i]);
+            Game::instance()->scoreGraphics[i]->setPixmap(QPixmap(Sprites::instance()->get("0-score")).scaled(50, 50));
+            Game::instance()->scoreGraphics[i]->setY(250);
+            Game::instance()->scoreGraphics[i]->setX((int)350 - ((i * 50)));
+            Game::instance()->scoreGraphics[i]->setScale(0.5);
+            Game::instance()->world()->addItem(Game::instance()->scoreGraphics[i]);
 
-        Game::instance()->scoreGraphicsTwo[i] = new QGraphicsPixmapItem();   
-        Game::instance()->scoreGraphicsTwo[i]->setPixmap(QPixmap(Sprites::instance()->get("0-score")).scaled(50, 50));
-        Game::instance()->scoreGraphicsTwo[i]->setY(250);
-        Game::instance()->scoreGraphicsTwo[i]->setX(850 - (i * 50));
-        Game::instance()->scoreGraphicsTwo[i]->setScale(0.5);
-        Game::instance()->world()->addItem(Game::instance()->scoreGraphicsTwo[i]);
-    }
-    Game::instance()->printScore();
+            Game::instance()->scoreGraphicsTwo[i] = new QGraphicsPixmapItem();   
+            Game::instance()->scoreGraphicsTwo[i]->setPixmap(QPixmap(Sprites::instance()->get("0-score")).scaled(50, 50));
+            Game::instance()->scoreGraphicsTwo[i]->setY(250);
+            Game::instance()->scoreGraphicsTwo[i]->setX((int)850 - ((i * 50)));
+            Game::instance()->scoreGraphicsTwo[i]->setScale(0.5);
+            Game::instance()->world()->addItem(Game::instance()->scoreGraphicsTwo[i]);
+        }   
+        Game::instance()->printScore();
 
-    new Button(QRect(((Game::instance()->sceneRect().width() / 3) - 110), 300, 250, 89), ButtonType::THE_WINNER_IS);
+        new Button(QRect(((Game::instance()->sceneRect().width() / 3) - 110), 300, 250, 89), ButtonType::THE_WINNER_IS);
 
-    if(Game::instance()->getScore()> Game::instance()->getSecondScore())
-        new Button(QRect(((Game::instance()->sceneRect().width() / 3) - 110), 350, 250, 89), ButtonType::FIRST_PLAYER);
-    else
-        new Button(QRect(((Game::instance()->sceneRect().width() / 3) - 110), 350, 250, 89), ButtonType::SECOND_PLAYER);
+        if(Game::instance()->getScore()> Game::instance()->getSecondScore())
+            new Button(QRect(((Game::instance()->sceneRect().width() / 3) - 110), 350, 250, 89), ButtonType::FIRST_PLAYER);
+        else
+            new Button(QRect(((Game::instance()->sceneRect().width() / 3) - 110), 350, 250, 89), ButtonType::SECOND_PLAYER);
 
-    new Button(QRect(((Game::instance()->sceneRect().width() / 3) - 75), 480, 500, 150), ButtonType::RETURN);
-    Game::instance()->setSceneRect(0, 0, Game::instance()->getBackground()->sceneBoundingRect().width(), Game::instance()->getBackground()->sceneBoundingRect().height());
+        new Button(QRect(((Game::instance()->sceneRect().width() / 3) - 75), 480, 500, 150), ButtonType::RETURN);
+        Game::instance()->setSceneRect(0, 0, Game::instance()->getBackground()->sceneBoundingRect().width(), Game::instance()->getBackground()->sceneBoundingRect().height());
     }
     else
     {
