@@ -28,7 +28,7 @@
 #include "box2d/include/box2d/box2d.h"
 
 using namespace PGG;
-int ciao = -45;
+int arrivederci = -45;
 
 bool sortbysec(const std::tuple<int, int>& a,
     const std::tuple<int, int>& b)
@@ -141,7 +141,7 @@ void Game::play() //in gioco
 
 void Game::nextFrame()
 {
-    
+    masterPegGraphic->setVisible(true);
     world2d->Step(timeStep, velocityIterations, positionIterations); //sarebbe l'advance
 
   for (b2ContactEdge* edge = MasterPegBox->GetContactList(); edge; edge = edge->next)
@@ -157,7 +157,7 @@ void Game::nextFrame()
            // if is Bucket
           }else if (edge->contact->GetFixtureA()->GetBody()->GetType() == b2BodyType::b2_kinematicBody){
               Bucket* tmp = static_cast<Bucket*>(edge->contact->GetFixtureA()->GetBody()->GetUserData());
-              tmp->goal();
+              //tmp->goal();
           }
 
       }
@@ -180,12 +180,12 @@ void Game::nextFrame()
 
     //master peg
    
-  if (!simulation) {
+  //if (!simulation) {
       masterPegGraphic->advance(MasterPegBox);
       bucketGraphic->advance(BucketBox);
       if(_power&&((turn ? getCharacter() : getSecondCharacter()) ==Character::BEAVER|| (turn ? getCharacter() : getSecondCharacter()) == Character::RABBIT))
         secondMasterPegGraphics->advance(secondMasterPegBox);
-  }
+  //}
     if (MasterPegBox->GetPosition().y > 35&&simulation)
     {
             QPointF center(720, 100);
@@ -197,8 +197,10 @@ void Game::nextFrame()
             world2d->SetGravity(b2Vec2(0, 0));
             alpha--;
             if (alpha < -89) {
-                
+
                 printf("Finitooo");
+                BucketBox->GetFixtureList()->SetSensor(true);
+                bucketGraphic->setPos(QPoint(0, sceneRect().height()));
                 _engine.setInterval(1000/GAME_FPS);
                 masterPegGraphic->setFire(false);
                 BucketBox->SetTransform(b2Vec2((sceneRect().width() / 2) / 30.0, (Game::instance()->sceneRect().height() - 530) / 30.0), MasterPegBox->GetAngle());
@@ -225,15 +227,15 @@ void Game::nextFrame()
                     printf("%d", std::get<0>(simulationScore[176]));
 
                     p.setAngle((std::get<0>(simulationScore[176])));
-                    f.setAngle((std::get<0>(simulationScore[176])));
-                    ciao = (std::get<0>(simulationScore[176]));
+                    /*f.setAngle((std::get<0>(simulationScore[176])));
+                    arrivederci = (std::get<0>(simulationScore[176]));
                     cannon->setTransformOriginPoint(QPoint(30, -65));
                     cannon->setRotation(-c.angleTo(p));
                     if (!masterPegGraphic->getFire())
                         MasterPegBox->SetTransform(b2Vec2(f.p2().x() / 30.0, f.p2().y() / 30.0), MasterPegBox->GetAngle());
                     MasterPegBox->SetLinearVelocity(b2Vec2((p.dx() - (MasterPegBox->GetPosition().x / 30.0)) * 0.05, (p.dy() - (MasterPegBox->GetPosition().y) / 30.0) * 0.05));
                     masterPegGraphic->setFire(true);
-                    world2d->SetGravity(b2Vec2(0, 25.0f));
+                    world2d->SetGravity(b2Vec2(0, 25.0f));*/
 
                     world()->addLine(p, QPen(Qt::green));
                 }
@@ -488,7 +490,7 @@ void Game::keyPressEvent(QKeyEvent* e)
     if (e->key() == Qt::Key_Z && _state == GameState::PLAYING)
     {
      
-        fire(ciao, true);
+        fire(arrivederci, true);
     }
 }
 
@@ -678,7 +680,7 @@ float Game::fire(float alfa, bool b) {
     }
     else {
         // -90 == 0
-
+        
         _engine.setInterval(0.1);
 
         simulation = true;
@@ -691,7 +693,8 @@ float Game::fire(float alfa, bool b) {
         world()->addLine(p, QPen(Qt::blue));
         p.setAngle(alfa);
         f.setAngle(alfa);
-
+        QVector2D z = QVector2D(p.dx(), p.dy());
+        z.normalize();
         world()->addLine(p, QPen(Qt::red));
 
 
@@ -699,9 +702,13 @@ float Game::fire(float alfa, bool b) {
         cannon->setRotation(-c.angleTo(p));
         if (!masterPegGraphic->getFire())
             MasterPegBox->SetTransform(b2Vec2(f.p2().x() / 30.0, f.p2().y() / 30.0), MasterPegBox->GetAngle());
-        MasterPegBox->SetLinearVelocity(b2Vec2((p.dx() - (MasterPegBox->GetPosition().x / 30.0)) * 0.05, (p.dy() - (MasterPegBox->GetPosition().y) / 30.0) * 0.05));
+
+        MasterPegBox->SetLinearVelocity(b2Vec2(z.x()*15, z.y() * 15));
+        
+       // MasterPegBox->SetLinearVelocity(b2Vec2((p.dx() - (MasterPegBox->GetPosition().x / 30.0)) * 0.05, (p.dy() - (MasterPegBox->GetPosition().y) / 30.0) * 0.05));
         world2d->SetGravity(b2Vec2(0, 25.0f));
         masterPegGraphic->setFire(true);
+        
     }
     return alfa;
 }
@@ -795,8 +802,6 @@ void Game::activePower(Character c) {
 
 
         }
-
-
     }
 
     }
