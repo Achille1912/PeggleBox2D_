@@ -183,7 +183,7 @@ void Game::nextFrame()
   if (!simulation) {
       masterPegGraphic->advance(MasterPegBox);
       bucketGraphic->advance(BucketBox);
-      if(_power&&(getCharacter()==Character::BEAVER|| getCharacter() == Character::RABBIT))
+      if(_power&&((turn ? getCharacter() : getSecondCharacter()) ==Character::BEAVER|| (turn ? getCharacter() : getSecondCharacter()) == Character::RABBIT))
         secondMasterPegGraphics->advance(secondMasterPegBox);
   }
     if (MasterPegBox->GetPosition().y > 35&&simulation)
@@ -272,6 +272,9 @@ void Game::mousePressEvent(QMouseEvent* e)
             if (_mode == GameMode::CPU&& !turn) {
                 return;
             }
+            Game::instance()->setPower(false);
+            for (auto el : Game::instance()->trajcetory)
+                delete el;
             masterPegGraphic->setFire(true);
             world2d->SetGravity(b2Vec2(0, 25.0f));
             QPoint midPos((sceneRect().width() / 2), 0), currPos;
@@ -279,7 +282,7 @@ void Game::mousePressEvent(QMouseEvent* e)
             currPos = QPoint(mapToScene(e->pos()).x(), mapToScene(e->pos()).y());
             QVector2D p = QVector2D(currPos.x() - midPos.x(), currPos.y() - midPos.y());
             p.normalize();
-            MasterPegBox->SetLinearVelocity(b2Vec2(p.x() * 12, p.y() * 12));
+            MasterPegBox->SetLinearVelocity(b2Vec2(p.x() * 15, p.y() * 15));
             masterPegGraphic->setVisible(true);
             cannon->setPixmap(Sprites::instance()->get("cannon_without_ball"));
         }
@@ -434,12 +437,21 @@ void Game::mouseMoveEvent(QMouseEvent* e)
                     cannon->setTransformOriginPoint(QPoint(30, -65));
                     cannon->setRotation(-v1.angleTo(v2));
                 }
-
-
-            /*    for (int i = 0; i < 180; i++) { // three seconds at 60fps
-                    b2Vec2 trajectoryPosition = getTrajectoryPoint(b2Vec2(MasterPegBox->GetPosition().x, MasterPegBox->GetPosition().y), b2Vec2(5,5), i);
-                    world()->addLine(QLineF(masterPegGraphic->pos().x(), masterPegGraphic->pos().y(),(trajectoryPosition.x/30.0) +masterPegGraphic->pos().x(), (trajectoryPosition.y/30.0) + masterPegGraphic->pos().x()), QPen(Qt::red));
-                }*/
+                if ((turn?getCharacter():getSecondCharacter()) == Character::UNICORN && getPower()) {
+                    QVector2D p = QVector2D(currPos.x() - midPos.x(), currPos.y() - midPos.y());
+                    p.normalize();
+                    for (auto el : trajcetory)
+                        delete el;
+                    trajcetory.resize(30);
+                    if (!masterPegGraphic->getFire()) {
+                        for (int i = 10; i < 30; i++) { // three seconds at 60fps
+                            if (i % 2 == 0)
+                                continue;
+                            b2Vec2 trajectoryPosition = getTrajectoryPoint(b2Vec2(MasterPegBox->GetPosition().x, MasterPegBox->GetPosition().y), b2Vec2(p.x() * 15, p.y() * 15), i);
+                            trajcetory.push_back(new MasterPeg(QPoint((trajectoryPosition.x * 30.0), (trajectoryPosition.y * 30.0))));
+                        }
+                    }
+                }
         }
     }
 }
@@ -520,13 +532,13 @@ void Game::updateFPS()
     _FPS_timer.start();
 }
 
-
 b2Vec2 Game::getTrajectoryPoint(b2Vec2& startingPosition, b2Vec2& startingVelocity, float n)
 {
     //velocity and gravity are given per second but we want time step values here
     float t = 1 / 60.0f; // seconds per time step (at 60fps)
     b2Vec2 stepVelocity = t * startingVelocity; // m/s
-    b2Vec2 stepGravity = t * t * world2d->GetGravity(); // m/s/s
+    
+    b2Vec2 stepGravity = t * t * b2Vec2(0,25.0); // m/s/s
 
     return startingPosition + n * stepVelocity + 0.5f * (n * n + n) * stepGravity;
 }

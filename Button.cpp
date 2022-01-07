@@ -252,12 +252,15 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 		 break;
 
 	 case ButtonType::PLAY_NOW:
-		 if (Game::instance()->getState() != GameState::SELECT_SECOND_CHARACTER) 
+		 if (Game::instance()->getState() != GameState::SELECT_SECOND_CHARACTER) {
 			 if (Game::instance()->getCharacter() != Character::NONE)
 				 Game::instance()->play();
-		 else 
-			 if (Game::instance()->getSecondCharacter() != Character::NONE)
-				 Game::instance()->play();
+		 }
+		 else {
+			if (Game::instance()->getSecondCharacter() != Character::NONE)
+				Game::instance()->play();
+			
+		 }
 		 break;
 
 	 case ButtonType::RETURN:

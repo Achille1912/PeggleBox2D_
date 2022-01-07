@@ -176,7 +176,7 @@ public:
 
 
     QVector<b2Body*>getPegBox() { return PegBox; }
-    
+    QVector<MasterPeg*> trajcetory;
     
    
    
