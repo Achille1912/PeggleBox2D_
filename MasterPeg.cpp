@@ -292,7 +292,11 @@ void MasterPeg::down() {
                 case Character::DRAGON:
                     Game::instance()->getCharacterFace()->setPixmap(QPixmap(Sprites::instance()->get("dragon_face_right")));
                     break;
+                case Character::RABBIT:
+                    Game::instance()->getCharacterFace()->setPixmap(QPixmap(Sprites::instance()->get("rabbit_face_right")));
+                    break;
                 }
+
             }
             else {
                 Game::instance()->setTurn(true);
@@ -320,6 +324,9 @@ void MasterPeg::down() {
                     break;
                 case Character::DRAGON:
                     Game::instance()->getCharacterFace()->setPixmap(QPixmap(Sprites::instance()->get("dragon_face_right")));
+                    break;
+                case Character::RABBIT:
+                    Game::instance()->getCharacterFace()->setPixmap(QPixmap(Sprites::instance()->get("rabbit_face_right")));
                     break;
                 }
             }
