@@ -254,6 +254,8 @@ void MasterPeg::down() {
             Game::instance()->getBandOne()->setY(924);
             Game::instance()->getBandTwo()->setY(924);
 
+
+            Game::instance()->alpha = 89;
             Game::instance()->simulationScore.clear();
             Game::instance()->setSimulationScore(0);
             Game::instance()->fire(Game::instance()->alpha);
@@ -374,7 +376,7 @@ void MasterPeg::down() {
 
 
 void MasterPeg::randomShot() {
-    int alfa = rand() % 181;
+    int alfa = 20 + (rand() % 160);;
     QPoint midPos((Game::instance()->sceneRect().width() / 2), 130);
 
     QLineF p = QLineF(midPos, QPointF((Game::instance()->sceneRect().width() / 2), 500));
