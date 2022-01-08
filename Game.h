@@ -133,6 +133,7 @@ public:
 // GETTERS
 
         // game attributes
+    
     GameState getState() { return _state; }
     GameMode getGameMode() { return _mode; }
     Character getCharacter() { return _character; }
@@ -176,7 +177,7 @@ public:
 
 
     QVector<b2Body*>getPegBox() { return PegBox; }
-    QVector<MasterPeg*> trajcetory;
+    QVector<MasterPeg*> trajectory;
     
    
    
@@ -229,7 +230,7 @@ public:
     void activePower(Character c);
     void printScore();
     b2Vec2 getTrajectoryPoint(b2Vec2& startingPosition, b2Vec2& startingVelocity, float n);
-    float fire(float alfa, bool b);
+    void fire(float alfa);
     int alpha = 89;
     std::vector < std::tuple< int, int > >simulationScore;
     
@@ -242,7 +243,7 @@ public:
     virtual void keyPressEvent(QKeyEvent *e) override;
     virtual void resizeEvent(QResizeEvent* e) override;
 
-
+   
     void init();
     void reset();
     void menuDuel();
@@ -252,9 +253,10 @@ public:
 
  signals:
     void gameOver();
-   
+    void changeEngine();
 public slots:
     void nextFrame();
     void updateFPS();
     void gameOverSlot();
+    void changeEngineSlot();
 };

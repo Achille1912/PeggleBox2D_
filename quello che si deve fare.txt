@@ -22,13 +22,12 @@ COSA E' STATO FATTO FINORA:
 		>MasterPeg Rimanenti (grafica e logica)
 		>Gameover
 		>Personaggi e relativi poteri 
-			*In particolare UNICORN, FLOWER, DRAGON, PUMPKIN, ALIEN, BEAVER, RABBIT
+			*In particolare UNICORN, FLOWER, DRAGON, PUMPKIN, ALIEN, BEAVER, RABBIT, OWL
 		>Score (grafica e logica)
 		>Bucket funzionante
+	-INTELLIGENZA ARTIFICIALE
 		
 COSE CHE MANCANO:
-	*OWL con relativo potere
-	*AI
 	*Suoni
 	(opzionale: risoluzione bug della traiettoria imprecisa)
 

@@ -10,7 +10,6 @@
 #include <set>
 
 
-
 #include "Game.h"
 #include "Peg.h"
 #include "Bucket.h"
@@ -28,13 +27,6 @@
 #include "box2d/include/box2d/box2d.h"
 
 using namespace PGG;
-int arrivederci = -45;
-
-bool sortbysec(const std::tuple<int, int>& a,
-    const std::tuple<int, int>& b)
-{
-    return (std::get<1>(a) < std::get<1>(b));
-}
 
 // singleton
 Game* Game::_uniqueInstance = 0;
@@ -62,6 +54,8 @@ Game::Game() : QGraphicsView()
                      this, SLOT(nextFrame()));
     QObject::connect(this, SIGNAL(gameOver()),
         this, SLOT(gameOverSlot()), Qt::QueuedConnection);
+    QObject::connect(this, SIGNAL(changeEngine()),
+        this, SLOT(changeEngineSlot()));
     _engine.setTimerType(Qt::PreciseTimer);
     _engine.setInterval(1000 / GAME_FPS);
 
@@ -70,11 +64,10 @@ Game::Game() : QGraphicsView()
 
     _builder = new LevelBuilder();
     _window = new WindowBuilder();
-    // install HUD
-    //_hud = new HUD(width(), height(), this);
     _score = 0;
     _secondScore = 0;
     _redPegHit = -1;
+    _simulationScore = 0;
     _character = Character::NONE;
     _power = false;
 
@@ -86,6 +79,8 @@ Game::Game() : QGraphicsView()
 void Game::reset()
 {
     _score = 0;
+    alpha = 89;
+    simulationScore.clear();
     _secondScore = 0;
     remainingBall = 10;
     _redPegHit = -1;
@@ -94,6 +89,10 @@ void Game::reset()
     restoreGreen = false;
     _power = false;
     turn = true;
+    trajectory.resize(30);
+    for (auto el : trajectory)
+        delete el;
+    
     _engine.stop();
     _world->clear();
 
@@ -102,7 +101,12 @@ void Game::reset()
 void Game::init()
 {
     reset();
-    _world->addPixmap(QPixmap(Sprites::instance()->get("peggle_title")));
+    
+    background= _world->addPixmap(QPixmap(Sprites::instance()->get("peggle_title")));
+    
+    centerOn(background);
+    setSceneRect(0, 0, getBackground()->sceneBoundingRect().width(), getBackground()->sceneBoundingRect().height());
+    showNormal();
     _state = GameState::TITLE;
 }
 
@@ -141,8 +145,8 @@ void Game::play() //in gioco
 
 void Game::nextFrame()
 {
-    masterPegGraphic->setVisible(true);
-    world2d->Step(timeStep, velocityIterations, positionIterations); //sarebbe l'advance
+    
+    world2d->Step(timeStep, velocityIterations, positionIterations); 
 
   for (b2ContactEdge* edge = MasterPegBox->GetContactList(); edge; edge = edge->next)
     {
@@ -151,13 +155,19 @@ void Game::nextFrame()
           // if is a Peg
           if (edge->contact->GetFixtureA()->GetBody()->GetType() == b2BodyType::b2_staticBody) {
               Peg* tmp = static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData());
+              if (simulation) {
+                  if (!tmp->getSimulHit())
+                      tmp->hit();
+              }
+              else {
+                  if (!tmp->getHitted())
+                      tmp->hit();
+              }
               
-              if (!tmp->getHitted())
-                  tmp->hit();
            // if is Bucket
           }else if (edge->contact->GetFixtureA()->GetBody()->GetType() == b2BodyType::b2_kinematicBody){
               Bucket* tmp = static_cast<Bucket*>(edge->contact->GetFixtureA()->GetBody()->GetUserData());
-              //tmp->goal();
+              tmp->goal();
           }
 
       }
@@ -170,8 +180,14 @@ void Game::nextFrame()
               // if is a Peg
               if (edge->contact->GetFixtureA()->GetBody()->GetType() == b2BodyType::b2_staticBody) {
                   Peg* tmp = static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData());
-                  if (!tmp->getHitted())
-                      tmp->hit();
+                  if (simulation) {
+                      if (!tmp->getSimulHit())
+                          tmp->hit();
+                  }
+                  else {
+                      if (!tmp->getHitted())
+                          tmp->hit();
+                  }
                  
               }
           }
@@ -180,78 +196,17 @@ void Game::nextFrame()
 
     //master peg
    
-  //if (!simulation) {
+  if (!simulation) {
       masterPegGraphic->advance(MasterPegBox);
       bucketGraphic->advance(BucketBox);
       if(_power&&((turn ? getCharacter() : getSecondCharacter()) ==Character::BEAVER|| (turn ? getCharacter() : getSecondCharacter()) == Character::RABBIT))
         secondMasterPegGraphics->advance(secondMasterPegBox);
-  //}
-    if (MasterPegBox->GetPosition().y > 35&&simulation)
-    {
-            QPointF center(720, 100);
-            QLineF v2(center, QCursor::pos());
-            v2.setLength(200.0);
-            MasterPegBox->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), MasterPegBox->GetAngle());
-            MasterPegBox->SetLinearVelocity(b2Vec2(0, 0));
-            MasterPegBox->SetAngularVelocity(0);
-            world2d->SetGravity(b2Vec2(0, 0));
-            alpha--;
-            if (alpha < -89) {
-
-                printf("Finitooo");
-                BucketBox->GetFixtureList()->SetSensor(true);
-                bucketGraphic->setPos(QPoint(0, sceneRect().height()));
-                _engine.setInterval(1000/GAME_FPS);
-                masterPegGraphic->setFire(false);
-                BucketBox->SetTransform(b2Vec2((sceneRect().width() / 2) / 30.0, (Game::instance()->sceneRect().height() - 530) / 30.0), MasterPegBox->GetAngle());
-
-                if (simulation) {
-                    sort(simulationScore.begin(), simulationScore.end(), sortbysec);
-                    for (int i = 0; i < (simulationScore.size() - 1); i++) {
-                        printf("Alpha: ");
-                        printf("%d", std::get<0>(simulationScore[i]));
-                        
-                        printf(" Score: ");
-                        printf("%d", std::get<1>(simulationScore[i]));
-                       printf("\n");
-                    }
-                   
-                    
-
-                    QPoint midPos((sceneRect().width() / 2), 130);
-
-                    QLineF p = QLineF(midPos, QPointF((sceneRect().width() / 2), 500));
-                    QLineF f = QLineF(midPos, QPointF((sceneRect().width() / 2), 300));
-                    QLineF c = p;
-                   
-                    printf("%d", std::get<0>(simulationScore[176]));
-
-                    p.setAngle((std::get<0>(simulationScore[176])));
-                    /*f.setAngle((std::get<0>(simulationScore[176])));
-                    arrivederci = (std::get<0>(simulationScore[176]));
-                    cannon->setTransformOriginPoint(QPoint(30, -65));
-                    cannon->setRotation(-c.angleTo(p));
-                    if (!masterPegGraphic->getFire())
-                        MasterPegBox->SetTransform(b2Vec2(f.p2().x() / 30.0, f.p2().y() / 30.0), MasterPegBox->GetAngle());
-                    MasterPegBox->SetLinearVelocity(b2Vec2((p.dx() - (MasterPegBox->GetPosition().x / 30.0)) * 0.05, (p.dy() - (MasterPegBox->GetPosition().y) / 30.0) * 0.05));
-                    masterPegGraphic->setFire(true);
-                    world2d->SetGravity(b2Vec2(0, 25.0f));*/
-
-                    world()->addLine(p, QPen(Qt::green));
-                }
-                simulation = false;
-            }
-            else {
-                simulationScore.emplace_back(alpha-90, _simulationScore);
-                _simulationScore = 0;
-                fire(alpha,false);
-            }
-    }
-    
+  }
+  else {
+      masterPegGraphic->simulAdvance(MasterPegBox);
+  }
        
 }
-
-
 
 // EVENTI
 void Game::mousePressEvent(QMouseEvent* e)
@@ -275,12 +230,13 @@ void Game::mousePressEvent(QMouseEvent* e)
                 return;
             }
             Game::instance()->setPower(false);
-            for (auto el : Game::instance()->trajcetory)
-                delete el;
+            
             masterPegGraphic->setFire(true);
             world2d->SetGravity(b2Vec2(0, 25.0f));
             QPoint midPos((sceneRect().width() / 2), 0), currPos;
-
+            for (auto el : trajectory)
+                if (dynamic_cast<MasterPeg*>(el))
+                    el->setVisible(false);
             currPos = QPoint(mapToScene(e->pos()).x(), mapToScene(e->pos()).y());
             QVector2D p = QVector2D(currPos.x() - midPos.x(), currPos.y() - midPos.y());
             p.normalize();
@@ -442,15 +398,15 @@ void Game::mouseMoveEvent(QMouseEvent* e)
                 if ((turn?getCharacter():getSecondCharacter()) == Character::UNICORN && getPower()) {
                     QVector2D p = QVector2D(currPos.x() - midPos.x(), currPos.y() - midPos.y());
                     p.normalize();
-                    for (auto el : trajcetory)
+                    for (auto el : trajectory)
                         delete el;
-                    trajcetory.resize(30);
+                    trajectory.resize(30);
                     if (!masterPegGraphic->getFire()) {
                         for (int i = 10; i < 30; i++) { // three seconds at 60fps
                             if (i % 2 == 0)
                                 continue;
                             b2Vec2 trajectoryPosition = getTrajectoryPoint(b2Vec2(MasterPegBox->GetPosition().x, MasterPegBox->GetPosition().y), b2Vec2(p.x() * 15, p.y() * 15), i);
-                            trajcetory.push_back(new MasterPeg(QPoint((trajectoryPosition.x * 30.0), (trajectoryPosition.y * 30.0))));
+                            trajectory.push_back(new MasterPeg(QPoint((trajectoryPosition.x * 30.0), (trajectoryPosition.y * 30.0))));
                         }
                     }
                 }
@@ -479,19 +435,15 @@ void Game::keyPressEvent(QKeyEvent* e)
     }
     if (e->key() == Qt::Key_R && _state == GameState::PLAYING)
     {
-        reset();
-        menuDuel();
+        init();
     }
     if (e->key() == Qt::Key_A && _state == GameState::PLAYING)
     {
+        simulationScore.clear();
         alpha = 89;
-        fire(90, false);
+        fire(alpha);
     }
-    if (e->key() == Qt::Key_Z && _state == GameState::PLAYING)
-    {
-     
-        fire(arrivederci, true);
-    }
+
 }
 
 void Game::resizeEvent(QResizeEvent* e)
@@ -650,37 +602,9 @@ void Game::save() {
     file.close();
 }
 
-float Game::fire(float alfa, bool b) {
-    if (b) {
-
-        _engine.setInterval(100);
-       
-        QPoint midPos((sceneRect().width() / 2), 130);
-
-        QLineF p = QLineF(midPos, QPointF((sceneRect().width() / 2), 500));
-        QLineF f = QLineF(midPos, QPointF((sceneRect().width() / 2), 300));
-        QLineF c = p;
-        world()->addLine(p, QPen(Qt::blue));
-        p.setAngle(alfa);
-        f.setAngle(alfa);
-
-        world()->addLine(p, QPen(Qt::red));
-
-
-        cannon->setTransformOriginPoint(QPoint(30, -65));
-        cannon->setRotation(-c.angleTo(p));
-        if (!masterPegGraphic->getFire())
-            MasterPegBox->SetTransform(b2Vec2(f.p2().x() / 30.0, f.p2().y() / 30.0), MasterPegBox->GetAngle());
-        MasterPegBox->SetLinearVelocity(b2Vec2((p.dx() - (MasterPegBox->GetPosition().x / 30.0)) * 0.05, (p.dy() - (MasterPegBox->GetPosition().y) / 30.0) * 0.05));
-        world2d->SetGravity(b2Vec2(0, 25.0f));
-        masterPegGraphic->setFire(true);
-
-        
-
-    }
-    else {
+void Game::fire(float alfa) {
         // -90 == 0
-        
+       
         _engine.setInterval(0.1);
 
         simulation = true;
@@ -690,27 +614,25 @@ float Game::fire(float alfa, bool b) {
         QLineF p = QLineF(midPos, QPointF((sceneRect().width() / 2), 500));
         QLineF f = QLineF(midPos, QPointF((sceneRect().width() / 2), 300));
         QLineF c = p;
-        world()->addLine(p, QPen(Qt::blue));
+        
         p.setAngle(alfa);
         f.setAngle(alfa);
         QVector2D z = QVector2D(p.dx(), p.dy());
         z.normalize();
-        world()->addLine(p, QPen(Qt::red));
+      
 
 
         cannon->setTransformOriginPoint(QPoint(30, -65));
         cannon->setRotation(-c.angleTo(p));
-        if (!masterPegGraphic->getFire())
-            MasterPegBox->SetTransform(b2Vec2(f.p2().x() / 30.0, f.p2().y() / 30.0), MasterPegBox->GetAngle());
+        MasterPegBox->SetTransform(b2Vec2(f.p2().x() / 30.0, f.p2().y() / 30.0), MasterPegBox->GetAngle());
 
         MasterPegBox->SetLinearVelocity(b2Vec2(z.x()*15, z.y() * 15));
-        
-       // MasterPegBox->SetLinearVelocity(b2Vec2((p.dx() - (MasterPegBox->GetPosition().x / 30.0)) * 0.05, (p.dy() - (MasterPegBox->GetPosition().y) / 30.0) * 0.05));
+       
         world2d->SetGravity(b2Vec2(0, 25.0f));
         masterPegGraphic->setFire(true);
         
-    }
-    return alfa;
+    
+    
 }
 
 
@@ -799,21 +721,21 @@ void Game::activePower(Character c) {
         case 2:
             activePower(Character::FLOWER);
             break;
-
-
         }
     }
-
     }
 }
-
-
 
 void Game::printScore() {
     QVector<int> arrOne;
     QVector<int> arrTwo;
     int x = _score;
     int y = _secondScore;
+    if (x == 0)
+        for (int i = 0; i < 6; i++) 
+            scoreGraphics[i]->setPixmap(QPixmap(Sprites::instance()->get("0-score")).scaled(50, 50));
+    
+
     while (x> 0)
     {
         arrOne.push_back(x % 10);
@@ -833,10 +755,15 @@ void Game::printScore() {
     
 }
 
+
 void Game::gameOverSlot() {
     _engine.stop();
     if(_mode==GameMode::SINGLE)
         _window->load("result_single");
     else 
         _window->load("result_double");
+}
+
+void Game::changeEngineSlot() {
+    _engine.setInterval(1000 / GAME_FPS);
 }

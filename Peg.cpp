@@ -8,6 +8,7 @@ using namespace PGG;
 Peg::Peg(QPoint pos, PegColor color= PegColor::BLUE): QGraphicsPixmapItem(0)
 {
 	_hitted = false;
+	_simulHit = false;
 	setPos(pos);
 	_color = color;
 
@@ -29,7 +30,7 @@ void Peg::hit() {
 
 		if (_color == PegColor::BLUE) {
 			setPixmap(Sprites::instance()->get("peg_blue_hit").scaled(30, 30));
-			Game::instance()->getTurn() ?
+;			Game::instance()->getTurn() ?
 				Game::instance()->setScore(Game::instance()->getScore() + 100) :
 				Game::instance()->setSecondScore(Game::instance()->getSecondScore() + 100);
 			if (Game::instance()->getBandOne()->scenePos().y() >= 300) {
@@ -64,10 +65,12 @@ void Peg::hit() {
 		Game::instance()->printScore();
 	}
 	else {
+		_simulHit = true;
 		if (_color == PegColor::BLUE) 
 			Game::instance()->setSimulationScore(Game::instance()->getSimulationScore()+100);
 		else 
 			Game::instance()->setSimulationScore(Game::instance()->getSimulationScore() + 200);
+		
 	}
 }
 

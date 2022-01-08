@@ -261,6 +261,7 @@ void LevelBuilder::load(const QString& level_name)
 		Game::instance()->getBucketBox()->CreateFixture(&buckFixture);
 		Game::instance()->getBucketBox()->SetLinearVelocity(b2Vec2(10, 0));
 		Game::instance()->getBucketBox()->SetUserData((Game::instance()->getBucketGraphic()));
+		Game::instance()->getBucketBox()->GetFixtureList()->SetSensor(true);
 
 
 	// CREATE PANELS

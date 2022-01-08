@@ -21,9 +21,10 @@ public:
     MasterPeg(QPoint pos);
 
     void advance(b2Body* box);
-
+    void simulAdvance(b2Body* box);
     void setFire(bool b) { _fire = b; }
     bool getFire() { return _fire; }
+    void randomShot();
     void down();
 
 };
