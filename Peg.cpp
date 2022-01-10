@@ -25,7 +25,7 @@ Peg::Peg(QPoint pos, PegColor color= PegColor::BLUE): QGraphicsPixmapItem(0)
 
 void Peg::hit() {
 	if (!Game::instance()->getSimulation()) {
-		QSound::play("sounds/peghit.wav");
+		QSound::play(":/sounds/peghit.wav");
 		_hitted = true;
 
 		if (_color == PegColor::BLUE) {

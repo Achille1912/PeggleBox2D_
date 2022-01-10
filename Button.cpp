@@ -102,6 +102,7 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 
  void Button::slotLabelClicked()   
  {
+	 QSound::play(":/sounds/buttonclick.wav");
 	 switch (_buttonType) {
 	 case ButtonType::SINGLE:
 		 Game::instance()->setGameMode(GameMode::SINGLE);

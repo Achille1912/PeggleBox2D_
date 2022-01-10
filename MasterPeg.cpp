@@ -1,7 +1,7 @@
 #include "MasterPeg.h"
 #include "Game.h"
 #include "Sprites.h"
-
+#include <QSound>
 #include <QVector2D>
 
 using namespace PGG;
@@ -76,6 +76,7 @@ void MasterPeg::simulAdvance(b2Body* box) {
                 Game::instance()->getMasterPegGraphic()->setVisible(true);
                 Game::instance()->getWorld2d()->SetGravity(b2Vec2(0, 25.0f));
 
+                QSound::play(":/sounds/cannonshot.wav");
 
 
             }
@@ -402,4 +403,6 @@ void MasterPeg::randomShot() {
     Game::instance()->getMasterPegGraphic()->setFire(true);
     Game::instance()->getMasterPegGraphic()->setVisible(true);
     Game::instance()->getCannon()->setPixmap(Sprites::instance()->get("cannon_without_ball"));
+    QSound::play(":/sounds/cannonshot.wav");
+
 }

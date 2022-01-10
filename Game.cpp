@@ -243,6 +243,8 @@ void Game::mousePressEvent(QMouseEvent* e)
             MasterPegBox->SetLinearVelocity(b2Vec2(p.x() * 15, p.y() * 15));
             masterPegGraphic->setVisible(true);
             cannon->setPixmap(Sprites::instance()->get("cannon_without_ball"));
+            QSound::play(":/sounds/cannonshot.wav");
+
         }
 
         if (e->button() == Qt::RightButton)
@@ -641,6 +643,8 @@ void Game::activePower(Character c) {
     switch (c) {
     case Character::FLOWER:
     {
+        QSound::play(":/sounds/powerup_flower.wav");
+
         int twenty = (25 - Game::instance()->getRedPegHit()) * 20 / 100;
         int c = 0;
         for (int i = 0; i < 95; i++) {
@@ -655,6 +659,8 @@ void Game::activePower(Character c) {
     break;
     case Character::ALIEN:
     {
+        QSound::play(":/sounds/powerup.wav");
+
         QPoint centerCircle(masterPegGraphic->pos().x(), masterPegGraphic->pos().y());
         QList<QGraphicsItem*> tmp;
         for (auto el : PegBox) {
@@ -677,6 +683,8 @@ void Game::activePower(Character c) {
     break;
     case Character::BEAVER:
     {
+        QSound::play(":/sounds/powerup.wav");
+
         b2BodyDef ballDef;
         ballDef.type = b2_dynamicBody;
         ballDef.linearDamping = 0;
@@ -709,6 +717,8 @@ void Game::activePower(Character c) {
 
     case Character::RABBIT:
     {
+        QSound::play(":/sounds/powerup_rabbit.wav");
+
         int  r = rand() % 3;
         switch (r) {
         case 0:
@@ -722,6 +732,24 @@ void Game::activePower(Character c) {
             activePower(Character::FLOWER);
             break;
         }
+    case Character::UNICORN:
+    
+        QSound::play(":/sounds/powerup.wav");
+    
+    break;
+    case Character::DRAGON:
+    
+        QSound::play(":/sounds/powerup.wav");
+    
+    case Character::PUMPKIN:
+    
+        QSound::play(":/sounds/powerup.wav");
+    
+    break;
+    case Character::OWL:
+    
+        QSound::play(":/sounds/powerup.wav");
+    
     }
     }
 }
@@ -757,6 +785,7 @@ void Game::printScore() {
 
 
 void Game::gameOverSlot() {
+    QSound::play(":/sounds/fanfare.wav");
     _engine.stop();
     if(_mode==GameMode::SINGLE)
         _window->load("result_single");
