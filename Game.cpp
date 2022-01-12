@@ -120,13 +120,23 @@ void Game::play() //in gioco
 {
     showFullScreen();
     buildLevel();
+    _engine.setInterval(1000 / GAME_FPS);
     _engine.start();
     _state = GameState::PLAYING;
     setMouseTracking(true);
+    playingTheme = new QMediaPlayer;
+    playingTheme->setVolume(30);
+    if (Game::instance()->me)
+        playingTheme->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/theme.wav"));
+    else
+        playingTheme->setMedia(QUrl::fromLocalFile(":/sounds/theme.wav"));
+
+    playingTheme->play();
 }
 
 void Game::nextFrame()
 {
+    updateSchedulers();
     world2d->Step(timeStep, velocityIterations, positionIterations); 
     for (b2ContactEdge* edge = MasterPegBox->GetContactList(); edge; edge = edge->next)
     {
@@ -395,6 +405,7 @@ void Game::wheelEvent(QWheelEvent* e)
         scale(1.1, 1.1);
     else
         scale(1 / 1.1, 1 / 1.1);
+    
 }
 
 void Game::keyPressEvent(QKeyEvent* e)
@@ -410,6 +421,7 @@ void Game::keyPressEvent(QKeyEvent* e)
     }
     if (e->key() == Qt::Key_R && _state == GameState::PLAYING)
     {
+        playingTheme->stop();
         init();
     }
     if (e->key() == Qt::Key_A && _state == GameState::PLAYING)
@@ -549,24 +561,22 @@ void Game::fire(float alfa) {
         simulationCount--;
         showRemainingSimulation();
         // -90 == 0
-        _engine.setInterval(0.1);
+        _engine.setInterval(0.0001);
 
         simulation = true;
         alfa = alfa - 90;
         QPoint midPos((sceneRect().width() / 2), 130);
 
-        QLineF p = QLineF(midPos, QPointF((sceneRect().width() / 2), 500));
-        QLineF f = QLineF(midPos, QPointF((sceneRect().width() / 2), 300));
-        QLineF c = p;
+        QLineF p = QLineF(midPos, QPointF((sceneRect().width() / 2), 300));
+      
         
         p.setAngle(alfa);
-        f.setAngle(alfa);
+      
         QVector2D z = QVector2D(p.dx(), p.dy());
         z.normalize();
 
-        //cannon->setTransformOriginPoint(QPoint(30, -65));
-        //cannon->setRotation(-c.angleTo(p));
-        MasterPegBox->SetTransform(b2Vec2(f.p2().x() / 30.0, f.p2().y() / 30.0), MasterPegBox->GetAngle());
+
+        MasterPegBox->SetTransform(b2Vec2(p.p2().x() / 30.0, p.p2().y() / 30.0), MasterPegBox->GetAngle());
 
         MasterPegBox->SetLinearVelocity(b2Vec2(z.x()*15, z.y() * 15));
        
@@ -757,6 +767,7 @@ void Game::printScore() {
 
 
 void Game::gameOverSlot() {
+    playingTheme->stop();
     QMediaPlayer* player = new QMediaPlayer;
     player->setVolume(50);
     if (Game::instance()->me)
@@ -772,7 +783,10 @@ void Game::gameOverSlot() {
 }
 
 void Game::changeEngineSlot() {
-    _engine.setInterval(1000 / GAME_FPS);
+    if(_redPegHit==24)
+        _engine.setInterval(200);
+    else
+        _engine.setInterval(1000 / GAME_FPS);
 }
 
 
@@ -782,7 +796,6 @@ void Game::deselectButtons() {
             printf("Ciaoo");
     }
 }
-
 
 
 void Game::showRemainingSimulation() {
@@ -803,4 +816,17 @@ void Game::showRemainingSimulation() {
             remainingSimulation[2]->setPixmap(QPixmap(Sprites::instance()->get("0-score")).scaled(80, 80));
     }
 
+}
+
+
+void Game::schedule(const std::string& id, int delay, std::function<void()> action)
+{
+    _schedulers[id] = Scheduler(delay, action);
+}
+
+void Game::updateSchedulers()
+{
+    for (auto& t : _schedulers)
+        if (t.second.on())
+            t.second++;
 }

@@ -33,5 +33,6 @@
 	<file>sounds/powerup_rabbit.wav</file>
         <file>sounds/extraball.wav</file>
 	<file>sounds/theme.wav</file>
+	<file>sounds/applause.wav</file>
     </qresource>
     </RCC>

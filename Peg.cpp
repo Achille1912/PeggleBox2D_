@@ -1,6 +1,7 @@
 #include "Peg.h"
 #include "Game.h"
 #include "Sprites.h"
+#include "Scheduler.h"
 #include <QMediaPlayer>
 
 using namespace PGG;
@@ -52,6 +53,32 @@ void Peg::hit() {
 			Game::instance()->setScore(Game::instance()->getScore() + 200) :
 			Game::instance()->setSecondScore(Game::instance()->getSecondScore() + 200);
 			Game::instance()->addMolt();
+			if (Game::instance()->getRedPegHit() == 24) {
+				Game::instance()->centerOn(this->scenePos());
+				Game::instance()->scale(4.1, 4.1);
+				emit Game::instance()->changeEngine();
+				QMediaPlayer* player = new QMediaPlayer;
+				player->setVolume(50);
+				if (Game::instance()->me)
+					player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/applause.wav"));
+				else
+					player->setMedia(QUrl::fromLocalFile(":/sounds/applause.wav"));
+
+				player->play();
+				Game::instance()->schedule("fever", 10, [this]() {
+					Game::instance()->resetMatrix();
+					Game::instance()->scale(1,1);
+					for (auto el : Game::instance()->PegBox) {
+						if (!(static_cast<Peg*>(el->GetUserData())->getHitted())) {
+							(Game::instance()->getTurn() ?
+								Game::instance()->setScore(Game::instance()->getScore() + 1000) :
+								Game::instance()->setSecondScore(Game::instance()->getSecondScore() + 1000));
+						}
+					}
+					emit Game::instance()->gameOver();
+					
+					});
+			}
 			if (Game::instance()->getBandOne()->scenePos().y() >= 300) {
 				Game::instance()->getBandOne()->setY(Game::instance()->getBandOne()->scenePos().y() - 50);
 				Game::instance()->getBandTwo()->setY(Game::instance()->getBandTwo()->scenePos().y() - 50);

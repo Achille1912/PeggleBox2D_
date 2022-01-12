@@ -27,4 +27,8 @@ public:
     void randomShot();
     void down();
 
+    void restorePos(b2Body* box);
+
+    void shot(QLineF c, QLineF p, QLineF f, QVector2D z);
+
 };

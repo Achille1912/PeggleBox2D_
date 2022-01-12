@@ -4,6 +4,7 @@
 #include <QSound>
 #include <QVector2D>
 #include <QMediaPlayer>
+
 using namespace PGG;
 
 /*int ciao = -45;*/
@@ -18,20 +19,12 @@ MasterPeg::MasterPeg(QPoint pos) : QGraphicsPixmapItem(0)
 	setPos(pos);
 	setPixmap(Sprites::instance()->get("master_peg").scaled(20, 20));
 	Game::instance()->world()->addItem(this);
-
 }
-
 
 void MasterPeg::simulAdvance(b2Body* box) {
     if (box->GetPosition().y > 35)
     {
-        QPointF center(720, 100);
-        QLineF v2(center, QCursor::pos());
-        v2.setLength(200.0);
-        box->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), box->GetAngle());
-        box->SetLinearVelocity(b2Vec2(0, 0));
-        box->SetAngularVelocity(0);
-        Game::instance()->getWorld2d()->SetGravity(b2Vec2(0, 0));
+        restorePos(box);
         Game::instance()->alpha--;
         if (Game::instance()->alpha < -89) {
             Game::instance()->printScore();
@@ -67,23 +60,7 @@ void MasterPeg::simulAdvance(b2Body* box) {
                 QVector2D z = QVector2D(p.dx(), p.dy());
                 z.normalize();
 
-                Game::instance()->getCannon()->setTransformOriginPoint(QPoint(30, -65));
-                Game::instance()->getCannon()->setRotation(-c.angleTo(p));
-                if (!Game::instance()->getMasterPegGraphic()->getFire())
-                    Game::instance()->getMasterPegBox()->SetTransform(b2Vec2(f.p2().x() / 30.0, f.p2().y() / 30.0), Game::instance()->getMasterPegBox()->GetAngle());
-                Game::instance()->getMasterPegBox()->SetLinearVelocity(b2Vec2(z.x() * 15, z.y() * 15));
-                Game::instance()->getMasterPegGraphic()->setFire(true);
-                Game::instance()->getMasterPegGraphic()->setVisible(true);
-                Game::instance()->getWorld2d()->SetGravity(b2Vec2(0, 25.0f));
-                Game::instance()->getCannon()->setPixmap(Sprites::instance()->get("cannon_without_ball"));
-                QMediaPlayer* player = new QMediaPlayer;
-                player->setVolume(50);
-                if (Game::instance()->me)
-                    player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/cannonshot.wav"));
-                else
-                    player->setMedia(QUrl::fromLocalFile(":/sounds/cannonshot.wav"));
-
-                player->play();
+                shot(c,p,f, z);
                 Game::instance()->simulationCount = 180;
                 for (auto el : Game::instance()->remainingSimulation)
                     el->setVisible(false);
@@ -100,10 +77,7 @@ void MasterPeg::simulAdvance(b2Body* box) {
 
             Game::instance()->setSimulationScore(0);
             
-            
             Game::instance()->fire(Game::instance()->alpha);
-
-
         }
     }
 }
@@ -113,14 +87,7 @@ void MasterPeg::advance(b2Body* box) {
     this->setPos(box->GetPosition().x * 30.0, box->GetPosition().y * 30.0);
 
     if (box->GetPosition().y > 35)
-    {
-
-
         down();
-    }
-            
-      
-    
 }
 
 
@@ -140,18 +107,7 @@ void MasterPeg::down() {
                 Game::instance()->lateral_mp[9 - (Game::instance()->getRemainingBall())]->setVisible(false);
 
             Game::instance()->printRemainingBall(Game::instance()->getRemainingBall());
-            QPointF center(720, 100);
-
-
-            QLineF v2(center, QCursor::pos());
-            v2.setLength(200.0);
-            Game::instance()->getMasterPegBox()->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), Game::instance()->getMasterPegBox()->GetAngle());
-            Game::instance()->getMasterPegBox()->SetLinearVelocity(b2Vec2(0, 0));
-            Game::instance()->getMasterPegBox()->SetAngularVelocity(0);
-            Game::instance()->getWorld2d()->SetGravity(b2Vec2(0, 0));
-            Game::instance()->getBandOne()->setY(924);
-            Game::instance()->getBandTwo()->setY(924);
-
+            restorePos(Game::instance()->getMasterPegBox());
 
             if (Game::instance()->getGameMode() == GameMode::CPU && !(Game::instance()->getTurn())) {
                 if (!Game::instance()->getHardMode()) {
@@ -211,18 +167,8 @@ void MasterPeg::down() {
                 Game::instance()->lateral_mp[9 - (Game::instance()->getRemainingBall())]->setVisible(false);
 
             Game::instance()->printRemainingBall(Game::instance()->getRemainingBall());
-            QPointF center(720, 100);
-
-
-            QLineF v2(center, QCursor::pos());
-            v2.setLength(200.0);
-            Game::instance()->getMasterPegBox()->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), Game::instance()->getMasterPegBox()->GetAngle());
-            Game::instance()->getMasterPegBox()->SetLinearVelocity(b2Vec2(0, 0));
-            Game::instance()->getMasterPegBox()->SetAngularVelocity(0);
-            Game::instance()->getWorld2d()->SetGravity(b2Vec2(0, 0));
-            Game::instance()->getBandOne()->setY(924);
-            Game::instance()->getBandTwo()->setY(924);
-
+            restorePos(Game::instance()->getMasterPegBox());
+      
             if (Game::instance()->getGameMode() == GameMode::CPU && !(Game::instance()->getTurn())){
                 if (!Game::instance()->getHardMode()) {
                     randomShot();
@@ -252,18 +198,7 @@ void MasterPeg::down() {
                 Game::instance()->lateral_mp[9 - (Game::instance()->getRemainingBall())]->setVisible(false);
 
             Game::instance()->printRemainingBall(Game::instance()->getRemainingBall());
-            QPointF center(720, 100);
-
-
-            QLineF v2(center, QCursor::pos());
-            v2.setLength(200.0);
-            Game::instance()->getMasterPegBox()->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), Game::instance()->getMasterPegBox()->GetAngle());
-            Game::instance()->getMasterPegBox()->SetLinearVelocity(b2Vec2(0, 0));
-            Game::instance()->getMasterPegBox()->SetAngularVelocity(0);
-            Game::instance()->getWorld2d()->SetGravity(b2Vec2(0, 0));
-            Game::instance()->getBandOne()->setY(924);
-            Game::instance()->getBandTwo()->setY(924);
-
+            restorePos(Game::instance()->getMasterPegBox());
 
             Game::instance()->alpha = 89;
             Game::instance()->simulationScore.clear();
@@ -354,17 +289,8 @@ void MasterPeg::down() {
             Game::instance()->lateral_mp[9 - (Game::instance()->getRemainingBall())]->setVisible(false);
 
         Game::instance()->printRemainingBall(Game::instance()->getRemainingBall());
-        QPointF center(720, 100);
+        restorePos(Game::instance()->getMasterPegBox());
 
-
-        QLineF v2(center, QCursor::pos());
-        v2.setLength(200.0);
-        Game::instance()->getMasterPegBox()->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), Game::instance()->getMasterPegBox()->GetAngle());
-        Game::instance()->getMasterPegBox()->SetLinearVelocity(b2Vec2(0, 0));
-        Game::instance()->getMasterPegBox()->SetAngularVelocity(0);
-        Game::instance()->getWorld2d()->SetGravity(b2Vec2(0, 0));
-        Game::instance()->getBandOne()->setY(924);
-        Game::instance()->getBandTwo()->setY(924);
         Game::instance()->getMasterPegGraphic()->setVisible(false);
         Game::instance()->getCannon()->setPixmap(Sprites::instance()->get("cannon"));
 
@@ -402,22 +328,40 @@ void MasterPeg::randomShot() {
 
     p.setAngle(-alfa);
     f.setAngle(-alfa);
+    QVector2D z = QVector2D(p.dx(), p.dy());
+    z.normalize();
+    shot(c, p, f, z);
+}
 
+
+void MasterPeg::restorePos(b2Body* box) {
+    QPointF center(720, 100);
+    QLineF v2(center, QCursor::pos());
+    v2.setLength(200.0);
+    box->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), box->GetAngle());
+    box->SetLinearVelocity(b2Vec2(0, 0));
+    box->SetAngularVelocity(0);
+    Game::instance()->getWorld2d()->SetGravity(b2Vec2(0, 0));
+    Game::instance()->getBandOne()->setY(924);
+    Game::instance()->getBandTwo()->setY(924);
+}
+
+
+void MasterPeg::shot(QLineF c, QLineF p, QLineF f, QVector2D z) {
     Game::instance()->getCannon()->setTransformOriginPoint(QPoint(30, -65));
     Game::instance()->getCannon()->setRotation(-c.angleTo(p));
     if (!Game::instance()->getMasterPegGraphic()->getFire())
         Game::instance()->getMasterPegBox()->SetTransform(b2Vec2(f.p2().x() / 30.0, f.p2().y() / 30.0), Game::instance()->getMasterPegBox()->GetAngle());
-    Game::instance()->getMasterPegBox()->SetLinearVelocity(b2Vec2((p.dx() - (Game::instance()->getMasterPegBox()->GetPosition().x / 30.0)) * 0.05, (p.dy() - (Game::instance()->getMasterPegBox()->GetPosition().y) / 30.0) * 0.05));
-    Game::instance()->getWorld2d()->SetGravity(b2Vec2(0, 25.0f));
+    Game::instance()->getMasterPegBox()->SetLinearVelocity(b2Vec2(z.x() * 15, z.y() * 15));
     Game::instance()->getMasterPegGraphic()->setFire(true);
     Game::instance()->getMasterPegGraphic()->setVisible(true);
+    Game::instance()->getWorld2d()->SetGravity(b2Vec2(0, 25.0f));
     Game::instance()->getCannon()->setPixmap(Sprites::instance()->get("cannon_without_ball"));
-
     QMediaPlayer* player = new QMediaPlayer;
     player->setVolume(50);
-    if (Game::instance()->me) 
+    if (Game::instance()->me)
         player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/cannonshot.wav"));
-    else 
+    else
         player->setMedia(QUrl::fromLocalFile(":/sounds/cannonshot.wav"));
 
     player->play();

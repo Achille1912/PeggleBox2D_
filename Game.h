@@ -5,12 +5,14 @@
 #include <QLabel>
 #include <QPainterPath>
 #include <Map>
+#include <QMediaPlayer>
 
 #include "Bucket.h"
 #include "MasterPeg.h"
 #include "Peg.h"
 #include "LevelBuilder.h"
 #include "WindowBuilder.h"
+#include "Scheduler.h"
 
 #include "Button.h"
 
@@ -130,6 +132,12 @@ public:
     QVector< QGraphicsPixmapItem*> scoreGraphicsTwo;
     QVector< QGraphicsPixmapItem*> remainingSimulation;
     int simulationCount=180;
+    QMediaPlayer* playingTheme;
+    std::map<std::string, Scheduler> _schedulers;
+    virtual void schedule(const std::string& id, int delay, std::function<void()> action);
+    virtual void updateSchedulers();
+
+
     
 // GETTERS
 
@@ -235,7 +243,7 @@ public:
     void fire(float alfa);
     int alpha = 89;
     std::vector < std::tuple< int, int > >simulationScore;
-    bool me = false;
+    bool me = true;
     
 
     // event handlers
