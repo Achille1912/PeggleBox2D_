@@ -1,6 +1,7 @@
 #include "Bucket.h"
 #include "Game.h"
 #include "Sprites.h"
+#include <QMediaPlayer>
 
 using namespace PGG;
 
@@ -23,6 +24,14 @@ void Bucket::advance(b2Body* box) {
 
 
 void Bucket::goal() {
+        QMediaPlayer* player = new QMediaPlayer;
+        player->setVolume(40);
+        if (Game::instance()->me)
+            player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/extraball.wav"));
+        else
+            player->setMedia(QUrl::fromLocalFile(":/sounds/extraball.wav"));
+
+        player->play();
         Game::instance()->clearHittedPeg();
         Game::instance()->setRemainingBall((Game::instance()->getRemainingBall())+1);
         Game::instance()->printRemainingBall(Game::instance()->getRemainingBall());

@@ -31,6 +31,7 @@
 	<file>sounds/powerup_flower.wav</file>
 	<file>sounds/powerup_pumpkin.wav</file>
 	<file>sounds/powerup_rabbit.wav</file>
-        
+        <file>sounds/extraball.wav</file>
+	<file>sounds/theme.wav</file>
     </qresource>
     </RCC>
