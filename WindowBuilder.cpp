@@ -11,8 +11,7 @@ using namespace PGG;
 
 void WindowBuilder::load(const QString& window_name)
 {
-
-	if(window_name=="mode"){
+     if (window_name == "mode") {
         Game::instance()->world()->clear();
         Game::instance()->setState(GameState::MODE);
         Game::instance()->setBackground(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("gameMode"))));

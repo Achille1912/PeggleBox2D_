@@ -8,7 +8,8 @@
 #include <cmath>
 #include <qDebug>
 #include <set>
-
+#include <QMediaPlayer>
+#include <QStyle>
 
 #include "Game.h"
 #include "Peg.h"
@@ -19,8 +20,6 @@
 #include "Button.h"
 
 
-
-#include "Sounds.h"
 #include "Sprites.h"
 
 #include "box2d/include/box2d/b2_settings.h"
@@ -37,6 +36,7 @@ Game* Game::instance()
     return _uniqueInstance;
 }
 
+// constructor
 Game::Game() : QGraphicsView()
 {
     // setup world/scene
@@ -70,10 +70,10 @@ Game::Game() : QGraphicsView()
     _simulationScore = 0;
     _character = Character::NONE;
     _power = false;
+    simulationCount = 180;
 
     reset();
     init();
-    
 }
 
 void Game::reset()
@@ -81,6 +81,7 @@ void Game::reset()
     _score = 0;
     alpha = 89;
     simulationScore.clear();
+    remainingSimulation.clear();
     _secondScore = 0;
     remainingBall = 10;
     _redPegHit = -1;
@@ -88,6 +89,7 @@ void Game::reset()
     _secondCharacter = Character::NONE;
     restoreGreen = false;
     _power = false;
+    simulationCount = 180;
     turn = true;
     trajectory.resize(30);
     for (auto el : trajectory)
@@ -101,56 +103,33 @@ void Game::reset()
 void Game::init()
 {
     reset();
-    
     background= _world->addPixmap(QPixmap(Sprites::instance()->get("peggle_title")));
-    
+    _state = GameState::TITLE;
     centerOn(background);
     setSceneRect(0, 0, getBackground()->sceneBoundingRect().width(), getBackground()->sceneBoundingRect().height());
     showNormal();
-    _state = GameState::TITLE;
-}
-
-
-void Game::menuDuel()
-{
-    _world->clear();
-    _state = GameState::TITLE;
-    showNormal();
-    fitInView(_world->addPixmap(QPixmap(Sprites::instance()->get("peggle_title"))), Qt::KeepAspectRatio);
-
 }
 
 void Game::buildLevel()
 {
     _world->clear();
-    
     _builder->load("level_1");
-
 }
 
 void Game::play() //in gioco
 {
-    
     showFullScreen();
-    
-
     buildLevel();
-    
     _engine.start();
-   
     _state = GameState::PLAYING;
     setMouseTracking(true);
-    
 }
 
 void Game::nextFrame()
 {
-    
     world2d->Step(timeStep, velocityIterations, positionIterations); 
-
-  for (b2ContactEdge* edge = MasterPegBox->GetContactList(); edge; edge = edge->next)
+    for (b2ContactEdge* edge = MasterPegBox->GetContactList(); edge; edge = edge->next)
     {
-      
       if (edge->contact->IsTouching()&& static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData())) {
           // if is a Peg
           if (edge->contact->GetFixtureA()->GetBody()->GetType() == b2BodyType::b2_staticBody) {
@@ -163,19 +142,16 @@ void Game::nextFrame()
                   if (!tmp->getHitted())
                       tmp->hit();
               }
-              
            // if is Bucket
           }else if (edge->contact->GetFixtureA()->GetBody()->GetType() == b2BodyType::b2_kinematicBody){
               Bucket* tmp = static_cast<Bucket*>(edge->contact->GetFixtureA()->GetBody()->GetUserData());
               tmp->goal();
           }
-
       }
     }
-  if (getPower() && (_character == Character::BEAVER|| _character == Character::RABBIT)) {
+    if (getPower() && (_character == Character::BEAVER|| _character == Character::RABBIT)) {
       for (b2ContactEdge* edge = secondMasterPegBox->GetContactList(); edge; edge = edge->next)
       {
-
           if (edge->contact->IsTouching() && static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData())) {
               // if is a Peg
               if (edge->contact->GetFixtureA()->GetBody()->GetType() == b2BodyType::b2_staticBody) {
@@ -188,47 +164,41 @@ void Game::nextFrame()
                       if (!tmp->getHitted())
                           tmp->hit();
                   }
-                 
               }
           }
       }
-  }
+    }
 
     //master peg
-   
-  if (!simulation) {
-      masterPegGraphic->advance(MasterPegBox);
-      bucketGraphic->advance(BucketBox);
-      if(_power&&((turn ? getCharacter() : getSecondCharacter()) ==Character::BEAVER|| (turn ? getCharacter() : getSecondCharacter()) == Character::RABBIT))
-        secondMasterPegGraphics->advance(secondMasterPegBox);
-  }
-  else {
-      masterPegGraphic->simulAdvance(MasterPegBox);
-  }
-       
+    if (!simulation) {
+        masterPegGraphic->advance(MasterPegBox);
+        bucketGraphic->advance(BucketBox);
+        if(_power&&((turn ? getCharacter() : getSecondCharacter()) ==Character::BEAVER|| (turn ? getCharacter() : getSecondCharacter()) == Character::RABBIT))
+            secondMasterPegGraphics->advance(secondMasterPegBox);
+    }
+    else {
+        masterPegGraphic->simulAdvance(MasterPegBox);
+    }
 }
 
 // EVENTI
 void Game::mousePressEvent(QMouseEvent* e)
 {
-    
     if (!simulation) {
         if (_state ==GameState::TITLE)
         {
-            
             _window->load("mode");
             return;
         }
 
         if (_state == GameState::MODE || _state == GameState::RESULT_DOUBLE||_state == GameState::RESULT_SINGLE|| _state == GameState::SELECT_SINGLE_CHARACTER || _state == GameState::SELECT_FIRST_CHARACTER || _state == GameState::SELECT_SECOND_CHARACTER || _state == GameState::SELECT_DIFFICULTY)
             QGraphicsView::mousePressEvent(e);
-        
 
         if (e->button() == Qt::LeftButton && _state == GameState::PLAYING)
         {
-            if (_mode == GameMode::CPU&& !turn) {
+            if (_mode == GameMode::CPU&& !turn) 
                 return;
-            }
+            
             Game::instance()->setPower(false);
             
             masterPegGraphic->setFire(true);
@@ -243,10 +213,15 @@ void Game::mousePressEvent(QMouseEvent* e)
             MasterPegBox->SetLinearVelocity(b2Vec2(p.x() * 15, p.y() * 15));
             masterPegGraphic->setVisible(true);
             cannon->setPixmap(Sprites::instance()->get("cannon_without_ball"));
-            QSound::play(":/sounds/cannonshot.wav");
+            QMediaPlayer* player = new QMediaPlayer;
+            player->setVolume(50);
+            if (Game::instance()->me)
+                player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/cannonshot.wav"));
+            else
+                player->setMedia(QUrl::fromLocalFile(":/sounds/cannonshot.wav"));
 
+            player->play();
         }
-
         if (e->button() == Qt::RightButton)
             _engine.setInterval(5);
     }
@@ -256,7 +231,6 @@ void Game::mouseReleaseEvent(QMouseEvent* e)
 {
     if (e->button() == Qt::RightButton&& !simulation)
         _engine.setInterval(1000 / GAME_FPS);
-    
 }
 
 void Game::mouseMoveEvent(QMouseEvent* e)
@@ -264,7 +238,6 @@ void Game::mouseMoveEvent(QMouseEvent* e)
     if (_state==GameState::PLAYING){
         if (!simulation) {
             QPointF midPos((sceneRect().width() / 2), 0), currPos;
-                
                 currPos = QPoint(mapToScene(e->pos()).x(), mapToScene(e->pos()).y());
                 setMouseTracking(true);
                 if (turn) {
@@ -445,13 +418,11 @@ void Game::keyPressEvent(QKeyEvent* e)
         alpha = 89;
         fire(alpha);
     }
-
 }
 
 void Game::resizeEvent(QResizeEvent* e)
 {
     fitInView(0, 0, sceneRect().width(), sceneRect().height(), Qt::KeepAspectRatio);
-   
     QGraphicsView::resizeEvent(e);
 }
 
@@ -477,7 +448,6 @@ void Game::updateFPS()
 {
     _FPS_label->setText(QString("FPS = ") + QString::number(_frame_count));
     _frame_count = 0;
-
     // setup FPS display and measuring
     _FPS_label = new QLabel("FPS =           ", this);
     _FPS_label->setFont(QFont("Consolas", 10));
@@ -493,9 +463,7 @@ b2Vec2 Game::getTrajectoryPoint(b2Vec2& startingPosition, b2Vec2& startingVeloci
     //velocity and gravity are given per second but we want time step values here
     float t = 1 / 60.0f; // seconds per time step (at 60fps)
     b2Vec2 stepVelocity = t * startingVelocity; // m/s
-    
     b2Vec2 stepGravity = t * t * b2Vec2(0,25.0); // m/s/s
-
     return startingPosition + n * stepVelocity + 0.5f * (n * n + n) * stepGravity;
 }
 
@@ -545,25 +513,20 @@ void Game::printRemainingBall(int b) {
 
 void Game::clearHittedPeg() {
     for (int i = 0; i < PegBox.size(); i++) {
-       
         Peg* tmp = static_cast<Peg*>(PegBox[i]->GetUserData());
         if (tmp->getHitted()) {
             tmp->setVisible(false);
             PegBox[i]->DestroyFixture(PegBox[i]->GetFixtureList());
-            
         }
     }
     if (restoreGreen) {
-
         int i = 0;
-
         do {
             i = rand() % 95;
         } while (static_cast<Peg*>(PegBox[i]->GetUserData())->getPegColor() == PegColor::RED && (static_cast<Peg*>(PegBox[i]->GetUserData())->getHitted()) && !(static_cast<Peg*>(PegBox[i]->GetUserData())->isVisible()));
         static_cast<Peg*>(PegBox[i]->GetUserData())->changeColor(PegColor::GREEN);
         restoreGreen = false;
     }
-    
 }
 
 void Game::addMolt() {
@@ -579,34 +542,13 @@ void Game::addMolt() {
         molt_x[3]->setVisible(true);
 }
 
-void Game::save() {
-    QJsonObject recordObject;
-    recordObject.insert("RemainingBall", QJsonValue::fromVariant(remainingBall));
-    recordObject.insert("RedPegHit", QJsonValue::fromVariant(_redPegHit));
-
-    QJsonObject RemainingPeg;
-    for (int i = 0; i < PegBox.size(); i++) {
-        QJsonObject tmp;
-        tmp.insert("X", PegBox[i]->GetPosition().x);
-        tmp.insert("Y", PegBox[i]->GetPosition().y);
-        tmp.insert("Color", static_cast<Peg*>(PegBox[i]->GetUserData())->getPegColor()==PegColor::RED?true:false);
-        RemainingPeg.insert(QString::number(i), tmp);
-    }
-    recordObject.insert("RemainingPeg", RemainingPeg);
-
- 
-    QJsonDocument doc(recordObject);
-    qDebug().noquote() << doc.toJson();
-
-    QFile file("C:/Users/achil/Desktop/Prova.json");
-    file.open(QFile::WriteOnly | QFile::Text | QFile::Truncate);
-    file.write(doc.toJson());
-    file.close();
-}
-
 void Game::fire(float alfa) {
-        // -90 == 0
+        for (auto el : remainingSimulation)
+            el->setVisible(true);
        
+        simulationCount--;
+        showRemainingSimulation();
+        // -90 == 0
         _engine.setInterval(0.1);
 
         simulation = true;
@@ -621,35 +563,38 @@ void Game::fire(float alfa) {
         f.setAngle(alfa);
         QVector2D z = QVector2D(p.dx(), p.dy());
         z.normalize();
-      
 
-
-        cannon->setTransformOriginPoint(QPoint(30, -65));
-        cannon->setRotation(-c.angleTo(p));
+        //cannon->setTransformOriginPoint(QPoint(30, -65));
+        //cannon->setRotation(-c.angleTo(p));
         MasterPegBox->SetTransform(b2Vec2(f.p2().x() / 30.0, f.p2().y() / 30.0), MasterPegBox->GetAngle());
 
         MasterPegBox->SetLinearVelocity(b2Vec2(z.x()*15, z.y() * 15));
        
         world2d->SetGravity(b2Vec2(0, 25.0f));
-        masterPegGraphic->setFire(true);
-        
-    
-    
+        masterPegGraphic->setFire(true);    
 }
 
 
 void Game::activePower(Character c) {
     setPower(true);
+    QMediaPlayer* player = new QMediaPlayer;
+    player->setVolume(50);
     switch (c) {
     case Character::FLOWER:
     {
-        QSound::play(":/sounds/powerup_flower.wav");
+        if ((turn ? getCharacter() : getSecondCharacter()) != Character::RABBIT) {
+            if (Game::instance()->me)
+                player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup_flower.wav"));
+            else
+                player->setMedia(QUrl::fromLocalFile(":/sounds/powerup_flower.wav"));
 
+            player->play();
+        }
         int twenty = (25 - Game::instance()->getRedPegHit()) * 20 / 100;
         int c = 0;
         for (int i = 0; i < 95; i++) {
             if (static_cast<Peg*>(Game::instance()->PegBox[i]->GetUserData())->getPegColor() == PegColor::RED && c < twenty && !static_cast<Peg*>(Game::instance()->PegBox[i]->GetUserData())->getHitted()) {
-                printf("Twenty");
+                
                 static_cast<Peg*>(Game::instance()->PegBox[i]->GetUserData())->hit();
                 c++;
             }
@@ -659,8 +604,14 @@ void Game::activePower(Character c) {
     break;
     case Character::ALIEN:
     {
-        QSound::play(":/sounds/powerup.wav");
+        if ((turn ? getCharacter() : getSecondCharacter()) != Character::RABBIT) {
+            if (Game::instance()->me)
+                player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup.wav"));
+            else
+                player->setMedia(QUrl::fromLocalFile(":/sounds/powerup.wav"));
 
+            player->play();
+        }
         QPoint centerCircle(masterPegGraphic->pos().x(), masterPegGraphic->pos().y());
         QList<QGraphicsItem*> tmp;
         for (auto el : PegBox) {
@@ -677,14 +628,20 @@ void Game::activePower(Character c) {
                 
             }
         }
-        
         Game::instance()->setPower(false);
     }
     break;
     case Character::BEAVER:
     {
-        QSound::play(":/sounds/powerup.wav");
 
+        if ((turn ? getCharacter() : getSecondCharacter()) != Character::RABBIT) {
+            if (Game::instance()->me)
+                player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup.wav"));
+            else
+                player->setMedia(QUrl::fromLocalFile(":/sounds/powerup.wav"));
+
+            player->play();
+        }
         b2BodyDef ballDef;
         ballDef.type = b2_dynamicBody;
         ballDef.linearDamping = 0;
@@ -717,8 +674,14 @@ void Game::activePower(Character c) {
 
     case Character::RABBIT:
     {
-        QSound::play(":/sounds/powerup_rabbit.wav");
-
+        QMediaPlayer* player = new QMediaPlayer;
+        player->setVolume(50);
+        if (Game::instance()->me)
+            player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup_rabbit.wav"));
+        else
+            player->setMedia(QUrl::fromLocalFile(":/sounds/powerup_rabbit.wav"));
+      
+        player->play();
         int  r = rand() % 3;
         switch (r) {
         case 0:
@@ -727,32 +690,44 @@ void Game::activePower(Character c) {
         case 1:
             activePower(Character::BEAVER);
             break;
- 
         case 2:
             activePower(Character::FLOWER);
             break;
         }
+    }
     case Character::UNICORN:
-    
-        QSound::play(":/sounds/powerup.wav");
-    
+        if (Game::instance()->me)
+            player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup.wav"));
+        else
+            player->setMedia(QUrl::fromLocalFile(":/sounds/powerup.wav"));
+
+        player->play();
     break;
     case Character::DRAGON:
-    
-        QSound::play(":/sounds/powerup.wav");
-    
+        if (Game::instance()->me)
+            player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup.wav"));
+        else
+            player->setMedia(QUrl::fromLocalFile(":/sounds/powerup.wav"));
+
+        player->play();
     case Character::PUMPKIN:
-    
-        QSound::play(":/sounds/powerup.wav");
-    
+        if (Game::instance()->me)
+            player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup_pumpkin.wav"));
+        else
+            player->setMedia(QUrl::fromLocalFile(":/sounds/powerup_pumpkin.wav"));
+
+        player->play();
     break;
     case Character::OWL:
-    
-        QSound::play(":/sounds/powerup.wav");
-    
+        if (Game::instance()->me)
+            player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup.wav"));
+        else
+            player->setMedia(QUrl::fromLocalFile(":/sounds/powerup.wav"));
+
+        player->play();
     }
-    }
-}
+ }
+    
 
 void Game::printScore() {
     QVector<int> arrOne;
@@ -763,7 +738,6 @@ void Game::printScore() {
         for (int i = 0; i < 6; i++) 
             scoreGraphics[i]->setPixmap(QPixmap(Sprites::instance()->get("0-score")).scaled(50, 50));
     
-
     while (x> 0)
     {
         arrOne.push_back(x % 10);
@@ -774,18 +748,22 @@ void Game::printScore() {
         arrTwo.push_back(y % 10);
         y /= 10;
     }
+    for (int i = 0; i < arrOne.length(); i++)
+       scoreGraphics[i]->setPixmap(QPixmap(Sprites::instance()->get(std::to_string(arrOne[i]) + "-score")).scaled(50, 50));
 
-      for (int i = 0; i < arrOne.length(); i++)
-        scoreGraphics[i]->setPixmap(QPixmap(Sprites::instance()->get(std::to_string(arrOne[i]) + "-score")).scaled(50, 50));
-
-     for (int i = 0; i < arrTwo.length(); i++)
-        scoreGraphicsTwo[i]->setPixmap(QPixmap(Sprites::instance()->get(std::to_string(arrTwo[i]) + "-score")).scaled(50, 50));
-    
+    for (int i = 0; i < arrTwo.length(); i++)
+       scoreGraphicsTwo[i]->setPixmap(QPixmap(Sprites::instance()->get(std::to_string(arrTwo[i]) + "-score")).scaled(50, 50));
 }
 
 
 void Game::gameOverSlot() {
-    QSound::play(":/sounds/fanfare.wav");
+    QMediaPlayer* player = new QMediaPlayer;
+    player->setVolume(50);
+    if (Game::instance()->me)
+        player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/fanfare.wav"));
+    else
+        player->setMedia(QUrl::fromLocalFile(":/sounds/fanfare.wav"));
+    player->play();
     _engine.stop();
     if(_mode==GameMode::SINGLE)
         _window->load("result_single");
@@ -795,4 +773,34 @@ void Game::gameOverSlot() {
 
 void Game::changeEngineSlot() {
     _engine.setInterval(1000 / GAME_FPS);
+}
+
+
+void Game::deselectButtons() {
+    for (auto el : world()->findChildren<QObject*>()) {
+       if(dynamic_cast<Button*>(el))
+            printf("Ciaoo");
+    }
+}
+
+
+
+void Game::showRemainingSimulation() {
+    QVector<int> arrOne;
+    int x = simulationCount;
+    
+    while (x > 0)
+    {
+        arrOne.push_back(x % 10);
+        x /= 10;
+    }
+    for (int i = 0; i < arrOne.length(); i++)
+        remainingSimulation[i]->setPixmap(QPixmap(Sprites::instance()->get(std::to_string(arrOne[i]) + "-score")).scaled(80, 80));
+    if (arrOne.length() < 3) {
+        if(arrOne.length() < 2)
+            remainingSimulation[1]->setPixmap(QPixmap(Sprites::instance()->get("0-score")).scaled(80, 80));
+        else
+            remainingSimulation[2]->setPixmap(QPixmap(Sprites::instance()->get("0-score")).scaled(80, 80));
+    }
+
 }

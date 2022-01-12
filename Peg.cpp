@@ -1,7 +1,7 @@
 #include "Peg.h"
 #include "Game.h"
-#include "Sounds.h"
 #include "Sprites.h"
+#include <QMediaPlayer>
 
 using namespace PGG;
 
@@ -25,7 +25,15 @@ Peg::Peg(QPoint pos, PegColor color= PegColor::BLUE): QGraphicsPixmapItem(0)
 
 void Peg::hit() {
 	if (!Game::instance()->getSimulation()) {
-		QSound::play(":/sounds/peghit.wav");
+		QMediaPlayer* player = new QMediaPlayer;
+		player->setVolume(50);
+		if (Game::instance()->me)
+			player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/peghit.wav"));
+		else
+			player->setMedia(QUrl::fromLocalFile(":/sounds/peghit.wav"));
+
+		player->play();
+
 		_hitted = true;
 
 		if (_color == PegColor::BLUE) {

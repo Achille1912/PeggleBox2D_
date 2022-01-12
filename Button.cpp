@@ -1,8 +1,8 @@
 #include "Button.h"
 #include "Game.h"
-#include "Sounds.h"
-#include "Sprites.h"
 
+#include "Sprites.h"
+#include <QMediaPlayer>
 #include <QKeyEvent>
 
 using namespace PGG;
@@ -12,7 +12,7 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 {
 	_buttonType = bt;
 	connect(this, SIGNAL(clicked()), this, SLOT(slotLabelClicked()), Qt::QueuedConnection);
-
+	
 	switch (_buttonType) {
 	case ButtonType::SINGLE:
 		setPixmap(QPixmap(Sprites::instance()->get("single_button")));
@@ -69,6 +69,7 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 		setPixmap(QPixmap(Sprites::instance()->get("cat_button")));
 		break;
 	case ButtonType::ALIEN:
+		setObjectName("Alien");
 		setPixmap(QPixmap(Sprites::instance()->get("alien_button")));
 		break;
 	case ButtonType::CRAB:
@@ -94,15 +95,24 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 		break;
 	}
 
+	
 	setGeometry(pos);
 	setStyleSheet("background-color: transparent;");
 	Game::instance()->world()->addWidget(this);
+	
 }
 
 
  void Button::slotLabelClicked()   
  {
-	 QSound::play(":/sounds/buttonclick.wav");
+	 QMediaPlayer* player = new QMediaPlayer;
+	 player->setVolume(50);
+	 if (Game::instance()->me)
+		 player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/buttonclick.wav"));
+	 else
+		 player->setMedia(QUrl::fromLocalFile(":/sounds/buttonclick.wav"));
+
+	 player->play();
 	 switch (_buttonType) {
 	 case ButtonType::SINGLE:
 		 Game::instance()->setGameMode(GameMode::SINGLE);
@@ -120,7 +130,7 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 		 break;
 
 	 case ButtonType::MAIN_MENU:
-		 Game::instance()->menuDuel();
+		 Game::instance()->init();
 		 break;
 
 	 case ButtonType::NEXT:
@@ -154,9 +164,8 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 		 break;
 
 	 case ButtonType::BEAVER:
-		 for (auto el : (Game::instance()->world()->children()))
-			 if (dynamic_cast<Button*>(el))
-				 (dynamic_cast<Button*>(el))->setWindowOpacity(1);
+		 
+		 Game::instance()->deselectButtons();
 		 
 		 Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
 			 Game::instance()->setSecondCharacter(Character::BEAVER) :
@@ -266,7 +275,7 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 
 	 case ButtonType::RETURN:
 		 Game::instance()->reset();
-		 Game::instance()->menuDuel();
+		 Game::instance()->init();
 		 break;
 	 }
  }

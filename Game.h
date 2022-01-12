@@ -7,12 +7,11 @@
 #include <Map>
 
 #include "Bucket.h"
-#include "Hud.h"
 #include "MasterPeg.h"
 #include "Peg.h"
 #include "LevelBuilder.h"
 #include "WindowBuilder.h"
-#include "Hud.h"
+
 #include "Button.h"
 
 #include "box2d/include/box2d/b2_settings.h"
@@ -129,6 +128,8 @@ public:
     QVector<QGraphicsPixmapItem*> lateral_mp;
     QVector< QGraphicsPixmapItem*> scoreGraphics;
     QVector< QGraphicsPixmapItem*> scoreGraphicsTwo;
+    QVector< QGraphicsPixmapItem*> remainingSimulation;
+    int simulationCount=180;
     
 // GETTERS
 
@@ -224,15 +225,17 @@ public:
 
     // utility
     void addMolt();
+    void deselectButtons();
     void printRemainingBall(int b);
     void clearHittedPeg();
-    void save();
     void activePower(Character c);
+    void showRemainingSimulation();
     void printScore();
     b2Vec2 getTrajectoryPoint(b2Vec2& startingPosition, b2Vec2& startingVelocity, float n);
     void fire(float alfa);
     int alpha = 89;
     std::vector < std::tuple< int, int > >simulationScore;
+    bool me = false;
     
 
     // event handlers
@@ -246,7 +249,6 @@ public:
    
     void init();
     void reset();
-    void menuDuel();
     void togglePause();
     void buildLevel();
     void play();

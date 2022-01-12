@@ -1,15 +1,14 @@
 OBIETTIVO: LIVELLO 1 e basta. però che funziona tutto, quindi al momento solo peg circolari, punteggio, moltiplicatore, palline rimaste, bucket, sprites etc...
 
 RESPONSABILITA':
-	-Game				Fisica, Logica, AI
+	-Game				Fisica, Logica
 	-LevelBuilder			Costruzione del mondo
 	-WindowBuilder			Creazione delle Finestre
 	-Peg				Creazione dei Peg
-	-MasterPeg			Creazione della Master Peg e movimento grafico
+	-MasterPeg			Creazione della Master Peg e movimento grafico, AI (Sorta di Montecarlo Tree Search)
 	-Bucket				Creazione del Bucket e movimento grafico
 	-Sprites			Estrazione delle Sprites
 	-Button				Gestione dei Pulsanti del Gioco
-	-Sounds				Gestione dei suoni
 	
 COSA E' STATO FATTO FINORA:
 	-SCHERMATE e Pulsanti
@@ -26,9 +25,11 @@ COSA E' STATO FATTO FINORA:
 		>Score (grafica e logica)
 		>Bucket funzionante
 	-INTELLIGENZA ARTIFICIALE
+	-PRINCIPALI SUONI
 		
 COSE CHE MANCANO:
-	*Suoni
+	*Alcuni suoni
+	*Ottimizzazioni
 	(opzionale: risoluzione bug della traiettoria imprecisa)
 
 

@@ -3,7 +3,7 @@
 #include "Sprites.h"
 #include <QSound>
 #include <QVector2D>
-
+#include <QMediaPlayer>
 using namespace PGG;
 
 /*int ciao = -45;*/
@@ -75,9 +75,18 @@ void MasterPeg::simulAdvance(b2Body* box) {
                 Game::instance()->getMasterPegGraphic()->setFire(true);
                 Game::instance()->getMasterPegGraphic()->setVisible(true);
                 Game::instance()->getWorld2d()->SetGravity(b2Vec2(0, 25.0f));
+                Game::instance()->getCannon()->setPixmap(Sprites::instance()->get("cannon_without_ball"));
+                QMediaPlayer* player = new QMediaPlayer;
+                player->setVolume(50);
+                if (Game::instance()->me)
+                    player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/cannonshot.wav"));
+                else
+                    player->setMedia(QUrl::fromLocalFile(":/sounds/cannonshot.wav"));
 
-                QSound::play(":/sounds/cannonshot.wav");
-
+                player->play();
+                Game::instance()->simulationCount = 180;
+                for (auto el : Game::instance()->remainingSimulation)
+                    el->setVisible(false);
 
             }
             Game::instance()->setSimulation(false);
@@ -403,6 +412,13 @@ void MasterPeg::randomShot() {
     Game::instance()->getMasterPegGraphic()->setFire(true);
     Game::instance()->getMasterPegGraphic()->setVisible(true);
     Game::instance()->getCannon()->setPixmap(Sprites::instance()->get("cannon_without_ball"));
-    QSound::play(":/sounds/cannonshot.wav");
 
+    QMediaPlayer* player = new QMediaPlayer;
+    player->setVolume(50);
+    if (Game::instance()->me) 
+        player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/cannonshot.wav"));
+    else 
+        player->setMedia(QUrl::fromLocalFile(":/sounds/cannonshot.wav"));
+
+    player->play();
 }
