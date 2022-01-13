@@ -248,7 +248,7 @@ public:
     void fire(float alfa);
     int alpha = 89;
     std::vector < std::tuple< int, int > >simulationScore;
-    bool me = true;
+    bool me = false;
     
 
     // event handlers
