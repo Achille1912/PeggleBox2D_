@@ -183,17 +183,11 @@ public:
     QGraphicsPixmapItem* getBandOne() { return bandOne; }
     QGraphicsPixmapItem* getBandTwo() { return bandTwo; }
     
-    
-    
-   
-    
 
 
     QVector<b2Body*>getPegBox() { return PegBox; }
     QVector<MasterPeg*> trajectory;
     
-   
-   
 
     QVector<QGraphicsPixmapItem*> molt;
     QVector<QGraphicsPixmapItem*> molt_x;
