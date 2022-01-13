@@ -18,7 +18,7 @@
 #include "QJsonObject"
 #include "QJsonDocument"
 #include "Button.h"
-
+#include "CharacterHandler.h"
 
 #include "Sprites.h"
 
@@ -64,6 +64,7 @@ Game::Game() : QGraphicsView()
 
     _builder = new LevelBuilder();
     _window = new WindowBuilder();
+    _characterHandler = new CharacterHandler();
     _score = 0;
     _secondScore = 0;
     _redPegHit = -1;
@@ -71,6 +72,7 @@ Game::Game() : QGraphicsView()
     _character = Character::NONE;
     _power = false;
     simulationCount = 180;
+    
 
     reset();
     init();
@@ -97,7 +99,6 @@ void Game::reset()
     
     _engine.stop();
     _world->clear();
-
 }
 
 void Game::init()
@@ -106,6 +107,7 @@ void Game::init()
     background= _world->addPixmap(QPixmap(Sprites::instance()->get("peggle_title")));
     _state = GameState::TITLE;
     centerOn(background);
+    
     setSceneRect(0, 0, getBackground()->sceneBoundingRect().width(), getBackground()->sceneBoundingRect().height());
     showNormal();
 }
@@ -126,11 +128,8 @@ void Game::play() //in gioco
     setMouseTracking(true);
     playingTheme = new QMediaPlayer;
     playingTheme->setVolume(30);
-    if (Game::instance()->me)
-        playingTheme->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/theme.wav"));
-    else
-        playingTheme->setMedia(QUrl::fromLocalFile(":/sounds/theme.wav"));
 
+    playingTheme->setMedia(QUrl::fromLocalFile("./theme.wav"));
     playingTheme->play();
 }
 
@@ -159,7 +158,7 @@ void Game::nextFrame()
           }
       }
     }
-    if (getPower() && (_character == Character::BEAVER|| _character == Character::RABBIT)) {
+    if (getPower() && ((turn?_character:_secondCharacter) == Character::BEAVER|| (turn ? _character : _secondCharacter) == Character::RABBIT)) {
       for (b2ContactEdge* edge = secondMasterPegBox->GetContactList(); edge; edge = edge->next)
       {
           if (edge->contact->IsTouching() && static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData())) {
@@ -250,122 +249,8 @@ void Game::mouseMoveEvent(QMouseEvent* e)
             QPointF midPos((sceneRect().width() / 2), 0), currPos;
                 currPos = QPoint(mapToScene(e->pos()).x(), mapToScene(e->pos()).y());
                 setMouseTracking(true);
-                if (turn) {
-                    switch (_character) {
-                    case Character::UNICORN:
-                        if (currPos.x() < midPos.x())
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("unicorn_face_left")));
-                        else
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("unicorn_face_right")));
-                        break;
-                    case Character::BEAVER:
-                        if (currPos.x() < midPos.x())
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("beaver_face_left")));
-                        else
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("beaver_face_right")));
-                        break;
-                    case Character::CRAB:
-                        if (currPos.x() < midPos.x())
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("crab_face_left")));
-                        else
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("crab_face_right")));
-                        break;
-                    case Character::FLOWER:
-                        if (currPos.x() < midPos.x())
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("flower_face_left")));
-                        else
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("flower_face_right")));
-                        break;
-                    case Character::PUMPKIN:
-                        if (currPos.x() < midPos.x())
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("pumpkin_face_left")));
-                        else
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("pumpkin_face_right")));
-                        break;
-                    case Character::ALIEN:
-                        if (currPos.x() < midPos.x())
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("alien_face_left")));
-                        else
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("alien_face_right")));
-                        break;
-                    case Character::OWL:
-                        if (currPos.x() < midPos.x())
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("owl_face_left")));
-                        else
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("owl_face_right")));
-                        break;
-                    case Character::DRAGON:
-                        if (currPos.x() < midPos.x())
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("dragon_face_left")));
-                        else
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("dragon_face_right")));
-                        break;
-                    case Character::RABBIT:
-                        if (currPos.x() < midPos.x())
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("rabbit_face_left")));
-                        else
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("rabbit_face_right")));
-                        break;
-                    }
-                }
-                else {
-                    switch (_secondCharacter) {
-                    case Character::UNICORN:
-                        if (currPos.x() < midPos.x())
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("unicorn_face_left")));
-                        else
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("unicorn_face_right")));
-                        break;
-                    case Character::BEAVER:
-                        if (currPos.x() < midPos.x())
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("beaver_face_left")));
-                        else
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("beaver_face_right")));
-                        break;
-                    case Character::CRAB:
-                        if (currPos.x() < midPos.x())
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("crab_face_left")));
-                        else
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("crab_face_right")));
-                        break;
-                    case Character::FLOWER:
-                        if (currPos.x() < midPos.x())
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("flower_face_left")));
-                        else
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("flower_face_right")));
-                        break;
-                    case Character::PUMPKIN:
-                        if (currPos.x() < midPos.x())
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("pumpkin_face_left")));
-                        else
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("pumpkin_face_right")));
-                        break;
-                    case Character::ALIEN:
-                        if (currPos.x() < midPos.x())
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("alien_face_left")));
-                        else
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("alien_face_right")));
-                        break;
-                    case Character::OWL:
-                        if (currPos.x() < midPos.x())
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("owl_face_left")));
-                        else
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("owl_face_right")));
-                        break;
-                    case Character::DRAGON:
-                        if (currPos.x() < midPos.x())
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("dragon_face_left")));
-                        else
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("dragon_face_right")));
-                        break;
-                    case Character::RABBIT:
-                        if (currPos.x() < midPos.x())
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("rabbit_face_left")));
-                        else
-                            character_face->setPixmap(QPixmap(Sprites::instance()->get("rabbit_face_right")));
-                        break;
-                    }
-                }
+                
+                _characterHandler->swapFace(currPos, midPos);
                                    
                 QPointF center(720, 100);
                 QLineF v1(center, QPoint(720, 500));
@@ -481,44 +366,7 @@ b2Vec2 Game::getTrajectoryPoint(b2Vec2& startingPosition, b2Vec2& startingVeloci
 
 
 void Game::printRemainingBall(int b) { 
-    std::string tmp = "";
-    switch (b)
-    {
-    case 10:
-        tmp = "10";
-        break;
-    case 9:
-        tmp = "9";
-        break;
-    case 8:
-        tmp = "8";
-        break;
-    case 7:
-        tmp = "7";
-        break;
-    case 6:
-        tmp = "6";
-        break;
-    case 5:
-        tmp = "5";
-        break;
-    case 4:
-        tmp = "4";
-        break;
-    case 3:
-        tmp = "3";
-        break;
-    case 2:
-        tmp = "2";
-        break;
-    case 1:
-        tmp = "1";
-        break;
-    case 0:
-        tmp = "0";
-        break;
-    };
-    remainingBallPixmap->setPixmap(Sprites::instance()->get(tmp));
+    remainingBallPixmap->setPixmap(Sprites::instance()->get(std::to_string(b)));
     remainingBallPixmap->setPos(QPoint(60 -remainingBallPixmap->boundingRect().width() / 2, 180));
 }
 
@@ -531,14 +379,14 @@ void Game::clearHittedPeg() {
             PegBox[i]->DestroyFixture(PegBox[i]->GetFixtureList());
         }
     }
-    if (restoreGreen) {
+    /*if (restoreGreen) {
         int i = 0;
         do {
             i = rand() % 95;
         } while (static_cast<Peg*>(PegBox[i]->GetUserData())->getPegColor() == PegColor::RED && (static_cast<Peg*>(PegBox[i]->GetUserData())->getHitted()) && !(static_cast<Peg*>(PegBox[i]->GetUserData())->isVisible()));
         static_cast<Peg*>(PegBox[i]->GetUserData())->changeColor(PegColor::GREEN);
         restoreGreen = false;
-    }
+    }*/
 }
 
 void Game::addMolt() {
@@ -720,14 +568,7 @@ void Game::activePower(Character c) {
             player->setMedia(QUrl::fromLocalFile(":/sounds/powerup.wav"));
 
         player->play();
-    case Character::PUMPKIN:
-        if (Game::instance()->me)
-            player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup_pumpkin.wav"));
-        else
-            player->setMedia(QUrl::fromLocalFile(":/sounds/powerup_pumpkin.wav"));
 
-        player->play();
-    break;
     case Character::OWL:
         if (Game::instance()->me)
             player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup.wav"));
@@ -735,6 +576,14 @@ void Game::activePower(Character c) {
             player->setMedia(QUrl::fromLocalFile(":/sounds/powerup.wav"));
 
         player->play();
+    case Character::PUMPKIN:
+        if (Game::instance()->me)
+            player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup_pumpkin.wav"));
+        else
+            player->setMedia(QUrl::fromLocalFile(":/sounds/powerup_pumpkin.wav"));
+
+        player->play();
+        break;
     }
  }
     

@@ -31,7 +31,7 @@ void Peg::hit() {
 		if (Game::instance()->me)
 			player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/peghit.wav"));
 		else
-			player->setMedia(QUrl::fromLocalFile(":/sounds/peghit.wav"));
+			player->setMedia(QUrl::fromLocalFile(":/peghit.wav"));
 
 		player->play();
 
@@ -92,6 +92,7 @@ void Peg::hit() {
 				Game::instance()->setSecondScore(Game::instance()->getSecondScore() + 200);
 			Game::instance()->activePower((Game::instance()->getTurn() ? Game::instance()->getCharacter() : Game::instance()->getSecondCharacter()));
 			Game::instance()->setRestoreGreen(true);
+			
 			if (Game::instance()->getBandOne()->scenePos().y() >= 300) {
 				Game::instance()->getBandOne()->setY(Game::instance()->getBandOne()->scenePos().y() - 50);
 				Game::instance()->getBandTwo()->setY(Game::instance()->getBandTwo()->scenePos().y() - 50);

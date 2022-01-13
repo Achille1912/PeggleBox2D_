@@ -1,4 +1,6 @@
 #include <QApplication>
+#include <QDir>
+#include <QCoreApplication>
 #include "Game.h"
 
 int main(int argc, char *argv[])
@@ -18,7 +20,7 @@ int main(int argc, char *argv[])
 
     //istanzio applicazione Qt
     QApplication app(argc, argv);
-
+    QDir::setCurrent(QApplication::applicationDirPath());
     PGG::Game::instance()->show();
 
     //eseguo applicazione Qt
@@ -29,3 +31,4 @@ int main(int argc, char *argv[])
        e mettersi in attesa di interazioni dell’utente (ad es. da tastiera e mouse) che generano eventi
     */
 }
+

@@ -1,38 +1,39 @@
-    <!DOCTYPE RCC><RCC version="1.0">
-    <qresource>
-        <file>icons/peggle.ico</file>
-        <file>sprites/peggle_title.png</file>
-        
-        <file>sprites/krita.png</file>
-    
-        <file>sprites/ball.png</file>
-        <file>sprites/peggles.png</file>
-        <file>sprites/stage_elements.png</file>
-	<file>sprites/Peggle_Fonts.png</file>
-	<file>sprites/sprites.png</file>
-	<file>sprites/scaricati/Peggle2PegglePS3LeftoverGraphic5.png</file>
-	<file>sprites/choose_character.png</file>
-	<file>sprites/mainMenu.png</file>
-	<file>sprites/gameMode.png</file>
-	<file>sprites/gameMode_buttons.png</file>
-	<file>sprites/character_buttons.png</file>
-	<file>sprites/select_single_character.png</file>
-	<file>sprites/action_buttons.png</file>
-	<file>sprites/character_face.png</file>
-	<file>sprites/select_difficulty.png</file>
-	<file>sprites/results.png</file>
-	<file>sprites/results_label.png</file>
-	<file>sprites/lateral_mp.png</file>
+<!DOCTYPE RCC>
+<RCC version="1.0">
+	<qresource>
+		<file>sprites/krita.png</file>
+		<file>icons/peggle.ico</file>
+		<file>sprites/ball.png</file>
+		<file>sprites/peggles.png</file>
+		<file>sprites/stage_elements.png</file>
+		<file>sprites/Peggle_Fonts.png</file>
+		<file>sprites/sprites.png</file>
+		<file>sprites/scaricati/Peggle2PegglePS3LeftoverGraphic5.png</file>
+		<file>sprites/choose_character.png</file>
+		<file>sprites/mainMenu.png</file>
+		<file>sprites/gameMode.png</file>
+		<file>sprites/gameMode_buttons.png</file>
+		<file>sprites/character_buttons.png</file>
+		<file>sprites/select_single_character.png</file>
+		<file>sprites/action_buttons.png</file>
+		<file>sprites/character_face.png</file>
+		<file>sprites/select_difficulty.png</file>
+		<file>sprites/results.png</file>
+		<file>sprites/results_label.png</file>
+		<file>sprites/lateral_mp.png</file>
+		<file>sprites/peggle_title.png</file>
 
-	<file>sounds/peghit.wav</file>
-	<file>sounds/buttonclick.wav</file>
-	<file>sounds/fanfare.wav</file>
-	<file>sounds/powerup.wav</file>
-	<file>sounds/powerup_flower.wav</file>
-	<file>sounds/powerup_pumpkin.wav</file>
-	<file>sounds/powerup_rabbit.wav</file>
-        <file>sounds/extraball.wav</file>
-	<file>sounds/theme.wav</file>
-	<file>sounds/applause.wav</file>
-    </qresource>
-    </RCC>
+		<file>sounds/peghit.wav</file>
+		<file>sounds/buttonclick.wav</file>
+		<file>sounds/fanfare.wav</file>
+		<file>sounds/powerup.wav</file>
+		<file>sounds/powerup_flower.wav</file>
+		<file>sounds/powerup_pumpkin.wav</file>
+		<file>sounds/powerup_rabbit.wav</file>
+		<file>sounds/extraball.wav</file>
+		<file>sounds/applause.wav</file>
+		
+		
+
+	</qresource>
+</RCC>

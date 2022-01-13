@@ -13,6 +13,8 @@
 #include "LevelBuilder.h"
 #include "WindowBuilder.h"
 #include "Scheduler.h"
+#include "CharacterHandler.h"
+
 
 #include "Button.h"
 
@@ -83,6 +85,7 @@ private:
     QGraphicsScene *_world;
     LevelBuilder* _builder;
     WindowBuilder* _window;
+    CharacterHandler* _characterHandler;
     int _score;
     int _secondScore;
     int _redPegHit;
@@ -158,6 +161,7 @@ public:
     int getSimulationScore() { return _simulationScore; }
     bool getHardMode() { return hardMode; }
     bool getTurn() { return turn; }
+    CharacterHandler* getCharacterHandler() { return _characterHandler; }
 
         // box2d obj
     b2Body* getMasterPegBox() { return MasterPegBox; }
@@ -210,6 +214,7 @@ public:
     void setSimulationScore(int c) { _simulationScore = c; }
     void setHardMode(bool b) { hardMode = b; }
     void setTurn(bool b) { turn = b; }
+    void setCharacterHandler(CharacterHandler* c) {_characterHandler=c; }
 
         // box2d obj
     void setMasterPegBox(b2Body* b) { MasterPegBox = b; }

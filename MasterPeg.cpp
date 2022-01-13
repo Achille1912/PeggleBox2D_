@@ -168,8 +168,8 @@ void MasterPeg::down() {
 
             Game::instance()->printRemainingBall(Game::instance()->getRemainingBall());
             restorePos(Game::instance()->getMasterPegBox());
-      
-            if (Game::instance()->getGameMode() == GameMode::CPU && !(Game::instance()->getTurn())){
+
+            if (Game::instance()->getGameMode() == GameMode::CPU && !(Game::instance()->getTurn())) {
                 if (!Game::instance()->getHardMode()) {
                     randomShot();
                 }
@@ -185,7 +185,7 @@ void MasterPeg::down() {
             return;
         }
         break;
-        case Character::OWL:{
+        case Character::OWL: {
             Game::instance()->getCannon()->setPixmap(Sprites::instance()->get("cannon"));
 
             Game::instance()->getMasterPegGraphic()->setVisible(false);
@@ -194,7 +194,7 @@ void MasterPeg::down() {
             this->setFire(false);
             Game::instance()->clearHittedPeg();
             Game::instance()->setRemainingBall(Game::instance()->getRemainingBall() - 1);
-            if ((Game::instance()->getRemainingBall() < 10)&& (Game::instance()->getRemainingBall() >= 0))
+            if ((Game::instance()->getRemainingBall() < 10) && (Game::instance()->getRemainingBall() >= 0))
                 Game::instance()->lateral_mp[9 - (Game::instance()->getRemainingBall())]->setVisible(false);
 
             Game::instance()->printRemainingBall(Game::instance()->getRemainingBall());
@@ -206,75 +206,11 @@ void MasterPeg::down() {
             Game::instance()->fire(Game::instance()->alpha);
             return;
         }
-        break;
+           break;
         }
     }
         if (Game::instance()->getGameMode() == GameMode::DUEL || Game::instance()->getGameMode() == GameMode::CPU) {
-            if (Game::instance()->getTurn() == true) {
-                Game::instance()->setTurn(false);
-                switch (Game::instance()->getSecondCharacter()) {
-                case Character::UNICORN:
-                    Game::instance()->getCharacterFace()->setPixmap(QPixmap(Sprites::instance()->get("unicorn_face_right")));
-                    break;
-                case Character::BEAVER:
-                    Game::instance()->getCharacterFace()->setPixmap(QPixmap(Sprites::instance()->get("beaver_face_right")));
-                    break;
-                case Character::CRAB:
-                    Game::instance()->getCharacterFace()->setPixmap(QPixmap(Sprites::instance()->get("crab_face_right")));
-                    break;
-                case Character::FLOWER:
-                    Game::instance()->getCharacterFace()->setPixmap(QPixmap(Sprites::instance()->get("flower_face_right")));
-                    break;
-                case Character::PUMPKIN:
-                    Game::instance()->getCharacterFace()->setPixmap(QPixmap(Sprites::instance()->get("pumpkin_face_right")));
-                    break;
-                case Character::ALIEN:
-                    Game::instance()->getCharacterFace()->setPixmap(QPixmap(Sprites::instance()->get("alien_face_right")));
-                    break;
-                case Character::OWL:
-                    Game::instance()->getCharacterFace()->setPixmap(QPixmap(Sprites::instance()->get("owl_face_right")));
-                    break;
-                case Character::DRAGON:
-                    Game::instance()->getCharacterFace()->setPixmap(QPixmap(Sprites::instance()->get("dragon_face_right")));
-                    break;
-                case Character::RABBIT:
-                    Game::instance()->getCharacterFace()->setPixmap(QPixmap(Sprites::instance()->get("rabbit_face_right")));
-                    break;
-                }
-
-            }
-            else {
-                Game::instance()->setTurn(true);
-                switch (Game::instance()->getCharacter()) {
-                case Character::UNICORN:
-                    Game::instance()->getCharacterFace()->setPixmap(QPixmap(Sprites::instance()->get("unicorn_face_right")));
-                    break;
-                case Character::BEAVER:
-                    Game::instance()->getCharacterFace()->setPixmap(QPixmap(Sprites::instance()->get("beaver_face_right")));
-                    break;
-                case Character::CRAB:
-                    Game::instance()->getCharacterFace()->setPixmap(QPixmap(Sprites::instance()->get("crab_face_right")));
-                    break;
-                case Character::FLOWER:
-                    Game::instance()->getCharacterFace()->setPixmap(QPixmap(Sprites::instance()->get("flower_face_right")));
-                    break;
-                case Character::PUMPKIN:
-                    Game::instance()->getCharacterFace()->setPixmap(QPixmap(Sprites::instance()->get("pumpkin_face_right")));
-                    break;
-                case Character::ALIEN:
-                    Game::instance()->getCharacterFace()->setPixmap(QPixmap(Sprites::instance()->get("alien_face_right")));
-                    break;
-                case Character::OWL:
-                    Game::instance()->getCharacterFace()->setPixmap(QPixmap(Sprites::instance()->get("owl_face_right")));
-                    break;
-                case Character::DRAGON:
-                    Game::instance()->getCharacterFace()->setPixmap(QPixmap(Sprites::instance()->get("dragon_face_right")));
-                    break;
-                case Character::RABBIT:
-                    Game::instance()->getCharacterFace()->setPixmap(QPixmap(Sprites::instance()->get("rabbit_face_right")));
-                    break;
-                }
-            }
+            Game::instance()->getCharacterHandler()->changeTurnFace();
         }
 
         Game::instance()->setPower(false);
@@ -336,7 +272,8 @@ void MasterPeg::randomShot() {
 
 void MasterPeg::restorePos(b2Body* box) {
     QPointF center(720, 100);
-    QLineF v2(center, QCursor::pos());
+    
+    QLineF v2(center, mapToScene(QPoint(QCursor::pos().x(), QCursor::pos().y())));
     v2.setLength(200.0);
     box->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), box->GetAngle());
     box->SetLinearVelocity(b2Vec2(0, 0));
