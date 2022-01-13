@@ -7,6 +7,9 @@ using namespace PGG;
 void CharacterHandler::initButton(ButtonType t, Button* b)
 {
 	switch (t) {
+	case ButtonType::CLICK_TO_PLAY:
+		b->setPixmap(QPixmap(Sprites::instance()->get("clickToPlay")));
+		break;
 	case ButtonType::SINGLE:
 		b->setPixmap(QPixmap(Sprites::instance()->get("single_button")));
 		break;
@@ -93,6 +96,11 @@ void CharacterHandler::initButton(ButtonType t, Button* b)
 void CharacterHandler::clickButton(ButtonType t, Button* b)
 {
 	switch (t) {
+	case ButtonType::CLICK_TO_PLAY:
+		Game::instance()->setState(GameState::MODE);
+		Game::instance()->getWindow()->load("mode");
+		break;
+
 	case ButtonType::SINGLE:
 		Game::instance()->setGameMode(GameMode::SINGLE);
 		Game::instance()->getWindow()->load("select_single_character");

@@ -107,7 +107,8 @@ void Game::init()
     background= _world->addPixmap(QPixmap(Sprites::instance()->get("peggle_title")));
     _state = GameState::TITLE;
     centerOn(background);
-    
+    //new Button(QRect(280, 200, 89, 89), ButtonType::CLICK_TO_PLAY);
+
     setSceneRect(0, 0, getBackground()->sceneBoundingRect().width(), getBackground()->sceneBoundingRect().height());
     showNormal();
 }
@@ -207,29 +208,31 @@ void Game::mousePressEvent(QMouseEvent* e)
         {
             if (_mode == GameMode::CPU&& !turn) 
                 return;
-            
-            Game::instance()->setPower(false);
-            
-            masterPegGraphic->setFire(true);
-            world2d->SetGravity(b2Vec2(0, 25.0f));
-            QPoint midPos((sceneRect().width() / 2), 0), currPos;
-            for (auto el : trajectory)
-                if (dynamic_cast<MasterPeg*>(el))
-                    el->setVisible(false);
-            currPos = QPoint(mapToScene(e->pos()).x(), mapToScene(e->pos()).y());
-            QVector2D p = QVector2D(currPos.x() - midPos.x(), currPos.y() - midPos.y());
-            p.normalize();
-            MasterPegBox->SetLinearVelocity(b2Vec2(p.x() * 15, p.y() * 15));
-            masterPegGraphic->setVisible(true);
-            cannon->setPixmap(Sprites::instance()->get("cannon_without_ball"));
-            QMediaPlayer* player = new QMediaPlayer;
-            player->setVolume(50);
-            if (Game::instance()->me)
-                player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/cannonshot.wav"));
-            else
-                player->setMedia(QUrl::fromLocalFile(":/sounds/cannonshot.wav"));
 
-            player->play();
+            if (!masterPegGraphic->getFire()) {
+                Game::instance()->setPower(false);
+
+                masterPegGraphic->setFire(true);
+                world2d->SetGravity(b2Vec2(0, 25.0f));
+                QPoint midPos((sceneRect().width() / 2), 0), currPos;
+                for (auto el : trajectory)
+                    if (dynamic_cast<MasterPeg*>(el))
+                        el->setVisible(false);
+                currPos = QPoint(mapToScene(e->pos()).x(), mapToScene(e->pos()).y());
+                QVector2D p = QVector2D(currPos.x() - midPos.x(), currPos.y() - midPos.y());
+                p.normalize();
+                MasterPegBox->SetLinearVelocity(b2Vec2(p.x() * 15, p.y() * 15));
+                masterPegGraphic->setVisible(true);
+                cannon->setPixmap(Sprites::instance()->get("cannon_without_ball"));
+                QMediaPlayer* player = new QMediaPlayer;
+                player->setVolume(50);
+                if (Game::instance()->me)
+                    player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/cannonshot.wav"));
+                else
+                    player->setMedia(QUrl::fromLocalFile(":/sounds/cannonshot.wav"));
+
+                player->play();
+            }
         }
         if (e->button() == Qt::RightButton)
             _engine.setInterval(5);
@@ -309,7 +312,7 @@ void Game::keyPressEvent(QKeyEvent* e)
         playingTheme->stop();
         init();
     }
-    if (e->key() == Qt::Key_A && _state == GameState::PLAYING)
+    if (e->key() == Qt::Key_A && _state == GameState::PLAYING&& !masterPegGraphic->getFire())
     {
         simulationScore.clear();
         alpha = 89;
