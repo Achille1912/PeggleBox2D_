@@ -28,7 +28,7 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
 	 if (Game::instance()->me)
 		 player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/buttonclick.wav"));
 	 else
-		 player->setMedia(QUrl::fromLocalFile(":/sounds/buttonclick.wav"));
+		 player->setMedia(QUrl::fromLocalFile("./sounds/buttonclick.wav"));
 
 	 player->play();
 	 

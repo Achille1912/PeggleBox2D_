@@ -299,7 +299,7 @@ void MasterPeg::shot(QLineF c, QLineF p, QLineF f, QVector2D z) {
     if (Game::instance()->me)
         player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/cannonshot.wav"));
     else
-        player->setMedia(QUrl::fromLocalFile(":/sounds/cannonshot.wav"));
+        player->setMedia(QUrl::fromLocalFile("./sounds/cannonshot.wav"));
 
     player->play();
 }

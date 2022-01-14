@@ -229,7 +229,7 @@ void Game::mousePressEvent(QMouseEvent* e)
                 if (Game::instance()->me)
                     player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/cannonshot.wav"));
                 else
-                    player->setMedia(QUrl::fromLocalFile(":/sounds/cannonshot.wav"));
+                    player->setMedia(QUrl::fromLocalFile("./sounds/cannonshot.wav"));
 
                 player->play();
             }
@@ -447,7 +447,7 @@ void Game::activePower(Character c) {
             if (Game::instance()->me)
                 player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup_flower.wav"));
             else
-                player->setMedia(QUrl::fromLocalFile(":/sounds/powerup_flower.wav"));
+                player->setMedia(QUrl::fromLocalFile("./sounds/powerup_flower.wav"));
 
             player->play();
         }
@@ -469,7 +469,7 @@ void Game::activePower(Character c) {
             if (Game::instance()->me)
                 player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup.wav"));
             else
-                player->setMedia(QUrl::fromLocalFile(":/sounds/powerup.wav"));
+                player->setMedia(QUrl::fromLocalFile("./sounds/powerup.wav"));
 
             player->play();
         }
@@ -499,7 +499,7 @@ void Game::activePower(Character c) {
             if (Game::instance()->me)
                 player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup.wav"));
             else
-                player->setMedia(QUrl::fromLocalFile(":/sounds/powerup.wav"));
+                player->setMedia(QUrl::fromLocalFile("./sounds/powerup.wav"));
 
             player->play();
         }
@@ -540,7 +540,7 @@ void Game::activePower(Character c) {
         if (Game::instance()->me)
             player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup_rabbit.wav"));
         else
-            player->setMedia(QUrl::fromLocalFile(":/sounds/powerup_rabbit.wav"));
+            player->setMedia(QUrl::fromLocalFile("./sounds/powerup_rabbit.wav"));
       
         player->play();
         int  r = rand() % 3;
@@ -560,7 +560,7 @@ void Game::activePower(Character c) {
         if (Game::instance()->me)
             player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup.wav"));
         else
-            player->setMedia(QUrl::fromLocalFile(":/sounds/powerup.wav"));
+            player->setMedia(QUrl::fromLocalFile("./sounds/powerup.wav"));
 
         player->play();
     break;
@@ -568,7 +568,7 @@ void Game::activePower(Character c) {
         if (Game::instance()->me)
             player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup.wav"));
         else
-            player->setMedia(QUrl::fromLocalFile(":/sounds/powerup.wav"));
+            player->setMedia(QUrl::fromLocalFile("./sounds/powerup.wav"));
 
         player->play();
 
@@ -576,14 +576,14 @@ void Game::activePower(Character c) {
         if (Game::instance()->me)
             player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup.wav"));
         else
-            player->setMedia(QUrl::fromLocalFile(":/sounds/powerup.wav"));
+            player->setMedia(QUrl::fromLocalFile("./sounds/powerup.wav"));
 
         player->play();
     case Character::PUMPKIN:
         if (Game::instance()->me)
             player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup_pumpkin.wav"));
         else
-            player->setMedia(QUrl::fromLocalFile(":/sounds/powerup_pumpkin.wav"));
+            player->setMedia(QUrl::fromLocalFile("./sounds/powerup_pumpkin.wav"));
 
         player->play();
         break;
@@ -625,7 +625,7 @@ void Game::gameOverSlot() {
     if (Game::instance()->me)
         player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/fanfare.wav"));
     else
-        player->setMedia(QUrl::fromLocalFile(":/sounds/fanfare.wav"));
+        player->setMedia(QUrl::fromLocalFile("./sounds/fanfare.wav"));
     player->play();
     _engine.stop();
     if(_mode==GameMode::SINGLE)
