@@ -9,6 +9,7 @@ namespace PGG
     class Button;
     enum class ButtonType
     {
+        CLICK_TO_PLAY,
         SINGLE,
         DUEL,
         CPU,

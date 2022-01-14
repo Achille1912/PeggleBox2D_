@@ -81,7 +81,7 @@ void LevelBuilder::load(const QString& level_name)
 
 		Game::instance()->setPaused(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("paused"))));
 		Game::instance()->getPaused()->setScale(1.5);
-		Game::instance()->getPaused()->setPos(QPointF((720 - (Game::instance()->getPaused()->boundingRect().width()/2 )), 540 - (Game::instance()->getPaused()->boundingRect().height() / 2)));
+		Game::instance()->getPaused()->setPos(QPointF((690 - (Game::instance()->getPaused()->boundingRect().width()/2 )), 540 - (Game::instance()->getPaused()->boundingRect().height() / 2)));
 		Game::instance()->getPaused()->setVisible(false);
 		Game::instance()->getPaused()->setZValue(10);
 
@@ -136,6 +136,20 @@ void LevelBuilder::load(const QString& level_name)
 			Game::instance()->world()->addItem(Game::instance()->scoreGraphicsTwo[i]);
 		}
 
+
+		Game::instance()->remainingSimulation.resize(3);
+		for (int i = 0; i < 3; i++) {
+			Game::instance()->remainingSimulation[i] = new QGraphicsPixmapItem();
+			Game::instance()->remainingSimulation[i]->setY( 540 - (Game::instance()->getPaused()->boundingRect().height() / 2));
+			Game::instance()->remainingSimulation[i]->setX((int)780 - (i * 50));
+			Game::instance()->world()->addItem(Game::instance()->remainingSimulation[i]);
+			Game::instance()->remainingSimulation[i]->setVisible(false);
+			Game::instance()->remainingSimulation[i]->setZValue(2);
+		}
+
+		Game::instance()->remainingSimulation[0]->setPixmap(QPixmap(Sprites::instance()->get("0-score")).scaled(80, 80));
+		Game::instance()->remainingSimulation[1]->setPixmap(QPixmap(Sprites::instance()->get("8-score")).scaled(80, 80));
+		Game::instance()->remainingSimulation[2]->setPixmap(QPixmap(Sprites::instance()->get("1-score")).scaled(80, 80));
 
  // CREATE PHYSICS WORLD
 	
@@ -261,6 +275,7 @@ void LevelBuilder::load(const QString& level_name)
 		Game::instance()->getBucketBox()->CreateFixture(&buckFixture);
 		Game::instance()->getBucketBox()->SetLinearVelocity(b2Vec2(10, 0));
 		Game::instance()->getBucketBox()->SetUserData((Game::instance()->getBucketGraphic()));
+		Game::instance()->getBucketBox()->GetFixtureList()->SetSensor(true);
 
 
 	// CREATE PANELS

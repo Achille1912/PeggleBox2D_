@@ -21,9 +21,14 @@ public:
     MasterPeg(QPoint pos);
 
     void advance(b2Body* box);
-
+    void simulAdvance(b2Body* box);
     void setFire(bool b) { _fire = b; }
     bool getFire() { return _fire; }
+    void randomShot();
     void down();
+
+    void restorePos(b2Body* box);
+
+    void shot(QLineF c, QLineF p, QLineF f, QVector2D z);
 
 };

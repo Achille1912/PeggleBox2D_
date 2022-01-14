@@ -21,15 +21,17 @@ class PGG::Peg : public QGraphicsPixmapItem
 private:
     PegColor _color;
     bool _hitted;
+    bool _simulHit;
 public:
     Peg(QPoint pos, PegColor color);
 
     // getters
     PegColor getPegColor() { return _color; }
     bool getHitted() { return _hitted; }
+    bool getSimulHit() { return _simulHit; }
     // setters
     void setPegColor(PegColor pg) { _color = pg; }
-    
+    void setSimulHit(bool b) { _simulHit = b; }
 
     void hit();
     

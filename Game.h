@@ -5,14 +5,17 @@
 #include <QLabel>
 #include <QPainterPath>
 #include <Map>
+#include <QMediaPlayer>
 
 #include "Bucket.h"
-#include "Hud.h"
 #include "MasterPeg.h"
 #include "Peg.h"
 #include "LevelBuilder.h"
 #include "WindowBuilder.h"
-#include "Hud.h"
+#include "Scheduler.h"
+#include "CharacterHandler.h"
+
+
 #include "Button.h"
 
 #include "box2d/include/box2d/b2_settings.h"
@@ -82,6 +85,7 @@ private:
     QGraphicsScene *_world;
     LevelBuilder* _builder;
     WindowBuilder* _window;
+    CharacterHandler* _characterHandler;
     int _score;
     int _secondScore;
     int _redPegHit;
@@ -129,10 +133,19 @@ public:
     QVector<QGraphicsPixmapItem*> lateral_mp;
     QVector< QGraphicsPixmapItem*> scoreGraphics;
     QVector< QGraphicsPixmapItem*> scoreGraphicsTwo;
+    QVector< QGraphicsPixmapItem*> remainingSimulation;
+    int simulationCount=180;
+    QMediaPlayer* playingTheme;
+    std::map<std::string, Scheduler> _schedulers;
+    virtual void schedule(const std::string& id, int delay, std::function<void()> action);
+    virtual void updateSchedulers();
+
+
     
 // GETTERS
 
         // game attributes
+    
     GameState getState() { return _state; }
     GameMode getGameMode() { return _mode; }
     Character getCharacter() { return _character; }
@@ -148,6 +161,7 @@ public:
     int getSimulationScore() { return _simulationScore; }
     bool getHardMode() { return hardMode; }
     bool getTurn() { return turn; }
+    CharacterHandler* getCharacterHandler() { return _characterHandler; }
 
         // box2d obj
     b2Body* getMasterPegBox() { return MasterPegBox; }
@@ -169,17 +183,11 @@ public:
     QGraphicsPixmapItem* getBandOne() { return bandOne; }
     QGraphicsPixmapItem* getBandTwo() { return bandTwo; }
     
-    
-    
-   
-    
 
 
     QVector<b2Body*>getPegBox() { return PegBox; }
+    QVector<MasterPeg*> trajectory;
     
-    
-   
-   
 
     QVector<QGraphicsPixmapItem*> molt;
     QVector<QGraphicsPixmapItem*> molt_x;
@@ -200,6 +208,7 @@ public:
     void setSimulationScore(int c) { _simulationScore = c; }
     void setHardMode(bool b) { hardMode = b; }
     void setTurn(bool b) { turn = b; }
+    void setCharacterHandler(CharacterHandler* c) {_characterHandler=c; }
 
         // box2d obj
     void setMasterPegBox(b2Body* b) { MasterPegBox = b; }
@@ -223,15 +232,17 @@ public:
 
     // utility
     void addMolt();
+    void deselectButtons();
     void printRemainingBall(int b);
     void clearHittedPeg();
-    void save();
     void activePower(Character c);
+    void showRemainingSimulation();
     void printScore();
     b2Vec2 getTrajectoryPoint(b2Vec2& startingPosition, b2Vec2& startingVelocity, float n);
-    float fire(float alfa, bool b);
+    void fire(float alfa);
     int alpha = 89;
     std::vector < std::tuple< int, int > >simulationScore;
+    bool me = false;
     
 
     // event handlers
@@ -242,19 +253,19 @@ public:
     virtual void keyPressEvent(QKeyEvent *e) override;
     virtual void resizeEvent(QResizeEvent* e) override;
 
-
+   
     void init();
     void reset();
-    void menuDuel();
     void togglePause();
     void buildLevel();
     void play();
 
  signals:
     void gameOver();
-   
+    void changeEngine();
 public slots:
     void nextFrame();
     void updateFPS();
     void gameOverSlot();
+    void changeEngineSlot();
 };
