@@ -29,7 +29,7 @@ void Bucket::goal() {
         if (Game::instance()->me)
             player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/extraball.wav"));
         else
-            player->setMedia(QUrl::fromLocalFile(":/sounds/extraball.wav"));
+            player->setMedia(QUrl::fromLocalFile("./sounds/extraball.wav"));
 
         player->play();
         Game::instance()->clearHittedPeg();

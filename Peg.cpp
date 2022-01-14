@@ -31,7 +31,7 @@ void Peg::hit() {
 		if (Game::instance()->me)
 			player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/peghit.wav"));
 		else
-			player->setMedia(QUrl::fromLocalFile(":/peghit.wav"));
+			player->setMedia(QUrl::fromLocalFile("./sounds/peghit.wav"));
 
 		player->play();
 
@@ -62,7 +62,7 @@ void Peg::hit() {
 				if (Game::instance()->me)
 					player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/applause.wav"));
 				else
-					player->setMedia(QUrl::fromLocalFile(":/sounds/applause.wav"));
+					player->setMedia(QUrl::fromLocalFile("./sounds/applause.wav"));
 
 				player->play();
 				Game::instance()->schedule("fever", 10, [this]() {
