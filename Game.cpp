@@ -278,7 +278,7 @@ void Game::mouseMoveEvent(QMouseEvent* e)
                         for (int i = 10; i < 30; i++) { // three seconds at 60fps
                             if (i % 2 == 0)
                                 continue;
-                            b2Vec2 trajectoryPosition = getTrajectoryPoint(b2Vec2(MasterPegBox->GetPosition().x, MasterPegBox->GetPosition().y), b2Vec2(p.x() * 15, p.y() * 15), i);
+                            const b2Vec2 trajectoryPosition = getTrajectoryPoint(b2Vec2(MasterPegBox->GetPosition().x, MasterPegBox->GetPosition().y), b2Vec2(p.x() * 15, p.y() * 15), i);
                             trajectory.push_back(new MasterPeg(QPoint((trajectoryPosition.x * 30.0), (trajectoryPosition.y * 30.0))));
                         }
                     }

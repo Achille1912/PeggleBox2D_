@@ -1,8 +1,6 @@
 OBIETTIVO: LIVELLO 1 e basta. però che funziona tutto, quindi al momento solo peg circolari, punteggio, moltiplicatore, palline rimaste, bucket, sprites etc...
 
-(Dato che il file theme.wav è troppo pesante per essere linkato nel file qrc e di conseguenza essere
-successivamente binarizzato, per sentirlo sarà sufficiente copiarlo nella cartella Debug
-creata dal cmake [cartella in cui c'è l'eseguibile]).
+(Copiare la cartella sounds nella cartella debug per sentire i suoni).
 
 RESPONSABILITA':
 	-Game				Fisica, Logica
