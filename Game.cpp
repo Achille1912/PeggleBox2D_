@@ -403,6 +403,8 @@ void Game::addMolt() {
         molt_x[2]->setVisible(true);
     else if (_redPegHit == 21)
         molt_x[3]->setVisible(true);
+
+    mol = true;
 }
 
 void Game::fire(float alfa) {

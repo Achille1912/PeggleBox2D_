@@ -243,6 +243,7 @@ public:
     int alpha = 89;
     std::vector < std::tuple< int, int > >simulationScore;
     bool me = false;
+    bool mol = false;
     
 
     // event handlers

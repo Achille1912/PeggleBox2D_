@@ -24,6 +24,7 @@ MasterPeg::MasterPeg(QPoint pos) : QGraphicsPixmapItem(0)
 void MasterPeg::simulAdvance(b2Body* box) {
     if (box->GetPosition().y > 35)
     {
+
         restorePos(box);
         Game::instance()->alpha--;
         if (Game::instance()->alpha < -89) {
@@ -93,6 +94,27 @@ void MasterPeg::advance(b2Body* box) {
 
 
 void MasterPeg::down() {
+    if (Game::instance()->mol) {
+        int x = 0;
+        switch (Game::instance()->getRedPegHit()) {
+        case 9:
+            x = 2;
+            break;
+        case 14:
+            x = 3;
+            break;
+        case 18:
+            x = 5;
+            break;
+        case 21:
+            x = 10;
+            break;
+        }
+        Game::instance()->getTurn() ?
+            Game::instance()->setScore(Game::instance()->getScore() + ((Game::instance()->getScore() * 10 / 100) * x)) :
+            Game::instance()->setSecondScore(Game::instance()->getSecondScore() + ((Game::instance()->getSecondScore() * 10 / 100) * x));
+        Game::instance()->printScore();
+    }
     if (Game::instance()->getPower()) {
         switch (Game::instance()->getTurn() ? Game::instance()->getCharacter() : Game::instance()->getSecondCharacter()) {
         case Character::UNICORN:
