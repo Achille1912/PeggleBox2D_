@@ -130,7 +130,7 @@ void Game::play() //in gioco
     playingTheme = new QMediaPlayer;
     playingTheme->setVolume(30);
 
-    playingTheme->setMedia(QUrl::fromLocalFile("./theme.wav"));
+    playingTheme->setMedia(QUrl::fromLocalFile("./sounds/theme.wav"));
     playingTheme->play();
 }
 

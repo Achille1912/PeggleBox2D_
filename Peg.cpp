@@ -102,10 +102,21 @@ void Peg::hit() {
 	}
 	else {
 		_simulHit = true;
-		if (_color == PegColor::BLUE) 
-			Game::instance()->setSimulationScore(Game::instance()->getSimulationScore()+100);
-		else 
-			Game::instance()->setSimulationScore(Game::instance()->getSimulationScore() + 200);
+		if (_color == PegColor::BLUE) {
+			Game::instance()->setSimulationScore(Game::instance()->getSimulationScore() + 100);
+		}
+		else {
+			if (Game::instance()->getRedPegHit() == 23) 
+				feverNext = true;
+			
+			if (feverNext) {
+				Game::instance()->setSimulationScore(Game::instance()->getSimulationScore() + 400);
+				feverNext = false;
+			}
+			else {
+				Game::instance()->setSimulationScore(Game::instance()->getSimulationScore() + 200);
+			}
+		}
 		
 	}
 }
