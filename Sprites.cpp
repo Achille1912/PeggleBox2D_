@@ -135,33 +135,33 @@ QPixmap Sprites::get(const std::string &id)
     else if (id == "bucket")
         return stage_elements.copy(bucket);
     else if (id == "unicorn_face_right")
-        return character_face.copy(0, 0, 66, 89);
+        return character_face.copy(0, 0, 70, 89);
     else if (id == "unicorn_face_left")
         return character_face.copy(0, 98, 66, 89);
     else if (id == "beaver_face_right")
-        return character_face.copy(0, 257, 92, 79);
+        return character_face.copy(0, 265, 92, 79);
     else if (id == "beaver_face_left")
-        return character_face.copy(0, 180, 92, 79);
+        return character_face.copy(0, 189, 92, 79);
     else if (id == "crab_face_right")
-        return character_face.copy(0, 421, 66, 84);
+        return character_face.copy(0, 426, 66, 84);
     else if (id == "crab_face_left")
-        return character_face.copy(0, 339, 66, 84);
+        return character_face.copy(0, 342, 66, 84);
     else if (id == "flower_face_right")
-        return character_face.copy(0, 590, 86, 83);
+        return character_face.copy(0, 595, 86, 80);
     else if (id == "flower_face_left")
-        return character_face.copy(0, 507, 86, 83);
+        return character_face.copy(0, 512, 86, 85);
     else if (id == "pumpkin_face_right")
-        return character_face.copy(0, 757, 83, 80);
+        return character_face.copy(0, 760, 83, 80);
     else if (id == "pumpkin_face_left")
-        return character_face.copy(0, 675, 83, 80);
+        return character_face.copy(0, 675, 83, 86);
     else if (id == "alien_face_right")
-        return character_face.copy(0, 921, 72, 82);
+        return character_face.copy(0, 925, 72, 80);
     else if (id == "alien_face_left")
         return character_face.copy(0, 839, 72, 82);
     else if (id == "owl_face_right")
-        return character_face.copy(0, 1101, 89, 96);
+        return character_face.copy(0, 1103, 89, 94);
     else if (id == "owl_face_left")
-        return character_face.copy(0, 1006, 89, 96);
+        return character_face.copy(0, 1006, 89, 94);
     else if (id == "dragon_face_right")
         return character_face.copy(0, 1298, 79, 95);
     else if (id == "dragon_face_left")
@@ -176,9 +176,9 @@ QPixmap Sprites::get(const std::string &id)
     else if (id == "0")
         return fonts.copy(remainingBallNumber);
     else if (id == "1")
-        return fonts.copy(moveBy(remainingBallNumber, 1, 0, 30 * 1));
+        return fonts.copy(moveBy(remainingBallNumber, 1, 0, (30 * 1)-5));
     else if (id == "2")
-        return fonts.copy(moveBy(remainingBallNumber, 1, 0, (30 * 2)));
+        return fonts.copy(moveBy(remainingBallNumber, 1, 0, (30 * 2)-5));
     else if (id == "3")
         return fonts.copy(moveBy(remainingBallNumber, 1, 0, (30 * 3)));
     else if (id == "4")
@@ -192,16 +192,16 @@ QPixmap Sprites::get(const std::string &id)
     else if (id == "8")
         return fonts.copy(moveBy(remainingBallNumber, 1, 0, (35 * 7)));
     else if (id == "9")
-        return fonts.copy(moveBy(remainingBallNumber, 1, 0, (35 * 8)));
+        return fonts.copy(moveBy(remainingBallNumber, 1, 0, (35 * 8)-5));
     else if (id == "10")
-    return (fonts.copy(5, 296, 47, 40));
+        return (fonts.copy(5, 296, 47, 40));
 
     else if (id == "cannon")
         return sprites.copy(384, 327, 50, 80);
     else if (id == "cannon_without_ball")
-    return sprites.copy(384, 327, 50, 50);
+        return sprites.copy(384, 327, 50, 50);
     else if (id == "cannon_fired")
-    return sprites.copy(459, 327, 50, 100);
+        return sprites.copy(459, 327, 50, 100);
 
     else if (id == "peg_blue_hit")
         return peggles.copy(pegle);
@@ -214,7 +214,7 @@ QPixmap Sprites::get(const std::string &id)
     else if (id == "peg_red")
         return peggles.copy(moveBy(pegle, 1, 1, 200, 200));
     else if (id == "peg_green")
-        return peggles.copy(QRect(405,204,200,200));
+        return peggles.copy(QRect(405, 204, 200, 200));
 
     else if (id == "band")
         return sprites.copy(91, 528, 15, 422);
@@ -227,28 +227,28 @@ QPixmap Sprites::get(const std::string &id)
     else if (id == "molt-x5")
         return sprites.copy(673, 364, 25, 20);
     else if (id == "molt-x10")
-        return sprites.copy(673, 384, 25, 20);
+        return sprites.copy(673, 384, 30, 20);
 
     else if (id == "0-score")
         return fonts.copy(794, 327, 22, 26);
     else if (id == "1-score")
-    return fonts.copy(816, 327, 22, 26);
+        return fonts.copy(816, 327, 22, 26);
     else if (id == "2-score")
-    return fonts.copy(838, 327, 22, 26);
+        return fonts.copy(838, 327, 22, 26);
     else if (id == "3-score")
-    return fonts.copy(860, 327, 22, 26);
+        return fonts.copy(860, 327, 22, 26);
     else if (id == "4-score")
-    return fonts.copy(882, 327, 22, 26);
+        return fonts.copy(882, 327, 22, 26);
     else if (id == "5-score")
-    return fonts.copy(904, 327, 22, 26);
+        return fonts.copy(904, 327, 22, 26);
     else if (id == "6-score")
-    return fonts.copy(926, 327, 22, 26);
+        return fonts.copy(926, 327, 22, 26);
     else if (id == "7-score")
-    return fonts.copy(948, 327, 22, 26);
+        return fonts.copy(948, 327, 22, 26);
     else if (id == "8-score")
-    return fonts.copy(970, 327, 22, 26);
+        return fonts.copy(970, 327, 22, 26);
     else if (id == "9-score")
-    return fonts.copy(992, 327, 22, 26);
+        return fonts.copy(992, 327, 22, 26);
 
     else if (id == "paused")
         return sprites.copy(700, 1258, 230, 59);
