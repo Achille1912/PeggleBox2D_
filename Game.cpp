@@ -10,6 +10,8 @@
 #include <set>
 #include <QMediaPlayer>
 #include <QStyle>
+#include <QMainWindow>
+
 
 #include "Game.h"
 #include "Peg.h"
@@ -19,6 +21,7 @@
 #include "QJsonDocument"
 #include "Button.h"
 #include "CharacterHandler.h"
+#include "Sounds.h"
 
 #include "Sprites.h"
 
@@ -39,6 +42,7 @@ Game* Game::instance()
 // constructor
 Game::Game() : QGraphicsView()
 {
+   
     // setup world/scene
     _world = new QGraphicsScene();
     _world->setBackgroundBrush(QBrush(QColor(0, 0, 0)));
@@ -56,10 +60,12 @@ Game::Game() : QGraphicsView()
         this, SLOT(gameOverSlot()), Qt::QueuedConnection);
     QObject::connect(this, SIGNAL(changeEngine()),
         this, SLOT(changeEngineSlot()));
+    QObject::connect(this, SIGNAL(restartSignal()),
+        this, SLOT(restartSlot()));
     _engine.setTimerType(Qt::PreciseTimer);
     _engine.setInterval(1000 / GAME_FPS);
 
-    setWindowIcon(QIcon(":/icons/peggle.ico"));
+    setWindowIcon(QIcon(QPixmap("./icons/peggle.ico")));
     setWindowTitle("Peggle");
 
     _builder = new LevelBuilder();
@@ -72,7 +78,9 @@ Game::Game() : QGraphicsView()
     _character = Character::NONE;
     _power = false;
     simulationCount = 180;
-    
+  
+
+    _gameSounds = new Sounds();
 
     reset();
     init();
@@ -96,7 +104,7 @@ void Game::reset()
     trajectory.resize(30);
     for (auto el : trajectory)
         delete el;
-    
+
     _engine.stop();
     _world->clear();
 }
@@ -127,11 +135,7 @@ void Game::play() //in gioco
     _engine.start();
     _state = GameState::PLAYING;
     setMouseTracking(true);
-    playingTheme = new QMediaPlayer;
-    playingTheme->setVolume(30);
-
-    playingTheme->setMedia(QUrl::fromLocalFile("./sounds/theme.wav"));
-    playingTheme->play();
+    Game::instance()->_gameSounds->get("theme")->play();
 }
 
 void Game::nextFrame()
@@ -224,14 +228,9 @@ void Game::mousePressEvent(QMouseEvent* e)
                 MasterPegBox->SetLinearVelocity(b2Vec2(p.x() * 15, p.y() * 15));
                 masterPegGraphic->setVisible(true);
                 cannon->setPixmap(Sprites::instance()->get("cannon_without_ball"));
-                QMediaPlayer* player = new QMediaPlayer;
-                player->setVolume(50);
-                if (Game::instance()->me)
-                    player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/cannonshot.wav"));
-                else
-                    player->setMedia(QUrl::fromLocalFile("./sounds/cannonshot.wav"));
+                Game::instance()->_gameSounds->get("cannonShot")->play();
 
-                player->play();
+
             }
         }
         if (e->button() == Qt::RightButton)
@@ -309,7 +308,7 @@ void Game::keyPressEvent(QKeyEvent* e)
     }
     if (e->key() == Qt::Key_R && _state == GameState::PLAYING)
     {
-        playingTheme->stop();
+        Game::instance()->_gameSounds->get("theme")->stop();
         init();
     }
     if (e->key() == Qt::Key_A && _state == GameState::PLAYING&& !masterPegGraphic->getFire())
@@ -440,18 +439,15 @@ void Game::fire(float alfa) {
 
 void Game::activePower(Character c) {
     setPower(true);
-    QMediaPlayer* player = new QMediaPlayer;
-    player->setVolume(50);
+    
+
+    
     switch (c) {
     case Character::FLOWER:
     {
         if ((turn ? getCharacter() : getSecondCharacter()) != Character::RABBIT) {
-            if (Game::instance()->me)
-                player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup_flower.wav"));
-            else
-                player->setMedia(QUrl::fromLocalFile("./sounds/powerup_flower.wav"));
+            Game::instance()->_gameSounds->get("powerUpFlower")->play();
 
-            player->play();
         }
         int twenty = (25 - Game::instance()->getRedPegHit()) * 20 / 100;
         int c = 0;
@@ -468,12 +464,8 @@ void Game::activePower(Character c) {
     case Character::ALIEN:
     {
         if ((turn ? getCharacter() : getSecondCharacter()) != Character::RABBIT) {
-            if (Game::instance()->me)
-                player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup.wav"));
-            else
-                player->setMedia(QUrl::fromLocalFile("./sounds/powerup.wav"));
+            Game::instance()->_gameSounds->get("powerUpAlien")->play();
 
-            player->play();
         }
         QPoint centerCircle(masterPegGraphic->pos().x(), masterPegGraphic->pos().y());
         QList<QGraphicsItem*> tmp;
@@ -498,12 +490,8 @@ void Game::activePower(Character c) {
     {
 
         if ((turn ? getCharacter() : getSecondCharacter()) != Character::RABBIT) {
-            if (Game::instance()->me)
-                player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup.wav"));
-            else
-                player->setMedia(QUrl::fromLocalFile("./sounds/powerup.wav"));
+            Game::instance()->_gameSounds->get("powerUp")->play();
 
-            player->play();
         }
         b2BodyDef ballDef;
         ballDef.type = b2_dynamicBody;
@@ -537,14 +525,9 @@ void Game::activePower(Character c) {
 
     case Character::RABBIT:
     {
-        QMediaPlayer* player = new QMediaPlayer;
-        player->setVolume(50);
-        if (Game::instance()->me)
-            player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup_rabbit.wav"));
-        else
-            player->setMedia(QUrl::fromLocalFile("./sounds/powerup_rabbit.wav"));
-      
-        player->play();
+        Game::instance()->_gameSounds->get("powerUpRabbit")->play();
+
+
         int  r = rand() % 3;
         switch (r) {
         case 0:
@@ -559,35 +542,18 @@ void Game::activePower(Character c) {
         }
     }
     case Character::UNICORN:
-        if (Game::instance()->me)
-            player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup.wav"));
-        else
-            player->setMedia(QUrl::fromLocalFile("./sounds/powerup.wav"));
+        Game::instance()->_gameSounds->get("powerUp")->play();
 
-        player->play();
     break;
     case Character::DRAGON:
-        if (Game::instance()->me)
-            player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup.wav"));
-        else
-            player->setMedia(QUrl::fromLocalFile("./sounds/powerup.wav"));
+        Game::instance()->_gameSounds->get("powerUp")->play();
 
-        player->play();
 
     case Character::OWL:
-        if (Game::instance()->me)
-            player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup.wav"));
-        else
-            player->setMedia(QUrl::fromLocalFile("./sounds/powerup.wav"));
+        Game::instance()->_gameSounds->get("powerUp")->play();
 
-        player->play();
     case Character::PUMPKIN:
-        if (Game::instance()->me)
-            player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/powerup_pumpkin.wav"));
-        else
-            player->setMedia(QUrl::fromLocalFile("./sounds/powerup_pumpkin.wav"));
-
-        player->play();
+        Game::instance()->_gameSounds->get("powerUpPumpkin")->play();
         break;
     }
  }
@@ -621,14 +587,11 @@ void Game::printScore() {
 
 
 void Game::gameOverSlot() {
-    playingTheme->stop();
-    QMediaPlayer* player = new QMediaPlayer;
-    player->setVolume(50);
-    if (Game::instance()->me)
-        player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/fanfare.wav"));
-    else
-        player->setMedia(QUrl::fromLocalFile("./sounds/fanfare.wav"));
-    player->play();
+    Game::instance()->_gameSounds->get("theme")->stop();
+    Game::instance()->_gameSounds->get("fanfare")->play();
+
+
+
     _engine.stop();
     if(_mode==GameMode::SINGLE)
         _window->load("result_single");
@@ -683,4 +646,8 @@ void Game::updateSchedulers()
     for (auto& t : _schedulers)
         if (t.second.on())
             t.second++;
+}
+
+void Game::restartSlot() {
+    qApp->exit(773);
 }

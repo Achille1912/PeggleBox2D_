@@ -2,6 +2,8 @@
 #include "Game.h"
 #include "Sprites.h"
 
+
+
 using namespace PGG;
 
 void CharacterHandler::initButton(ButtonType t, Button* b)
@@ -261,6 +263,8 @@ void CharacterHandler::clickButton(ButtonType t, Button* b)
 		break;
 
 	case ButtonType::RETURN:
+
+		//emit Game::instance()->restartSignal();
 		Game::instance()->reset();
 		Game::instance()->init();
 		break;

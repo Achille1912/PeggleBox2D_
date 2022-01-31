@@ -25,7 +25,7 @@ private:
     bool feverNext=false;
 public:
     Peg(QPoint pos, PegColor color);
-
+    
     // getters
     PegColor getPegColor() { return _color; }
     bool getHitted() { return _hitted; }

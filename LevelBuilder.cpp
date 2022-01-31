@@ -141,7 +141,7 @@ void LevelBuilder::load(const QString& level_name)
 		for (int i = 0; i < 3; i++) {
 			Game::instance()->remainingSimulation[i] = new QGraphicsPixmapItem();
 			Game::instance()->remainingSimulation[i]->setY( 540 - (Game::instance()->getPaused()->boundingRect().height() / 2));
-			Game::instance()->remainingSimulation[i]->setX((int)780 - (i * 50));
+			Game::instance()->remainingSimulation[i]->setX((int)740 - (i * 50));
 			Game::instance()->world()->addItem(Game::instance()->remainingSimulation[i]);
 			Game::instance()->remainingSimulation[i]->setVisible(false);
 			Game::instance()->remainingSimulation[i]->setZValue(2);

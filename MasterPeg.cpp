@@ -1,6 +1,7 @@
 #include "MasterPeg.h"
 #include "Game.h"
 #include "Sprites.h"
+#include "Sounds.h"
 #include <QSound>
 #include <QVector2D>
 #include <QMediaPlayer>
@@ -316,12 +317,7 @@ void MasterPeg::shot(QLineF c, QLineF p, QLineF f, QVector2D z) {
     Game::instance()->getMasterPegGraphic()->setVisible(true);
     Game::instance()->getWorld2d()->SetGravity(b2Vec2(0, 25.0f));
     Game::instance()->getCannon()->setPixmap(Sprites::instance()->get("cannon_without_ball"));
-    QMediaPlayer* player = new QMediaPlayer;
-    player->setVolume(50);
-    if (Game::instance()->me)
-        player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/cannonshot.wav"));
-    else
-        player->setMedia(QUrl::fromLocalFile("./sounds/cannonshot.wav"));
+    Game::instance()->_gameSounds->get("cannonShot")->play();
 
-    player->play();
+
 }
