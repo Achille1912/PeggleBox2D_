@@ -1,6 +1,7 @@
 #include "MasterPeg.h"
 #include "Game.h"
 #include "Sprites.h"
+#include "Sounds.h"
 #include <QSound>
 #include <QVector2D>
 #include <QMediaPlayer>
@@ -24,6 +25,7 @@ MasterPeg::MasterPeg(QPoint pos) : QGraphicsPixmapItem(0)
 void MasterPeg::simulAdvance(b2Body* box) {
     if (box->GetPosition().y > 35)
     {
+
         restorePos(box);
         Game::instance()->alpha--;
         if (Game::instance()->alpha < -89) {
@@ -93,6 +95,27 @@ void MasterPeg::advance(b2Body* box) {
 
 
 void MasterPeg::down() {
+    if (Game::instance()->mol) {
+        int x = 0;
+        switch (Game::instance()->getRedPegHit()) {
+        case 9:
+            x = 2;
+            break;
+        case 14:
+            x = 3;
+            break;
+        case 18:
+            x = 5;
+            break;
+        case 21:
+            x = 10;
+            break;
+        }
+        Game::instance()->getTurn() ?
+            Game::instance()->setScore(Game::instance()->getScore() + ((Game::instance()->getScore() * 10 / 100) * x)) :
+            Game::instance()->setSecondScore(Game::instance()->getSecondScore() + ((Game::instance()->getSecondScore() * 10 / 100) * x));
+        Game::instance()->printScore();
+    }
     if (Game::instance()->getPower()) {
         switch (Game::instance()->getTurn() ? Game::instance()->getCharacter() : Game::instance()->getSecondCharacter()) {
         case Character::UNICORN:
@@ -294,12 +317,7 @@ void MasterPeg::shot(QLineF c, QLineF p, QLineF f, QVector2D z) {
     Game::instance()->getMasterPegGraphic()->setVisible(true);
     Game::instance()->getWorld2d()->SetGravity(b2Vec2(0, 25.0f));
     Game::instance()->getCannon()->setPixmap(Sprites::instance()->get("cannon_without_ball"));
-    QMediaPlayer* player = new QMediaPlayer;
-    player->setVolume(50);
-    if (Game::instance()->me)
-        player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/cannonshot.wav"));
-    else
-        player->setMedia(QUrl::fromLocalFile("./sounds/cannonshot.wav"));
+    Game::instance()->_gameSounds->get("cannonShot")->play();
 
-    player->play();
+
 }

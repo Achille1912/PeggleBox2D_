@@ -1,6 +1,7 @@
 #include "Peg.h"
 #include "Game.h"
 #include "Sprites.h"
+#include "Sounds.h"
 #include "Scheduler.h"
 #include <QMediaPlayer>
 
@@ -26,14 +27,8 @@ Peg::Peg(QPoint pos, PegColor color= PegColor::BLUE): QGraphicsPixmapItem(0)
 
 void Peg::hit() {
 	if (!Game::instance()->getSimulation()) {
-		QMediaPlayer* player = new QMediaPlayer;
-		player->setVolume(50);
-		if (Game::instance()->me)
-			player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/peghit.wav"));
-		else
-			player->setMedia(QUrl::fromLocalFile("./sounds/peghit.wav"));
+		Game::instance()->_gameSounds->get("pegHit")->play();
 
-		player->play();
 
 		_hitted = true;
 
@@ -57,14 +52,10 @@ void Peg::hit() {
 				Game::instance()->centerOn(this->scenePos());
 				Game::instance()->scale(4.1, 4.1);
 				emit Game::instance()->changeEngine();
-				QMediaPlayer* player = new QMediaPlayer;
-				player->setVolume(50);
-				if (Game::instance()->me)
-					player->setMedia(QUrl::fromLocalFile("C:/Users/achil/Desktop/peggle2D/PeggleBox2D_/sounds/applause.wav"));
-				else
-					player->setMedia(QUrl::fromLocalFile("./sounds/applause.wav"));
+				Game::instance()->_gameSounds->get("applause")->play();
 
-				player->play();
+
+			
 				Game::instance()->schedule("fever", 10, [this]() {
 					Game::instance()->resetMatrix();
 					Game::instance()->scale(1,1);
@@ -102,10 +93,21 @@ void Peg::hit() {
 	}
 	else {
 		_simulHit = true;
-		if (_color == PegColor::BLUE) 
-			Game::instance()->setSimulationScore(Game::instance()->getSimulationScore()+100);
-		else 
-			Game::instance()->setSimulationScore(Game::instance()->getSimulationScore() + 200);
+		if (_color == PegColor::BLUE) {
+			Game::instance()->setSimulationScore(Game::instance()->getSimulationScore() + 100);
+		}
+		else {
+			if (Game::instance()->getRedPegHit() == 23) 
+				feverNext = true;
+			
+			if (feverNext) {
+				Game::instance()->setSimulationScore(Game::instance()->getSimulationScore() + 400);
+				feverNext = false;
+			}
+			else {
+				Game::instance()->setSimulationScore(Game::instance()->getSimulationScore() + 200);
+			}
+		}
 		
 	}
 }

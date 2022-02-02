@@ -22,9 +22,10 @@ private:
     PegColor _color;
     bool _hitted;
     bool _simulHit;
+    bool feverNext=false;
 public:
     Peg(QPoint pos, PegColor color);
-
+    
     // getters
     PegColor getPegColor() { return _color; }
     bool getHitted() { return _hitted; }

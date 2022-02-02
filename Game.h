@@ -14,6 +14,7 @@
 #include "WindowBuilder.h"
 #include "Scheduler.h"
 #include "CharacterHandler.h"
+#include "Sounds.h"
 
 
 #include "Button.h"
@@ -24,6 +25,8 @@
 namespace PGG
 {
 class Game;
+
+
 
 enum class GameState
 {
@@ -86,6 +89,7 @@ private:
     LevelBuilder* _builder;
     WindowBuilder* _window;
     CharacterHandler* _characterHandler;
+    
     int _score;
     int _secondScore;
     int _redPegHit;
@@ -128,6 +132,7 @@ private:
     Game();
 
 public:
+    Sounds* _gameSounds;
     static Game *instance();
     QVector<b2Body*> PegBox;
     QVector<QGraphicsPixmapItem*> lateral_mp;
@@ -243,6 +248,7 @@ public:
     int alpha = 89;
     std::vector < std::tuple< int, int > >simulationScore;
     bool me = false;
+    bool mol = false;
     
 
     // event handlers
@@ -263,9 +269,11 @@ public:
  signals:
     void gameOver();
     void changeEngine();
+    void restartSignal();
 public slots:
     void nextFrame();
     void updateFPS();
     void gameOverSlot();
     void changeEngineSlot();
+    void restartSlot();
 };
