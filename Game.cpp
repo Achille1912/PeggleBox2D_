@@ -46,6 +46,7 @@ Game::Game() : QGraphicsView()
     // setup world/scene
     _world = new QGraphicsScene();
     _world->setBackgroundBrush(QBrush(QColor(0, 0, 0)));
+    
 
     setScene(_world);
 
@@ -84,6 +85,7 @@ Game::Game() : QGraphicsView()
 
     reset();
     init();
+
 }
 
 void Game::reset()
@@ -111,14 +113,16 @@ void Game::reset()
 
 void Game::init()
 {
+   
     reset();
     background= _world->addPixmap(QPixmap(Sprites::instance()->get("peggle_title")));
     _state = GameState::TITLE;
     centerOn(background);
-    //new Button(QRect(280, 200, 89, 89), ButtonType::CLICK_TO_PLAY);
-
+    
     setSceneRect(0, 0, getBackground()->sceneBoundingRect().width(), getBackground()->sceneBoundingRect().height());
     showNormal();
+    
+
 }
 
 void Game::buildLevel()
@@ -205,8 +209,13 @@ void Game::mousePressEvent(QMouseEvent* e)
             return;
         }
 
-        if (_state == GameState::MODE || _state == GameState::RESULT_DOUBLE||_state == GameState::RESULT_SINGLE|| _state == GameState::SELECT_SINGLE_CHARACTER || _state == GameState::SELECT_FIRST_CHARACTER || _state == GameState::SELECT_SECOND_CHARACTER || _state == GameState::SELECT_DIFFICULTY)
+        if (_state == GameState::MODE || _state == GameState::RESULT_DOUBLE || _state == GameState::RESULT_SINGLE || _state == GameState::SELECT_SINGLE_CHARACTER || _state == GameState::SELECT_FIRST_CHARACTER || _state == GameState::SELECT_SECOND_CHARACTER || _state == GameState::SELECT_DIFFICULTY) {
+            if(_state != GameState::MODE)
+                //(_world->findChild<Button*>("Unicorn"))->setWindowOpacity(1);
+
             QGraphicsView::mousePressEvent(e);
+        }
+            
 
         if (e->button() == Qt::LeftButton && _state == GameState::PLAYING)
         {

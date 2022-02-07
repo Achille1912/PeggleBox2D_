@@ -13,6 +13,7 @@ void CharacterHandler::initButton(ButtonType t, Button* b)
 		b->setPixmap(QPixmap(Sprites::instance()->get("clickToPlay")));
 		break;
 	case ButtonType::SINGLE:
+
 		b->setPixmap(QPixmap(Sprites::instance()->get("single_button")));
 		break;
 	case ButtonType::DUEL:
@@ -58,6 +59,7 @@ void CharacterHandler::initButton(ButtonType t, Button* b)
 		b->setPixmap(QPixmap(Sprites::instance()->get("next_button")));
 		break;
 	case ButtonType::UNICORN:
+		b->setObjectName("Unicorn");
 		b->setPixmap(QPixmap(Sprites::instance()->get("unicorn_button")));
 		break;
 	case ButtonType::BEAVER:
