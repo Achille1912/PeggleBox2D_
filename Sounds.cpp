@@ -95,7 +95,7 @@ QMediaPlayer* Sounds::get(const std::string& id)
     else if (id == "powerUpPumpkin")
         return powerUpPumpkin;
     else {
-        printf("Ciauuuuuuu");
+       
         return NULL;
     }
 

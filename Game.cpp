@@ -381,14 +381,6 @@ void Game::clearHittedPeg() {
             PegBox[i]->DestroyFixture(PegBox[i]->GetFixtureList());
         }
     }
-    /*if (restoreGreen) {
-        int i = 0;
-        do {
-            i = rand() % 95;
-        } while (static_cast<Peg*>(PegBox[i]->GetUserData())->getPegColor() == PegColor::RED && (static_cast<Peg*>(PegBox[i]->GetUserData())->getHitted()) && !(static_cast<Peg*>(PegBox[i]->GetUserData())->isVisible()));
-        static_cast<Peg*>(PegBox[i]->GetUserData())->changeColor(PegColor::GREEN);
-        restoreGreen = false;
-    }*/
 }
 
 void Game::addMolt() {
@@ -464,8 +456,7 @@ void Game::activePower(Character c) {
     case Character::ALIEN:
     {
         if ((turn ? getCharacter() : getSecondCharacter()) != Character::RABBIT) {
-            Game::instance()->_gameSounds->get("powerUpAlien")->play();
-
+           Game::instance()->_gameSounds->get("powerUp")->play();
         }
         QPoint centerCircle(masterPegGraphic->pos().x(), masterPegGraphic->pos().y());
         QList<QGraphicsItem*> tmp;
