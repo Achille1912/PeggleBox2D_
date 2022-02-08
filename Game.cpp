@@ -221,9 +221,14 @@ void Game::mousePressEvent(QMouseEvent* e)
         {
             if (_mode == GameMode::CPU&& !turn)
                 return;
+
+            
             if (e->pos().y()>942) {   
-                QGraphicsView::mousePressEvent(e);
-                return;
+                if (e->pos().x() > 1550 || e->pos().x() < 300) {
+                    QGraphicsView::mousePressEvent(e);
+                    return;
+                }
+
             }
 
             if (!masterPegGraphic->getFire()) {

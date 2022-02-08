@@ -67,7 +67,7 @@ void LevelBuilder::load(const QString& level_name)
         for (int i = 0; i < 10; i++) {
             Game::instance()->lateral_mp[i]= Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("lateral_mp")));
             Game::instance()->lateral_mp[i]->setX(55);
-            Game::instance()->lateral_mp[i]->setY((int)450 + (i * 35));
+            Game::instance()->lateral_mp[i]->setY((int)420 + (i * 35));
         }
 
         //moltiplicatori x2 x3 x5 x10
