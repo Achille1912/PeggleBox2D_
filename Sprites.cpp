@@ -26,7 +26,7 @@ static QRect pegle(0, 0, 200, 200);
 
 static QRect cannon(256,330,82,55);
 
-static QRect bucket(168, 200, 168, 24);
+static QRect bucket(168, 200, 168, 34);
 static QRect front_bucket(298, 869, 97, 12);
 
 static QRect remainingBallNumber(479, 305, 30, 54);

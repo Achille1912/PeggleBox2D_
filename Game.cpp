@@ -284,7 +284,7 @@ void Game::mouseMoveEvent(QMouseEvent* e)
                 if (!masterPegGraphic->getFire())
                     MasterPegBox->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), MasterPegBox->GetAngle());
 
-                cannon->setTransformOriginPoint(QPoint(15, -60)); //-65
+                cannon->setTransformOriginPoint(QPoint(40, -65)); //-65
                 cannon->setRotation(-v1.angleTo(v2));
             }
 

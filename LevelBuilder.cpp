@@ -44,7 +44,7 @@ void LevelBuilder::load(const QString& level_name)
         // cannon
         Game::instance()->setCannon(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("cannon"))));
         Game::instance()->getCannon()->setScale(1.3);
-        Game::instance()->getCannon()->setPos((Game::instance()->sceneRect().width() / 2)-(15), 190);
+        Game::instance()->getCannon()->setPos((Game::instance()->sceneRect().width() / 2)-(40), 185);
         double screenHeight = Game::instance()->sceneRect().height();
         //
 
