@@ -37,20 +37,30 @@ void LevelBuilder::load(const QString& level_name)
         Game::instance()->getRemainingBallPixmap()->setScale(1.8);
         Game::instance()->getRemainingBallPixmap()->setPos(QPoint(55 - Game::instance()->getRemainingBallPixmap()->boundingRect().width()/2, 180));
 
+
+
+
+        // cannon
         Game::instance()->setCannon(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("cannon"))));
-        Game::instance()->getCannon()->setScale(1.5);
-        Game::instance()->getCannon()->setPos((Game::instance()->sceneRect().width() / 2)-(20), 205);
+        Game::instance()->getCannon()->setScale(1.3);
+        Game::instance()->getCannon()->setPos((Game::instance()->sceneRect().width() / 2)-(40), 185);
         double screenHeight = Game::instance()->sceneRect().height();
+        //
 
-
+        //left current score colored band
         Game::instance()->setBandOne(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("band"))));
         Game::instance()->getBandOne()->setZValue(5);
         Game::instance()->getBandOne()->setPos(11, 924);
         Game::instance()->getBandOne()->setScale(1.5);
+
         Game::instance()->setBandTwo(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("band").transformed(QTransform().scale(-1, 1)))));
         Game::instance()->getBandTwo()->setZValue(5);
         Game::instance()->getBandTwo()->setPos(107, 924);
         Game::instance()->getBandTwo()->setScale(1.5);
+
+        //green band
+
+        //
 
         Game::instance()->lateral_mp.resize(10);
         for (int i = 0; i < 10; i++) {
