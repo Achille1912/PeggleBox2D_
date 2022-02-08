@@ -2,6 +2,7 @@
 <RCC version="1.0">
 	<qresource>
 		<file>sprites/krita.png</file>
+        <file>sprites/bottom_zvalue.png</file>
 		<file>icons/peggle.ico</file>
 		<file>sprites/ball.png</file>
 		<file>sprites/peggles.png</file>

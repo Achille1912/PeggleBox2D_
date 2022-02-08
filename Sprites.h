@@ -25,6 +25,7 @@ private:
 
     //da fare nella classe Hud
     QPixmap Hud_Unicorn;
+    QPixmap bottom_zvalue;
     //QPixmap Hud_Crab;
     //...
 

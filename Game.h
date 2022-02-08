@@ -4,7 +4,7 @@
 #include <QTimer>
 #include <QLabel>
 #include <QPainterPath>
-#include <Map>
+#include <map>
 #include <QMediaPlayer>
 
 #include "Bucket.h"
