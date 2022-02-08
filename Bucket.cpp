@@ -12,11 +12,6 @@ Bucket::Bucket(QPoint pos) : QGraphicsPixmapItem(0)
     setPixmap(Sprites::instance()->get("bucket"));
     setScale(1.8);
 
-    //this->addPixmap(QPixmap(Sprites::instance()->get("front_bucket")));
-    //this->QGraphicsPixmapItem(QPixmap(Sprites::instance()->get("front_bucket")));
-   //Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("front_bucket")));
-   //a->setZValue(1);
-
     Game::instance()->world()->addItem(this);
 
 }

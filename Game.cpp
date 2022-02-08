@@ -210,7 +210,7 @@ void Game::mousePressEvent(QMouseEvent* e)
         }
 
         if (_state == GameState::MODE || _state == GameState::RESULT_DOUBLE || _state == GameState::RESULT_SINGLE || _state == GameState::SELECT_SINGLE_CHARACTER || _state == GameState::SELECT_FIRST_CHARACTER || _state == GameState::SELECT_SECOND_CHARACTER || _state == GameState::SELECT_DIFFICULTY) {
-            if(_state != GameState::MODE)
+            //if(_state != GameState::MODE)
                 //(_world->findChild<Button*>("Unicorn"))->setWindowOpacity(1);
 
                 QGraphicsView::mousePressEvent(e);
@@ -221,6 +221,10 @@ void Game::mousePressEvent(QMouseEvent* e)
         {
             if (_mode == GameMode::CPU&& !turn)
                 return;
+            if (e->pos().y()>942) {   
+                QGraphicsView::mousePressEvent(e);
+                return;
+            }
 
             if (!masterPegGraphic->getFire()) {
                 Game::instance()->setPower(false);
@@ -269,13 +273,13 @@ void Game::mouseMoveEvent(QMouseEvent* e)
 
             QLineF v2(center, currPos);
             v2.setLength(200.0);
-            if (currPos.y()>104)
+            if (currPos.y()>90)
             {
 
                 if (!masterPegGraphic->getFire())
                     MasterPegBox->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), MasterPegBox->GetAngle());
 
-                cannon->setTransformOriginPoint(QPoint(40, -65)); //-65
+                cannon->setTransformOriginPoint(QPoint(15, -60)); //-65
                 cannon->setRotation(-v1.angleTo(v2));
             }
 

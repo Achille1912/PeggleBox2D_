@@ -10,7 +10,7 @@ class Button;
 enum class ButtonType
 {
     AI,
-
+    MENU_BUTTON,
     CLICK_TO_PLAY,
     SINGLE,
     DUEL,
