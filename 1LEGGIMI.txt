@@ -1,6 +1,5 @@
-OBIETTIVO: LIVELLO 1 e basta. però che funziona tutto, quindi al momento solo peg circolari, punteggio, moltiplicatore, palline rimaste, bucket, sprites etc...
-
 (Copiare la cartella sounds nella cartella debug per sentire i suoni).
+(Mettere in Cmake come path di Box2d la cartella box2d nei sorgenti).
 
 RESPONSABILITA':
 	-Game				Fisica, Logica
@@ -12,6 +11,7 @@ RESPONSABILITA':
 	-Sprites			Estrazione delle Sprites
 	-Button				Gestione dei Pulsanti del Gioco
 	-CharacterHandler		Gestione Personaggi
+	-Sounds				Gestisce i Suoni
 	
 COSA E' STATO FATTO FINORA:
 	-SCHERMATE e Pulsanti
@@ -28,12 +28,8 @@ COSA E' STATO FATTO FINORA:
 		>Score (grafica e logica)
 		>Bucket funzionante
 	-INTELLIGENZA ARTIFICIALE
+		>Con relativo Pulsante
 	-PRINCIPALI SUONI
-		
-COSE CHE MANCANO:
-	*Ottimizzazioni
-	(opzionale: risoluzione bug della traiettoria imprecisa)
-
 
 suddivisione lavoro:
 Achille: tutte le cose con box2d, fisica, 
