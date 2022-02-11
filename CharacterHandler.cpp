@@ -113,9 +113,11 @@ void CharacterHandler::clickButton(ButtonType t, Button* b)
 		Game::instance()->getWindow()->load("mode");
 		break;
 	case ButtonType::AI:
-		Game::instance()->simulationScore.clear();
-		Game::instance()->alpha = 89;
-		Game::instance()->fire(Game::instance()->alpha);
+		if (!Game::instance()->getMasterPegGraphic()->getFire()) {
+			Game::instance()->simulationScore.clear();
+			Game::instance()->alpha = 89;
+			Game::instance()->fire(Game::instance()->alpha);
+		}
 		break;
 	case ButtonType::MENU_BUTTON:
 		Game::instance()->_gameSounds->get("theme")->stop();
