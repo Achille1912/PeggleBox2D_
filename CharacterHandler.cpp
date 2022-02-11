@@ -12,7 +12,16 @@ void CharacterHandler::initButton(ButtonType t, Button* b)
 	case ButtonType::CLICK_TO_PLAY:
 		b->setPixmap(QPixmap(Sprites::instance()->get("clickToPlay")));
 		break;
+	case ButtonType::AI:
+		b->setPixmap(QPixmap(Sprites::instance()->get("aiButton")));
+		
+		break;
+	case ButtonType::MENU_BUTTON:
+		b->setPixmap(QPixmap(Sprites::instance()->get("menuButton")));
+		
+		break;
 	case ButtonType::SINGLE:
+
 		b->setPixmap(QPixmap(Sprites::instance()->get("single_button")));
 		break;
 	case ButtonType::DUEL:
@@ -58,6 +67,7 @@ void CharacterHandler::initButton(ButtonType t, Button* b)
 		b->setPixmap(QPixmap(Sprites::instance()->get("next_button")));
 		break;
 	case ButtonType::UNICORN:
+		b->setObjectName("Unicorn");
 		b->setPixmap(QPixmap(Sprites::instance()->get("unicorn_button")));
 		break;
 	case ButtonType::BEAVER:
@@ -102,7 +112,15 @@ void CharacterHandler::clickButton(ButtonType t, Button* b)
 		Game::instance()->setState(GameState::MODE);
 		Game::instance()->getWindow()->load("mode");
 		break;
-
+	case ButtonType::AI:
+		Game::instance()->simulationScore.clear();
+		Game::instance()->alpha = 89;
+		Game::instance()->fire(Game::instance()->alpha);
+		break;
+	case ButtonType::MENU_BUTTON:
+		Game::instance()->_gameSounds->get("theme")->stop();
+		Game::instance()->init();
+		break;
 	case ButtonType::SINGLE:
 		Game::instance()->setGameMode(GameMode::SINGLE);
 		Game::instance()->getWindow()->load("select_single_character");

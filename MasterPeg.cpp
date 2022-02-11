@@ -308,7 +308,7 @@ void MasterPeg::restorePos(b2Body* box) {
 
 
 void MasterPeg::shot(QLineF c, QLineF p, QLineF f, QVector2D z) {
-    Game::instance()->getCannon()->setTransformOriginPoint(QPoint(30, -65));
+    Game::instance()->getCannon()->setTransformOriginPoint(QPoint(20, -65));
     Game::instance()->getCannon()->setRotation(-c.angleTo(p));
     if (!Game::instance()->getMasterPegGraphic()->getFire())
         Game::instance()->getMasterPegBox()->SetTransform(b2Vec2(f.p2().x() / 30.0, f.p2().y() / 30.0), Game::instance()->getMasterPegBox()->GetAngle());

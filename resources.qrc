@@ -2,6 +2,7 @@
 <RCC version="1.0">
 	<qresource>
 		<file>sprites/krita.png</file>
+        <file>sprites/bottom_zvalue.png</file>
 		<file>icons/peggle.ico</file>
 		<file>sprites/ball.png</file>
 		<file>sprites/peggles.png</file>
@@ -23,6 +24,8 @@
 		<file>sprites/lateral_mp.png</file>
 		<file>sprites/peggle_title.png</file>
 		<file>sprites/clickToPlay.png</file>
+		<file>sprites/aiButton.png</file>
+		<file>sprites/menuButton.png</file>
 		<file>sounds/peghit.wav</file>
 		<file>sounds/buttonclick.wav</file>
 		<file>sounds/fanfare.wav</file>

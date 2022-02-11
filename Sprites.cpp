@@ -23,7 +23,12 @@ QRect moveBy(QRect rect, int x, int y, int dx = 16, int dy = 16, int border_x = 
 // main object positions within sprites //non ha senso da togliere perché non ci serve
 static QRect player(467, 259, 93, 93);
 static QRect pegle(0, 0, 200, 200);
-static QRect bucket(168, 200, 168, 24);
+
+static QRect cannon(256,330,82,55);
+
+static QRect bucket(168, 200, 168, 34);
+static QRect front_bucket(298, 869, 97, 12);
+
 static QRect remainingBallNumber(479, 305, 30, 54);
 static QRect score(4, 280, 46,70);
 
@@ -38,6 +43,8 @@ Sprites::Sprites() //load in RAM
     title_screen = loadTexture(":/sprites/peggle_title.png", QColor(255, 0, 255));
 
     Hud_Unicorn = loadTexture(":/sprites/krita.png"); // da fare prob. nell'altra classe Hud
+    bottom_zvalue = loadTexture(":/sprites/bottom_zvalue.png");
+
     //Hud_Drake ...
 
     //dynamic Hud da fare
@@ -60,6 +67,8 @@ QPixmap Sprites::get(const std::string &id)
 
     else if (id == "Hud_Unicorn")
         return Hud_Unicorn;
+    else if (id == "bottom_zvalue")
+        return bottom_zvalue;
 
     else if (id == "gameMode")
         return loadTexture(":/sprites/gameMode.png", QColor(255, 0, 255));
@@ -82,6 +91,10 @@ QPixmap Sprites::get(const std::string &id)
         return gameMode_buttons.copy(QRect(0, 514, 211, 127));
     else if (id == "hard_mode_button")
         return gameMode_buttons.copy(QRect(0, 384, 211, 127));
+	else if (id == "menuButton")
+        return loadTexture(":/sprites/menuButton.png");
+    else if (id == "aiButton")
+        return loadTexture(":/sprites/aiButton.png");
 
     else if (id == "unicorn_button")
         return character_buttons.copy(QRect(0, 729, 89, 90));
@@ -132,8 +145,14 @@ QPixmap Sprites::get(const std::string &id)
         return sprites.copy(343, 10, 54, 54);
     else if (id == "master_peg_fired")
         return sprites.copy(424, 77, 22, 22);
+
+
     else if (id == "bucket")
         return stage_elements.copy(bucket);
+    else if (id == "front_bucket")
+        return sprites.copy(front_bucket);
+
+
     else if (id == "unicorn_face_right")
         return character_face.copy(0, 0, 70, 89);
     else if (id == "unicorn_face_left")
@@ -196,12 +215,18 @@ QPixmap Sprites::get(const std::string &id)
     else if (id == "10")
         return (fonts.copy(5, 296, 47, 40));
 
+
+    else if (id == "cannon_new")
+        return sprites.copy(cannon);
     else if (id == "cannon")
-        return sprites.copy(384, 327, 50, 80);
+       // return sprites.copy(384, 327, 50, 80);
+         return sprites.copy(cannon);
+
     else if (id == "cannon_without_ball")
         return sprites.copy(384, 327, 50, 50);
     else if (id == "cannon_fired")
         return sprites.copy(459, 327, 50, 100);
+
 
     else if (id == "peg_blue_hit")
         return peggles.copy(pegle);
@@ -261,91 +286,3 @@ QPixmap Sprites::get(const std::string &id)
     }
 }
 
-QPixmap Sprites::getNumber(int n, int fill)
-{
-    std::string text = std::to_string(n);
-
-    // fill with 0s on the left
-    if (fill)
-        while (text.size() != fill)
-            text = '0' + text;
-
-    // create collage texture
-    QPixmap collage(8 * int(text.size()), 8);
-    QPainter painter(&collage);
-
-    // add numbers
-    for (int i = 0; i < text.size(); i++)
-        painter.drawPixmap(8 * i, 0, Sprites::instance()->get(std::string("number-") + text[i]));
-
-    // end painting (necessary for setMask)
-    painter.end();
-
-    // make background transparent
-    collage.setMask(collage.createMaskFromColor(QColor(147, 187, 236)));
-
-    return collage;
-}
-
-QPixmap Sprites::getString(std::string text, int fill)
-{
-    // fill with 0s on the left
-    if (fill)
-        while (text.size() != fill)
-            text = ' ' + text;
-
-    // create collage texture
-    QPixmap collage(8 * int(text.size()), 8);
-    QPainter painter(&collage);
-
-    // add letters
-    for (int i = 0; i < text.size(); i++)
-        if (text[i] != ' ')
-            painter.drawPixmap(8 * i, 0, Sprites::instance()->get(std::string("char-") + text[i]));
-
-    // end painting (necessary for setMask)
-    painter.end();
-
-    // make background transparent
-    collage.setMask(collage.createMaskFromColor(QColor(147, 187, 236)));
-
-    return collage;
-}
-
-// score composite from sprite single score pieces
-QPixmap Sprites::getScore(int s)
-{
-    bool thousands = s >= 1000;
-    int base_score = s / (thousands ? 100 : 10);
-
-    QPixmap collage(16, 8);
-    QPainter painter(&collage);
-
-    // add 0s
-    
-
-    // add base number
-    //if (base_score == 10)
-        painter.drawPixmap(0, 0, fonts.copy(score));
-   /* else if (base_score == 20)
-        painter.drawPixmap(0, 0, _stage_tiles.copy(moveBy(score, 1, 0, 8, 8)));
-    else if (base_score == 40)
-        painter.drawPixmap(0, 0, _stage_tiles.copy(moveBy(score, 2, 0, 8, 8)));
-    else if (base_score == 50)
-        painter.drawPixmap(0, 0, _stage_tiles.copy(moveBy(score, 3, 0, 8, 8)));
-    else if (base_score == 80)
-        painter.drawPixmap(0, 0, _stage_tiles.copy(moveBy(score, 4, 0, 8, 8)));
-    else // 1 up
-        painter.drawPixmap(0, 0, _stage_tiles.copy(QRect(718, 185, 16, 8)));
-        */
-    // end painting (necessary for setMask)
-    painter.end();
-
-    // make background transparent
-    collage.setMask(collage.createMaskFromColor(QColor(147, 187, 236)));
-
-    return collage;
-}
-
-
-// score 325,794,23,30

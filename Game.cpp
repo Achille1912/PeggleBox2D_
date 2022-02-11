@@ -6,7 +6,7 @@
 #include <QKeyEvent>
 #include <QIcon>
 #include <cmath>
-#include <qDebug>
+#include <QDebug>
 #include <set>
 #include <QMediaPlayer>
 #include <QStyle>
@@ -42,10 +42,11 @@ Game* Game::instance()
 // constructor
 Game::Game() : QGraphicsView()
 {
-   
+
     // setup world/scene
     _world = new QGraphicsScene();
     _world->setBackgroundBrush(QBrush(QColor(0, 0, 0)));
+    
 
     setScene(_world);
 
@@ -57,11 +58,11 @@ Game::Game() : QGraphicsView()
     QObject::connect(&_engine, SIGNAL(timeout()),
                      this, SLOT(nextFrame()));
     QObject::connect(this, SIGNAL(gameOver()),
-        this, SLOT(gameOverSlot()), Qt::QueuedConnection);
+                     this, SLOT(gameOverSlot()), Qt::QueuedConnection);
     QObject::connect(this, SIGNAL(changeEngine()),
-        this, SLOT(changeEngineSlot()));
+                     this, SLOT(changeEngineSlot()));
     QObject::connect(this, SIGNAL(restartSignal()),
-        this, SLOT(restartSlot()));
+                     this, SLOT(restartSlot()));
     _engine.setTimerType(Qt::PreciseTimer);
     _engine.setInterval(1000 / GAME_FPS);
 
@@ -78,12 +79,13 @@ Game::Game() : QGraphicsView()
     _character = Character::NONE;
     _power = false;
     simulationCount = 180;
-  
+
 
     _gameSounds = new Sounds();
 
     reset();
     init();
+
 }
 
 void Game::reset()
@@ -111,14 +113,16 @@ void Game::reset()
 
 void Game::init()
 {
+
     reset();
     background= _world->addPixmap(QPixmap(Sprites::instance()->get("peggle_title")));
     _state = GameState::TITLE;
     centerOn(background);
-    //new Button(QRect(280, 200, 89, 89), ButtonType::CLICK_TO_PLAY);
-
+    
     setSceneRect(0, 0, getBackground()->sceneBoundingRect().width(), getBackground()->sceneBoundingRect().height());
     showNormal();
+    
+
 }
 
 void Game::buildLevel()
@@ -141,46 +145,46 @@ void Game::play() //in gioco
 void Game::nextFrame()
 {
     updateSchedulers();
-    world2d->Step(timeStep, velocityIterations, positionIterations); 
+    world2d->Step(timeStep, velocityIterations, positionIterations);
     for (b2ContactEdge* edge = MasterPegBox->GetContactList(); edge; edge = edge->next)
     {
-      if (edge->contact->IsTouching()&& static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData())) {
-          // if is a Peg
-          if (edge->contact->GetFixtureA()->GetBody()->GetType() == b2BodyType::b2_staticBody) {
-              Peg* tmp = static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData());
-              if (simulation) {
-                  if (!tmp->getSimulHit())
-                      tmp->hit();
-              }
-              else {
-                  if (!tmp->getHitted())
-                      tmp->hit();
-              }
-           // if is Bucket
-          }else if (edge->contact->GetFixtureA()->GetBody()->GetType() == b2BodyType::b2_kinematicBody){
-              Bucket* tmp = static_cast<Bucket*>(edge->contact->GetFixtureA()->GetBody()->GetUserData());
-              tmp->goal();
-          }
-      }
+        if (edge->contact->IsTouching()&& static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData())) {
+            // if is a Peg
+            if (edge->contact->GetFixtureA()->GetBody()->GetType() == b2BodyType::b2_staticBody) {
+                Peg* tmp = static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData());
+                if (simulation) {
+                    if (!tmp->getSimulHit())
+                        tmp->hit();
+                }
+                else {
+                    if (!tmp->getHitted())
+                        tmp->hit();
+                }
+                // if is Bucket
+            }else if (edge->contact->GetFixtureA()->GetBody()->GetType() == b2BodyType::b2_kinematicBody){
+                Bucket* tmp = static_cast<Bucket*>(edge->contact->GetFixtureA()->GetBody()->GetUserData());
+                tmp->goal();
+            }
+        }
     }
     if (getPower() && ((turn?_character:_secondCharacter) == Character::BEAVER|| (turn ? _character : _secondCharacter) == Character::RABBIT)) {
-      for (b2ContactEdge* edge = secondMasterPegBox->GetContactList(); edge; edge = edge->next)
-      {
-          if (edge->contact->IsTouching() && static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData())) {
-              // if is a Peg
-              if (edge->contact->GetFixtureA()->GetBody()->GetType() == b2BodyType::b2_staticBody) {
-                  Peg* tmp = static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData());
-                  if (simulation) {
-                      if (!tmp->getSimulHit())
-                          tmp->hit();
-                  }
-                  else {
-                      if (!tmp->getHitted())
-                          tmp->hit();
-                  }
-              }
-          }
-      }
+        for (b2ContactEdge* edge = secondMasterPegBox->GetContactList(); edge; edge = edge->next)
+        {
+            if (edge->contact->IsTouching() && static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData())) {
+                // if is a Peg
+                if (edge->contact->GetFixtureA()->GetBody()->GetType() == b2BodyType::b2_staticBody) {
+                    Peg* tmp = static_cast<Peg*>(edge->contact->GetFixtureA()->GetBody()->GetUserData());
+                    if (simulation) {
+                        if (!tmp->getSimulHit())
+                            tmp->hit();
+                    }
+                    else {
+                        if (!tmp->getHitted())
+                            tmp->hit();
+                    }
+                }
+            }
+        }
     }
 
     //master peg
@@ -205,13 +209,27 @@ void Game::mousePressEvent(QMouseEvent* e)
             return;
         }
 
-        if (_state == GameState::MODE || _state == GameState::RESULT_DOUBLE||_state == GameState::RESULT_SINGLE|| _state == GameState::SELECT_SINGLE_CHARACTER || _state == GameState::SELECT_FIRST_CHARACTER || _state == GameState::SELECT_SECOND_CHARACTER || _state == GameState::SELECT_DIFFICULTY)
-            QGraphicsView::mousePressEvent(e);
+        if (_state == GameState::MODE || _state == GameState::RESULT_DOUBLE || _state == GameState::RESULT_SINGLE || _state == GameState::SELECT_SINGLE_CHARACTER || _state == GameState::SELECT_FIRST_CHARACTER || _state == GameState::SELECT_SECOND_CHARACTER || _state == GameState::SELECT_DIFFICULTY) {
+            //if(_state != GameState::MODE)
+                //(_world->findChild<Button*>("Unicorn"))->setWindowOpacity(1);
+
+                QGraphicsView::mousePressEvent(e);
+        }
+
 
         if (e->button() == Qt::LeftButton && _state == GameState::PLAYING)
         {
-            if (_mode == GameMode::CPU&& !turn) 
+            if (_mode == GameMode::CPU&& !turn)
                 return;
+
+            
+            if (e->pos().y()>942) {   
+                if (e->pos().x() > 1550 || e->pos().x() < 300) {
+                    QGraphicsView::mousePressEvent(e);
+                    return;
+                }
+
+            }
 
             if (!masterPegGraphic->getFire()) {
                 Game::instance()->setPower(false);
@@ -247,41 +265,47 @@ void Game::mouseReleaseEvent(QMouseEvent* e)
 void Game::mouseMoveEvent(QMouseEvent* e)
 {
     if (_state==GameState::PLAYING){
-        if (!simulation) {
+        if (!simulation)
+        {
             QPointF midPos((sceneRect().width() / 2), 0), currPos;
-                currPos = QPoint(mapToScene(e->pos()).x(), mapToScene(e->pos()).y());
-                setMouseTracking(true);
-                
-                _characterHandler->swapFace(currPos, midPos);
-                                   
-                QPointF center(720, 100);
-                QLineF v1(center, QPoint(720, 500));
+            currPos = QPoint(mapToScene(e->pos()).x(), mapToScene(e->pos()).y());
+            setMouseTracking(true);
 
-                QLineF v2(center, currPos);
-                v2.setLength(200.0);
-                if (currPos.y()>104) {
+            _characterHandler->swapFace(currPos, midPos);
 
-                    if (!masterPegGraphic->getFire())
-                        MasterPegBox->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), MasterPegBox->GetAngle());
+            QPointF center(720, 100);
+            QLineF v1(center, QPoint(720, 500));
 
-                    cannon->setTransformOriginPoint(QPoint(30, -65));
-                    cannon->setRotation(-v1.angleTo(v2));
-                }
-                if ((turn?getCharacter():getSecondCharacter()) == Character::UNICORN && getPower()) {
-                    QVector2D p = QVector2D(currPos.x() - midPos.x(), currPos.y() - midPos.y());
-                    p.normalize();
-                    for (auto el : trajectory)
-                        delete el;
-                    trajectory.resize(30);
-                    if (!masterPegGraphic->getFire()) {
-                        for (int i = 10; i < 30; i++) { // three seconds at 60fps
-                            if (i % 2 == 0)
-                                continue;
-                            const b2Vec2 trajectoryPosition = getTrajectoryPoint(b2Vec2(MasterPegBox->GetPosition().x, MasterPegBox->GetPosition().y), b2Vec2(p.x() * 15, p.y() * 15), i);
-                            trajectory.push_back(new MasterPeg(QPoint((trajectoryPosition.x * 30.0), (trajectoryPosition.y * 30.0))));
-                        }
+            QLineF v2(center, currPos);
+            v2.setLength(200.0);
+            if (currPos.y()>90)
+            {
+
+                if (!masterPegGraphic->getFire())
+                    MasterPegBox->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), MasterPegBox->GetAngle());
+
+                cannon->setTransformOriginPoint(QPoint(40, -65)); //-65
+                cannon->setRotation(-v1.angleTo(v2));
+            }
+
+            if ((turn?getCharacter():getSecondCharacter()) == Character::UNICORN && getPower())
+            {
+                QVector2D p = QVector2D(currPos.x() - midPos.x(), currPos.y() - midPos.y());
+                p.normalize();
+                for (auto el : trajectory)
+                    delete el;
+                trajectory.resize(30);
+
+                if (!masterPegGraphic->getFire())
+                {
+                    for (int i = 10; i < 30; i++) { // three seconds at 60fps
+                        if (i % 2 == 0)
+                            continue;
+                        // const b2Vec2 trajectoryPosition = getTrajectoryPoint(b2Vec2(MasterPegBox->GetPosition().x, MasterPegBox->GetPosition().y), b2Vec2(p.x() * 15, p.y() * 15), i);
+                        // trajectory.push_back(new MasterPeg(QPoint((trajectoryPosition.x * 30.0), (trajectoryPosition.y * 30.0))));
                     }
                 }
+            }
         }
     }
 }
@@ -381,22 +405,14 @@ void Game::clearHittedPeg() {
             PegBox[i]->DestroyFixture(PegBox[i]->GetFixtureList());
         }
     }
-    /*if (restoreGreen) {
-        int i = 0;
-        do {
-            i = rand() % 95;
-        } while (static_cast<Peg*>(PegBox[i]->GetUserData())->getPegColor() == PegColor::RED && (static_cast<Peg*>(PegBox[i]->GetUserData())->getHitted()) && !(static_cast<Peg*>(PegBox[i]->GetUserData())->isVisible()));
-        static_cast<Peg*>(PegBox[i]->GetUserData())->changeColor(PegColor::GREEN);
-        restoreGreen = false;
-    }*/
 }
 
 void Game::addMolt() {
-    _redPegHit++; 
-    molt[_redPegHit]->setVisible(true); 
+    _redPegHit++;
+    molt[_redPegHit]->setVisible(true);
     if (_redPegHit == 9)
         molt_x[0]->setVisible(true);
-    else if(_redPegHit == 14) 
+    else if(_redPegHit == 14)
         molt_x[1]->setVisible(true);
     else if (_redPegHit == 18)//18
         molt_x[2]->setVisible(true);
@@ -407,33 +423,33 @@ void Game::addMolt() {
 }
 
 void Game::fire(float alfa) {
-        for (auto el : remainingSimulation)
-            el->setVisible(true);
-       
-        simulationCount--;
-        showRemainingSimulation();
-        // -90 == 0
-        _engine.setInterval(0.0001);
+    for (auto el : remainingSimulation)
+        el->setVisible(true);
 
-        simulation = true;
-        alfa = alfa - 90;
-        QPoint midPos((sceneRect().width() / 2), 130);
+    simulationCount--;
+    showRemainingSimulation();
+    // -90 == 0
+    _engine.setInterval(0.0001);
 
-        QLineF p = QLineF(midPos, QPointF((sceneRect().width() / 2), 300));
-      
-        
-        p.setAngle(alfa);
-      
-        QVector2D z = QVector2D(p.dx(), p.dy());
-        z.normalize();
+    simulation = true;
+    alfa = alfa - 90;
+    QPoint midPos((sceneRect().width() / 2), 130);
+
+    QLineF p = QLineF(midPos, QPointF((sceneRect().width() / 2), 300));
 
 
-        MasterPegBox->SetTransform(b2Vec2(p.p2().x() / 30.0, p.p2().y() / 30.0), MasterPegBox->GetAngle());
+    p.setAngle(alfa);
 
-        MasterPegBox->SetLinearVelocity(b2Vec2(z.x()*15, z.y() * 15));
-       
-        world2d->SetGravity(b2Vec2(0, 25.0f));
-        masterPegGraphic->setFire(true);    
+    QVector2D z = QVector2D(p.dx(), p.dy());
+    z.normalize();
+
+
+    MasterPegBox->SetTransform(b2Vec2(p.p2().x() / 30.0, p.p2().y() / 30.0), MasterPegBox->GetAngle());
+
+    MasterPegBox->SetLinearVelocity(b2Vec2(z.x()*15, z.y() * 15));
+
+    world2d->SetGravity(b2Vec2(0, 25.0f));
+    masterPegGraphic->setFire(true);
 }
 
 
@@ -460,12 +476,11 @@ void Game::activePower(Character c) {
         }
         Game::instance()->setPower(false);
     }
-    break;
+        break;
     case Character::ALIEN:
     {
         if ((turn ? getCharacter() : getSecondCharacter()) != Character::RABBIT) {
-            Game::instance()->_gameSounds->get("powerUpAlien")->play();
-
+            Game::instance()->_gameSounds->get("powerUp")->play();
         }
         QPoint centerCircle(masterPegGraphic->pos().x(), masterPegGraphic->pos().y());
         QList<QGraphicsItem*> tmp;
@@ -485,7 +500,7 @@ void Game::activePower(Character c) {
         }
         Game::instance()->setPower(false);
     }
-    break;
+        break;
     case Character::BEAVER:
     {
 
@@ -544,7 +559,7 @@ void Game::activePower(Character c) {
     case Character::UNICORN:
         Game::instance()->_gameSounds->get("powerUp")->play();
 
-    break;
+        break;
     case Character::DRAGON:
         Game::instance()->_gameSounds->get("powerUp")->play();
 
@@ -556,8 +571,8 @@ void Game::activePower(Character c) {
         Game::instance()->_gameSounds->get("powerUpPumpkin")->play();
         break;
     }
- }
-    
+}
+
 
 void Game::printScore() {
     QVector<int> arrOne;
@@ -565,7 +580,7 @@ void Game::printScore() {
     int x = _score;
     int y = _secondScore;
     if (x == 0)
-        for (int i = 0; i < 6; i++) 
+        for (int i = 0; i < 6; i++)
             scoreGraphics[i]->setPixmap(QPixmap(Sprites::instance()->get("0-score")).scaled(50, 50));
     
     while (x> 0)
@@ -579,10 +594,10 @@ void Game::printScore() {
         y /= 10;
     }
     for (int i = 0; i < arrOne.length(); i++)
-       scoreGraphics[i]->setPixmap(QPixmap(Sprites::instance()->get(std::to_string(arrOne[i]) + "-score")).scaled(50, 50));
+        scoreGraphics[i]->setPixmap(QPixmap(Sprites::instance()->get(std::to_string(arrOne[i]) + "-score")).scaled(50, 50));
 
     for (int i = 0; i < arrTwo.length(); i++)
-       scoreGraphicsTwo[i]->setPixmap(QPixmap(Sprites::instance()->get(std::to_string(arrTwo[i]) + "-score")).scaled(50, 50));
+        scoreGraphicsTwo[i]->setPixmap(QPixmap(Sprites::instance()->get(std::to_string(arrTwo[i]) + "-score")).scaled(50, 50));
 }
 
 
@@ -595,7 +610,7 @@ void Game::gameOverSlot() {
     _engine.stop();
     if(_mode==GameMode::SINGLE)
         _window->load("result_single");
-    else 
+    else
         _window->load("result_double");
 }
 
@@ -609,7 +624,7 @@ void Game::changeEngineSlot() {
 
 void Game::deselectButtons() {
     for (auto el : world()->findChildren<QObject*>()) {
-       if(dynamic_cast<Button*>(el))
+        if(dynamic_cast<Button*>(el))
             printf("Ciaoo");
     }
 }

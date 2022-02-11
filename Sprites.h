@@ -25,6 +25,7 @@ private:
 
     //da fare nella classe Hud
     QPixmap Hud_Unicorn;
+    QPixmap bottom_zvalue;
     //QPixmap Hud_Crab;
     //...
 
@@ -37,13 +38,4 @@ public:
     // extract texture from sprites using the given id
     QPixmap get(const std::string &id);
 
-
-    // score composite from sprite single score pieces
-    QPixmap getScore(int);
-
-    // number composite from sprite single characters
-    QPixmap getNumber(int n, int fill = 0);
-
-    // string composite from sprite single characters
-    QPixmap getString(std::string text, int fill = 0);
 };
