@@ -46,7 +46,7 @@ void LevelBuilder::load(const QString& level_name)
         Game::instance()->getCannon()->setScale(1.3);
         Game::instance()->getCannon()->setPos((Game::instance()->sceneRect().width() / 2)-(40), 185);
         double screenHeight = Game::instance()->sceneRect().height();
-        //
+        
 
         //left current score colored band
         Game::instance()->setBandOne(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("band"))));
@@ -210,9 +210,11 @@ void LevelBuilder::load(const QString& level_name)
                 k = 1;
                 j++;
             }
+
             if (randomRed.find(i) != randomRed.end())
                 color = PegColor::RED;
-            pegDef.position.Set((810 + (100 * k)) / 2 / 30.0, ((int)360 + (120 * j)) / 30.0);
+
+            pegDef.position.Set((595 + (130 * k)) / 2 / 30.0, ((int)400 + (140 * j)) / 30.0);
             Game::instance()->PegBox[i] = Game::instance()->getWorld2d()->CreateBody(&pegDef);
             Game::instance()->setPegGraphic( new Peg(QPoint(pegDef.position.x * 30.0, (pegDef.position.y * 30.0)), color));
             Game::instance()->PegBox[i]->CreateFixture(&shapeFixtureDef);
@@ -231,7 +233,7 @@ void LevelBuilder::load(const QString& level_name)
             }
             if (randomRed.find(i) != randomRed.end())
                 color = PegColor::RED;
-            pegDef.position.Set((860 + (100 * k)) / 2 / 30.0, ((int)420 + (120 * j)) / 30.0);
+            pegDef.position.Set((663 + (130 * k)) / 2 / 30.0, ((int)470 + (140 * j)) / 30.0);
             Game::instance()->PegBox[i] = Game::instance()->getWorld2d()->CreateBody(&pegDef);
             Game::instance()->setPegGraphic( new Peg(QPoint(pegDef.position.x * 30.0, (pegDef.position.y * 30.0)), color));
             Game::instance()->PegBox[i]->CreateFixture(&shapeFixtureDef);
