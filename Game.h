@@ -132,6 +132,7 @@ private:
     Game();
 
 public:
+    int greenPeg;
     Sounds* _gameSounds;
     static Game *instance();
     QVector<b2Body*> PegBox;

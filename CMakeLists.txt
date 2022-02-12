@@ -22,7 +22,8 @@ include_directories(Box2D)
 
 # collego le librerie Qt con l'eseguibile
 target_link_libraries(Peggle Qt5::Widgets Qt5::Multimedia box2d)
-
-add_library(box2d STATIC IMPORTED)
-set_property(TARGET box2d PROPERTY IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/library/box2d.lib)
-target_link_libraries(Peggle box2d)
+if(WIN32)
+	add_library(box2d STATIC IMPORTED)
+	set_property(TARGET box2d PROPERTY IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/library/box2d.lib)
+	target_link_libraries(Peggle box2d)
+endif(WIN32)

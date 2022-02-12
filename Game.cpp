@@ -79,6 +79,7 @@ Game::Game() : QGraphicsView()
     _character = Character::NONE;
     _power = false;
     simulationCount = 180;
+    greenPeg = 0;
 
 
     _gameSounds = new Sounds();
@@ -91,6 +92,7 @@ Game::Game() : QGraphicsView()
 void Game::reset()
 {
     _score = 0;
+    greenPeg = 0;
     alpha = 89;
     simulationScore.clear();
     remainingSimulation.clear();
@@ -404,6 +406,19 @@ void Game::clearHittedPeg() {
             tmp->setVisible(false);
             PegBox[i]->DestroyFixture(PegBox[i]->GetFixtureList());
         }
+    }
+
+    if (getRestoreGreen()&&greenPeg<1) {
+        greenPeg++;
+        srand((unsigned)time(0));
+        Peg* tmp;
+        do {
+            int random = rand() % 95;
+             tmp = static_cast<Peg*>(getPegBox().at(random)->GetUserData());
+        } while (tmp->getHitted()||tmp->getPegColor()==PegColor::RED);
+       
+        tmp->changeColor(PegColor::GREEN);
+        setRestoreGreen(false);
     }
 }
 
