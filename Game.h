@@ -95,7 +95,7 @@ private:
     int _redPegHit;
     bool _power;
     int remainingBall = 10;
-    bool restoreGreen = false;
+    bool restoreGreen = true;
     bool simulation = false;
     int _simulationScore = 0;
     bool hardMode = false;
