@@ -35,8 +35,8 @@ void Peg::hit() {
 		if (_color == PegColor::BLUE) {
 			setPixmap(Sprites::instance()->get("peg_blue_hit").scaled(30, 30));
 ;			Game::instance()->getTurn() ?
-				Game::instance()->setScore(Game::instance()->getScore() + 100) :
-				Game::instance()->setSecondScore(Game::instance()->getSecondScore() + 100);
+				Game::instance()->setScore(Game::instance()->getScore() + 10) :
+				Game::instance()->setSecondScore(Game::instance()->getSecondScore() + 10);
 			if (Game::instance()->getBandOne()->scenePos().y() >= 300) {
 				Game::instance()->getBandOne()->setY(Game::instance()->getBandOne()->scenePos().y() - 40);
 				Game::instance()->getBandTwo()->setY(Game::instance()->getBandTwo()->scenePos().y() - 40);
@@ -45,8 +45,8 @@ void Peg::hit() {
 		else if (_color == PegColor::RED) {
 			setPixmap(Sprites::instance()->get("peg_red_hit").scaled(30, 30));
 			Game::instance()->getTurn() ?
-			Game::instance()->setScore(Game::instance()->getScore() + 200) :
-			Game::instance()->setSecondScore(Game::instance()->getSecondScore() + 200);
+			Game::instance()->setScore(Game::instance()->getScore() + 100) :
+			Game::instance()->setSecondScore(Game::instance()->getSecondScore() + 100);
 			Game::instance()->addMolt();
 			if (Game::instance()->getRedPegHit() == 24) {
 				Game::instance()->centerOn(this->scenePos());
@@ -79,8 +79,8 @@ void Peg::hit() {
 		else {
 			setPixmap(Sprites::instance()->get("peg_green_hit").scaled(30, 30));
 			Game::instance()->getTurn() ?
-			Game::instance()->setScore(Game::instance()->getScore() + 200) :
-				Game::instance()->setSecondScore(Game::instance()->getSecondScore() + 200);
+			Game::instance()->setScore(Game::instance()->getScore() + 10) :
+				Game::instance()->setSecondScore(Game::instance()->getSecondScore() + 10);
 			Game::instance()->activePower((Game::instance()->getTurn() ? Game::instance()->getCharacter() : Game::instance()->getSecondCharacter()));
 			Game::instance()->setRestoreGreen(true);
 			
@@ -94,7 +94,7 @@ void Peg::hit() {
 	else {
 		_simulHit = true;
 		if (_color == PegColor::BLUE) {
-			Game::instance()->setSimulationScore(Game::instance()->getSimulationScore() + 100);
+			Game::instance()->setSimulationScore(Game::instance()->getSimulationScore() + 10);
 		}
 		else {
 			if (Game::instance()->getRedPegHit() == 23) 
@@ -105,7 +105,7 @@ void Peg::hit() {
 				feverNext = false;
 			}
 			else {
-				Game::instance()->setSimulationScore(Game::instance()->getSimulationScore() + 200);
+				Game::instance()->setSimulationScore(Game::instance()->getSimulationScore() + 100);
 			}
 		}
 		

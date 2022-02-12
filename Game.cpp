@@ -80,8 +80,8 @@ Game::Game() : QGraphicsView()
     _power = false;
     simulationCount = 180;
     greenPeg = 0;
-
-
+    tmpScore = 0;
+    moltInt = 1;
     _gameSounds = new Sounds();
 
     reset();
@@ -92,7 +92,9 @@ Game::Game() : QGraphicsView()
 void Game::reset()
 {
     _score = 0;
+    moltInt = 1;
     greenPeg = 0;
+    tmpScore = 0;
     alpha = 89;
     simulationScore.clear();
     remainingSimulation.clear();
@@ -250,7 +252,8 @@ void Game::mousePressEvent(QMouseEvent* e)
                 cannon->setPixmap(Sprites::instance()->get("cannon_without_ball"));
                 Game::instance()->_gameSounds->get("cannonShot")->play();
 
-
+                tmpScore = getTurn()? getScore(): getSecondScore();
+            
             }
         }
         if (e->button() == Qt::RightButton)
@@ -408,6 +411,17 @@ void Game::clearHittedPeg() {
         }
     }
 
+    if (turn) {
+        if(moltInt!=1)
+            setScore(((getScore() - tmpScore) * moltInt) + tmpScore);
+    }
+    else {
+        if (moltInt != 1)
+            setSecondScore(((getSecondScore() - tmpScore) * moltInt) + tmpScore);
+    }
+    
+    printScore();
+
     if (getRestoreGreen()&&greenPeg<1) {
         greenPeg++;
         srand((unsigned)time(0));
@@ -425,14 +439,22 @@ void Game::clearHittedPeg() {
 void Game::addMolt() {
     _redPegHit++;
     molt[_redPegHit]->setVisible(true);
-    if (_redPegHit == 9)
+    if (_redPegHit == 9) {
         molt_x[0]->setVisible(true);
-    else if(_redPegHit == 14)
+        moltInt = 2;
+    }
+    else if (_redPegHit == 14) {
         molt_x[1]->setVisible(true);
-    else if (_redPegHit == 18)//18
+        moltInt = 3;
+    }
+    else if (_redPegHit == 18) {
         molt_x[2]->setVisible(true);
-    else if (_redPegHit == 21)
+        moltInt = 5;
+    }
+    else if (_redPegHit == 21) {
         molt_x[3]->setVisible(true);
+        moltInt = 10;
+    }
 
     mol = true;
 }

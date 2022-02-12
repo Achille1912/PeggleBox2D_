@@ -132,7 +132,9 @@ private:
     Game();
 
 public:
+    int moltInt;
     int greenPeg;
+    int tmpScore;
     Sounds* _gameSounds;
     static Game *instance();
     QVector<b2Body*> PegBox;

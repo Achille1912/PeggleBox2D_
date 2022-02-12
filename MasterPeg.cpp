@@ -318,6 +318,13 @@ void MasterPeg::shot(QLineF c, QLineF p, QLineF f, QVector2D z) {
     Game::instance()->getWorld2d()->SetGravity(b2Vec2(0, 25.0f));
     Game::instance()->getCannon()->setPixmap(Sprites::instance()->get("cannon_without_ball"));
     Game::instance()->_gameSounds->get("cannonShot")->play();
+    Game::instance()->tmpScore = (Game::instance()->getTurn() ?
+        Game::instance()->getScore() :
+        Game::instance()->getSecondScore());
+
+}
 
 
+void MasterPeg::setFire(bool b) {
+    _fire = b;
 }

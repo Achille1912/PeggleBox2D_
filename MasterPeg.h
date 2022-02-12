@@ -22,7 +22,7 @@ public:
 
     void advance(b2Body* box);
     void simulAdvance(b2Body* box);
-    void setFire(bool b) { _fire = b; }
+    void setFire(bool b);
     bool getFire() { return _fire; }
     void randomShot();
     void down();
