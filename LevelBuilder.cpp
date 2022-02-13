@@ -49,17 +49,30 @@ void LevelBuilder::load(const QString& level_name)
         
 
         //left current score colored band
+
+        //green band
         Game::instance()->setBandOne(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("band"))));
         Game::instance()->getBandOne()->setZValue(5);
-        Game::instance()->getBandOne()->setPos(11, 924);
-        Game::instance()->getBandOne()->setScale(1.5);
+        Game::instance()->getBandOne()->setPos(10, 924);
+        Game::instance()->getBandOne()->setScale(1.6);
 
         Game::instance()->setBandTwo(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("band").transformed(QTransform().scale(-1, 1)))));
         Game::instance()->getBandTwo()->setZValue(5);
-        Game::instance()->getBandTwo()->setPos(107, 924);
-        Game::instance()->getBandTwo()->setScale(1.5);
+        Game::instance()->getBandTwo()->setPos(106, 924);
+        Game::instance()->getBandTwo()->setScale(1.6);
 
-        //green band
+        //purple band
+        Game::instance()->setPurpleBandOne(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("purpleBand"))));
+        Game::instance()->getPurpleBandOne()->setZValue(6);
+        Game::instance()->getPurpleBandOne()->setPos(10, 924);
+        Game::instance()->getPurpleBandOne()->setScale(1.7);
+
+        Game::instance()->setPurpleBandTwo(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("purpleBand").transformed(QTransform().scale(-1, 1)))));
+        Game::instance()->getPurpleBandTwo()->setZValue(6);
+        Game::instance()->getPurpleBandTwo()->setPos(106, 924);
+        Game::instance()->getPurpleBandTwo()->setScale(1.7);
+
+
 
         //
 

@@ -122,9 +122,11 @@ private:
     QGraphicsPixmapItem* remainingBallPixmap;
     QGraphicsPixmapItem* paused;
     QGraphicsPixmapItem* character_face;
+
     QGraphicsPixmapItem* bandOne;
     QGraphicsPixmapItem* bandTwo;
-    
+    QGraphicsPixmapItem* purpleBandOne;
+    QGraphicsPixmapItem* purpleBandTwo;
 
 
     // singleton
@@ -188,9 +190,11 @@ public:
     QGraphicsPixmapItem* getRemainingBallPixmap() { return remainingBallPixmap; }
     QGraphicsPixmapItem* getPaused() { return paused; }
     QGraphicsPixmapItem* getCharacterFace() { return character_face; }
+
     QGraphicsPixmapItem* getBandOne() { return bandOne; }
     QGraphicsPixmapItem* getBandTwo() { return bandTwo; }
-    
+    QGraphicsPixmapItem* getPurpleBandOne() { return purpleBandOne; }
+    QGraphicsPixmapItem* getPurpleBandTwo() { return purpleBandTwo; }
 
 
     QVector<b2Body*>getPegBox() { return PegBox; }
@@ -234,8 +238,12 @@ public:
     void setRemainingBallPixmap(QGraphicsPixmapItem* x) { remainingBallPixmap = x; }
     void setPaused(QGraphicsPixmapItem* x) { paused = x; }
     void setCharacterFace(QGraphicsPixmapItem* x) { character_face = x; }
+
     void setBandOne(QGraphicsPixmapItem* x) { bandOne = x; }
     void setBandTwo(QGraphicsPixmapItem* x) { bandTwo = x; }
+    void setPurpleBandOne(QGraphicsPixmapItem* x) { purpleBandOne = x; }
+    void setPurpleBandTwo(QGraphicsPixmapItem* x) { purpleBandTwo = x; }
+
 
 
     // utility
