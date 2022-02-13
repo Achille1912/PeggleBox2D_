@@ -411,17 +411,6 @@ void Game::clearHittedPeg() {
         }
     }
 
-    if (turn) {
-        if(moltInt!=1)
-            setScore(((getScore() - tmpScore) * moltInt) + tmpScore);
-    }
-    else {
-        if (moltInt != 1)
-            setSecondScore(((getSecondScore() - tmpScore) * moltInt) + tmpScore);
-    }
-    
-    printScore();
-
     if (getRestoreGreen()&&greenPeg<1) {
         greenPeg++;
         srand((unsigned)time(0));

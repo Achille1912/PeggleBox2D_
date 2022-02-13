@@ -111,10 +111,18 @@ void MasterPeg::down() {
             x = 10;
             break;
         }
-        Game::instance()->getTurn() ?
-            Game::instance()->setScore(Game::instance()->getScore() + ((Game::instance()->getScore() * 10 / 100) * x)) :
-            Game::instance()->setSecondScore(Game::instance()->getSecondScore() + ((Game::instance()->getSecondScore() * 10 / 100) * x));
+
+        if (Game::instance()->getTurn()) {
+            if (Game::instance()->moltInt != 1)
+                Game::instance()->setScore(((Game::instance()->getScore() - Game::instance()->tmpScore) * Game::instance()->moltInt) + Game::instance()->tmpScore);
+        }
+        else {
+            if (Game::instance()->moltInt != 1)
+                Game::instance()->setSecondScore(((Game::instance()->getSecondScore() - Game::instance()->tmpScore) * Game::instance()->moltInt) + Game::instance()->tmpScore);
+        }
+
         Game::instance()->printScore();
+
     }
     if (Game::instance()->getPower()) {
         switch (Game::instance()->getTurn() ? Game::instance()->getCharacter() : Game::instance()->getSecondCharacter()) {
