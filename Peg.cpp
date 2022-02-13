@@ -32,15 +32,22 @@ void Peg::hit() {
 
 		_hitted = true;
 
-		if (_color == PegColor::BLUE) {
+        if (_color == PegColor::BLUE)
+        {
 			setPixmap(Sprites::instance()->get("peg_blue_hit").scaled(30, 30));
 ;			Game::instance()->getTurn() ?
 				Game::instance()->setScore(Game::instance()->getScore() + 10) :
 				Game::instance()->setSecondScore(Game::instance()->getSecondScore() + 10);
-			if (Game::instance()->getBandOne()->scenePos().y() >= 300) {
+            if (Game::instance()->getBandOne()->scenePos().y() >= 300)
+            {
 				Game::instance()->getBandOne()->setY(Game::instance()->getBandOne()->scenePos().y() - 40);
 				Game::instance()->getBandTwo()->setY(Game::instance()->getBandTwo()->scenePos().y() - 40);
 			}
+            if (Game::instance()->getBandOne()->scenePos().y() <= 300)
+            {
+                Game::instance()->getPurpleBandOne()->setY(Game::instance()->getPurpleBandOne()->scenePos().y() - 40);
+                Game::instance()->getPurpleBandTwo()->setY(Game::instance()->getPurpleBandTwo()->scenePos().y() - 40);
+            }
 		}
 		else if (_color == PegColor::RED) {
 			setPixmap(Sprites::instance()->get("peg_red_hit").scaled(30, 30));
@@ -74,6 +81,11 @@ void Peg::hit() {
 				Game::instance()->getBandOne()->setY(Game::instance()->getBandOne()->scenePos().y() - 50);
 				Game::instance()->getBandTwo()->setY(Game::instance()->getBandTwo()->scenePos().y() - 50);
 			}
+            if (Game::instance()->getBandOne()->scenePos().y() <= 300)
+            {
+              Game::instance()->getPurpleBandOne()->setY(Game::instance()->getPurpleBandOne()->scenePos().y() - 40);
+              Game::instance()->getPurpleBandTwo()->setY(Game::instance()->getPurpleBandTwo()->scenePos().y() - 40);
+            }
 		}
 			
 		else {
@@ -88,6 +100,11 @@ void Peg::hit() {
 				Game::instance()->getBandOne()->setY(Game::instance()->getBandOne()->scenePos().y() - 50);
 				Game::instance()->getBandTwo()->setY(Game::instance()->getBandTwo()->scenePos().y() - 50);
 			}
+            if (Game::instance()->getBandOne()->scenePos().y() <= 300)
+            {
+                Game::instance()->getPurpleBandOne()->setY(Game::instance()->getPurpleBandOne()->scenePos().y() - 40);
+                Game::instance()->getPurpleBandTwo()->setY(Game::instance()->getPurpleBandTwo()->scenePos().y() - 40);
+            }
 		}
 		Game::instance()->printScore();
 	}

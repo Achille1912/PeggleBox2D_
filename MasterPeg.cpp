@@ -304,6 +304,10 @@ void MasterPeg::restorePos(b2Body* box) {
     Game::instance()->getWorld2d()->SetGravity(b2Vec2(0, 0));
     Game::instance()->getBandOne()->setY(924);
     Game::instance()->getBandTwo()->setY(924);
+
+    Game::instance()->getPurpleBandOne()->setY(924);
+    Game::instance()->getPurpleBandTwo()->setY(924);
+
 }
 
 

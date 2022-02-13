@@ -243,6 +243,10 @@ QPixmap Sprites::get(const std::string &id)
 
     else if (id == "band")
         return sprites.copy(91, 528, 15, 422);
+    else if (id == "purpleBand")
+        return sprites.copy(106, 528, 14, 422);
+
+
     else if (id == "molt")
         return sprites.copy(535, 355, 50, 16);
     else if (id == "molt-x2")
