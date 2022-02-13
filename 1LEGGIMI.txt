@@ -1,5 +1,5 @@
 (Copiare la cartella sounds nella cartella debug per sentire i suoni).
-(Mettere in Cmake come path di Box2d la cartella box2d nei sorgenti).
+(Mettere in Cmake, come path di Box2d, la cartella box2d nei sorgenti).
 
 RESPONSABILITA':
 	-Game				Fisica, Logica
