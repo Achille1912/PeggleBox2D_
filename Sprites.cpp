@@ -25,7 +25,7 @@ QRect moveBy(QRect rect, int x, int y, int dx = 16, int dy = 16, int border_x = 
 static QRect player(467, 259, 93, 93);
 static QRect pegle(0, 0, 200, 200);
 
-static QRect cannon(256,330,82,55);
+static QRect cannon(256,330,82,65);
 
 static QRect bucket(168, 200, 168, 34);
 static QRect front_bucket(298, 869, 97, 12);
@@ -245,9 +245,9 @@ QPixmap Sprites::get(const std::string &id)
          return sprites.copy(cannon);
 
     else if (id == "cannon_without_ball")
-        return sprites.copy(384, 327, 50, 50);
+        return sprites.copy(QRect(cannon.x(), cannon.y(), cannon.width(), cannon.height()-11));
     else if (id == "cannon_fired")
-        return sprites.copy(459, 327, 50, 100);
+        return sprites.copy(QRect(cannon.x()+cannon.width(), cannon.y(), cannon.width(), cannon.height()+3));
 
 
     else if (id == "peg_blue_hit")
