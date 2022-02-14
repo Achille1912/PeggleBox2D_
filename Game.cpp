@@ -201,6 +201,14 @@ void Game::nextFrame()
     else {
         masterPegGraphic->simulAdvance(MasterPegBox);
     }
+
+
+
+    //animate
+    //Sprites::instance()->animate();
+    //world()->addPixmap(Sprites::instance()->a);
+
+
 }
 
 // EVENTI
