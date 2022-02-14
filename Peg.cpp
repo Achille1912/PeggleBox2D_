@@ -127,6 +127,8 @@ void Peg::hit() {
 		}
 		
 	}
+
+
 }
 
 void Peg::changeColor(PegColor color) {

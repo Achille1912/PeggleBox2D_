@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QPixmap>
+#include <QGraphicsPixmapItem>
 
 namespace PGG
 {
@@ -23,6 +24,9 @@ private:
     QPixmap character_face;
     QPixmap results_label;
 
+
+
+
     //da fare nella classe Hud
     QPixmap Hud_Unicorn;
     QPixmap bottom_zvalue;
@@ -37,5 +41,11 @@ public:
 
     // extract texture from sprites using the given id
     QPixmap get(const std::string &id);
+
+
+    QPixmap _blueHitAnimation[13];
+    QGraphicsPixmapItem a;
+    int _animation_counter=0;
+    virtual bool animate();
 
 };

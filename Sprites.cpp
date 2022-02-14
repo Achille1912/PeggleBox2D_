@@ -2,6 +2,7 @@
 #include <QBitmap>
 #include <iostream>
 #include <QPainter>
+#include <QGraphicsPixmapItem>
 
 using namespace PGG;
 
@@ -49,6 +50,7 @@ Sprites::Sprites() //load in RAM
 
     //dynamic Hud da fare
 
+
     stage_elements = loadTexture(":/sprites/stage_elements.png", QColor(255, 0, 255));
     peggles = loadTexture(":/sprites/peggles.png", QColor(255, 255, 255));
     fonts = loadTexture(":/sprites/Peggle_Fonts.png");
@@ -58,7 +60,27 @@ Sprites::Sprites() //load in RAM
     action_buttons= loadTexture(":/sprites/action_buttons.png", QColor(255, 255, 255));
     character_face= loadTexture(":/sprites/character_face.png", QColor(255, 255, 255));
     results_label= loadTexture(":/sprites/results_label.png", QColor(255, 255, 255));
+
+    for(int i=0; i<13; i++)
+    {
+        QRect rect(1383, 18, 94, 92);
+
+        _blueHitAnimation[i]=sprites.copy(moveBy(rect, 1383, 18, 0, i*92, 0, 0));
+    }
+
+
+   a.setPixmap(_blueHitAnimation[0]);
+
 }
+
+bool Sprites::animate()
+{
+    _animation_counter++;
+    a.setPixmap(_blueHitAnimation[(_animation_counter / 2) % 13]);
+
+    return true;
+}
+
 
 QPixmap Sprites::get(const std::string &id)
 {
