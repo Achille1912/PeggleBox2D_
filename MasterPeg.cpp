@@ -140,7 +140,7 @@ void MasterPeg::down() {
         {
             Game::instance()->getCannon()->setPixmap(Sprites::instance()->get("cannon"));
             Game::instance()->getMasterPegGraphic()->setVisible(false);
-            Game::instance()->setPower(false);
+            
             this->setFire(false);
             Game::instance()->clearHittedPeg();
             Game::instance()->setRemainingBall(Game::instance()->getRemainingBall() - 1);

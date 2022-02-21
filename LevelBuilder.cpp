@@ -37,9 +37,11 @@ void LevelBuilder::load(const QString& level_name)
         Game::instance()->getRemainingBallPixmap()->setScale(1.8);
         Game::instance()->getRemainingBallPixmap()->setPos(QPoint(55 - Game::instance()->getRemainingBallPixmap()->boundingRect().width()/2, 180));
 
+        Game::instance()->buttons.clear();
+        Game::instance()->buttons.resize(2);
 
-        new Button(QRect(1315, 942, 300, 150), ButtonType::AI);
-        new Button(QRect(10, 942, 300, 150), ButtonType::MENU_BUTTON);
+        Game::instance()->buttons[0]=new Button(QRect(1315, 942, 300, 150), ButtonType::AI);
+        Game::instance()->buttons[1] =new Button(QRect(10, 942, 300, 150), ButtonType::MENU_BUTTON);
 
         // cannon
         Game::instance()->setCannon(Game::instance()->world()->addPixmap(QPixmap(Sprites::instance()->get("cannon"))));

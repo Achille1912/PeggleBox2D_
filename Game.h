@@ -205,6 +205,7 @@ public:
     QVector<QGraphicsPixmapItem*> molt_x;
     QVector<QLabel*> buttons;
 
+
 // SETTERS
         // game attributes
     void setState(GameState State) { _state = State; }

@@ -84,6 +84,7 @@ Game::Game() : QGraphicsView()
     moltInt = 1;
     _gameSounds = new Sounds();
 
+
     reset();
     init();
 
@@ -98,6 +99,7 @@ void Game::reset()
     alpha = 89;
     simulationScore.clear();
     remainingSimulation.clear();
+    buttons.clear();
     _secondScore = 0;
     remainingBall = 10;
     _redPegHit = -1;
@@ -105,11 +107,13 @@ void Game::reset()
     _secondCharacter = Character::NONE;
     restoreGreen = false;
     _power = false;
+
     simulationCount = 180;
     turn = true;
     trajectory.resize(30);
     for (auto el : trajectory)
-        delete el;
+        if(el)
+            delete el;
 
     _engine.stop();
     _world->clear();
@@ -125,7 +129,6 @@ void Game::init()
     
     setSceneRect(0, 0, getBackground()->sceneBoundingRect().width(), getBackground()->sceneBoundingRect().height());
     showNormal();
-    
 
 }
 
@@ -231,9 +234,11 @@ void Game::mousePressEvent(QMouseEvent* e)
         {
             if (_mode == GameMode::CPU&& !turn)
                 return;
-
+                
+            /*if (itemAt(e->pos()) == dynamic_cast<QGraphicsItem*>(buttons[1]))
+                printf("HEIIIIIIII");*/
             
-            if (e->pos().y()>942) {   
+            if (e->pos().y()>942) {
                 if ((e->pos().x() > 1550 && e->pos().x() < 1650) || e->pos().x() < 360) {
                     QGraphicsView::mousePressEvent(e);
                     return;
@@ -243,7 +248,7 @@ void Game::mousePressEvent(QMouseEvent* e)
 
             if (!masterPegGraphic->getFire()) {
                 Game::instance()->setPower(false);
-
+              
                 masterPegGraphic->setFire(true);
                 world2d->SetGravity(b2Vec2(0, 25.0f));
                 QPoint midPos((sceneRect().width() / 2), 0), currPos;
@@ -299,12 +304,13 @@ void Game::mouseMoveEvent(QMouseEvent* e)
                 cannon->setRotation(-v1.angleTo(v2));
             }
 
-            if ((turn?getCharacter():getSecondCharacter()) == Character::UNICORN && getPower())
+            if ((turn?getCharacter():getSecondCharacter()) == Character::UNICORN && getPower()&& !(masterPegGraphic->getFire()))
             {
                 QVector2D p = QVector2D(currPos.x() - midPos.x(), currPos.y() - midPos.y());
                 p.normalize();
                 for (auto el : trajectory)
-                    delete el;
+                    if(el)
+                        delete el;
                 trajectory.resize(30);
 
                 if (!masterPegGraphic->getFire())
@@ -312,8 +318,8 @@ void Game::mouseMoveEvent(QMouseEvent* e)
                     for (int i = 10; i < 30; i++) { // three seconds at 60fps
                         if (i % 2 == 0)
                             continue;
-                        // const b2Vec2 trajectoryPosition = getTrajectoryPoint(b2Vec2(MasterPegBox->GetPosition().x, MasterPegBox->GetPosition().y), b2Vec2(p.x() * 15, p.y() * 15), i);
-                        // trajectory.push_back(new MasterPeg(QPoint((trajectoryPosition.x * 30.0), (trajectoryPosition.y * 30.0))));
+                         const b2Vec2 trajectoryPosition = getTrajectoryPoint(b2Vec2(MasterPegBox->GetPosition().x, MasterPegBox->GetPosition().y), b2Vec2(p.x() * 15, p.y() * 15), i);
+                         trajectory.push_back(new MasterPeg(QPoint((trajectoryPosition.x * 30.0), (trajectoryPosition.y * 30.0))));
                     }
                 }
             }
@@ -348,6 +354,10 @@ void Game::keyPressEvent(QKeyEvent* e)
     }
     if (e->key() == Qt::Key_A && _state == GameState::PLAYING&& !masterPegGraphic->getFire())
     {
+        setPower(false);
+        for (auto el : trajectory)
+            if(el)
+                el->setVisible(false);
         simulationScore.clear();
         alpha = 89;
         fire(alpha);
@@ -487,9 +497,7 @@ void Game::fire(float alfa) {
 
 void Game::activePower(Character c) {
     setPower(true);
-    
 
-    
     switch (c) {
     case Character::FLOWER:
     {
@@ -589,6 +597,7 @@ void Game::activePower(Character c) {
         }
     }
     case Character::UNICORN:
+        
         Game::instance()->_gameSounds->get("powerUp")->play();
 
         break;
