@@ -203,7 +203,7 @@ public:
 
     QVector<QGraphicsPixmapItem*> molt;
     QVector<QGraphicsPixmapItem*> molt_x;
-
+    QVector<QLabel*> buttons;
 
 // SETTERS
         // game attributes

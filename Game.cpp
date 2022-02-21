@@ -222,8 +222,6 @@ void Game::mousePressEvent(QMouseEvent* e)
         }
 
         if (_state == GameState::MODE || _state == GameState::RESULT_DOUBLE || _state == GameState::RESULT_SINGLE || _state == GameState::SELECT_SINGLE_CHARACTER || _state == GameState::SELECT_FIRST_CHARACTER || _state == GameState::SELECT_SECOND_CHARACTER || _state == GameState::SELECT_DIFFICULTY) {
-            //if(_state != GameState::MODE)
-                //(_world->findChild<Button*>("Unicorn"))->setWindowOpacity(1);
 
                 QGraphicsView::mousePressEvent(e);
         }
@@ -236,7 +234,7 @@ void Game::mousePressEvent(QMouseEvent* e)
 
             
             if (e->pos().y()>942) {   
-                if (e->pos().x() > 1550 || e->pos().x() < 300) {
+                if ((e->pos().x() > 1550 && e->pos().x() < 1650) || e->pos().x() < 360) {
                     QGraphicsView::mousePressEvent(e);
                     return;
                 }
@@ -657,10 +655,8 @@ void Game::changeEngineSlot() {
 
 
 void Game::deselectButtons() {
-    for (auto el : world()->findChildren<QObject*>()) {
-        if(dynamic_cast<Button*>(el))
-            printf("Ciaoo");
-    }
+    for (auto el : (Game::instance()->buttons))
+        (dynamic_cast<Button*>(el))->setWindowOpacity(1);
 }
 
 

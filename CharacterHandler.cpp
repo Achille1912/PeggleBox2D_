@@ -152,19 +152,19 @@ void CharacterHandler::clickButton(ButtonType t, Button* b)
 		break;
 
 	case ButtonType::NORMAL_MODE:
+		Game::instance()->deselectButtons();
 		b->setWindowOpacity(0.5);
 		Game::instance()->setHardMode(false);
 		break;
 
 	case ButtonType::HARD_MODE:
+		Game::instance()->deselectButtons();
 		b->setWindowOpacity(0.5);
 		Game::instance()->setHardMode(true);
 		break;
 
 	case ButtonType::UNICORN:
-		for (auto el : (Game::instance()->world()->children()))
-			if (dynamic_cast<Button*>(el))
-				(dynamic_cast<Button*>(el))->setWindowOpacity(1);
+		Game::instance()->deselectButtons();
 
 		b->setWindowOpacity(0.5);
 		Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
@@ -183,9 +183,7 @@ void CharacterHandler::clickButton(ButtonType t, Button* b)
 		break;
 
 	case ButtonType::CAT:
-		for (auto el : (Game::instance()->world()->children()))
-			if (dynamic_cast<Button*>(el))
-				(dynamic_cast<Button*>(el))->setWindowOpacity(1);
+		Game::instance()->deselectButtons();
 
 		Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
 			Game::instance()->setSecondCharacter(Character::CAT) :
@@ -194,9 +192,7 @@ void CharacterHandler::clickButton(ButtonType t, Button* b)
 		break;
 
 	case ButtonType::ALIEN:
-		for (auto el : (Game::instance()->world()->children()))
-			if (dynamic_cast<Button*>(el))
-				(dynamic_cast<Button*>(el))->setWindowOpacity(1);
+		Game::instance()->deselectButtons();
 
 		Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
 			Game::instance()->setSecondCharacter(Character::ALIEN) :
@@ -205,9 +201,7 @@ void CharacterHandler::clickButton(ButtonType t, Button* b)
 		break;
 
 	case ButtonType::CRAB:
-		for (auto el : (Game::instance()->world()->children()))
-			if (dynamic_cast<Button*>(el))
-				(dynamic_cast<Button*>(el))->setWindowOpacity(1);
+		Game::instance()->deselectButtons();
 
 		Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
 			Game::instance()->setSecondCharacter(Character::CRAB) :
@@ -216,9 +210,7 @@ void CharacterHandler::clickButton(ButtonType t, Button* b)
 		break;
 
 	case ButtonType::PUMPKIN:
-		for (auto el : (Game::instance()->world()->children()))
-			if (dynamic_cast<Button*>(el))
-				(dynamic_cast<Button*>(el))->setWindowOpacity(1);
+		Game::instance()->deselectButtons();
 
 		Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
 			Game::instance()->setSecondCharacter(Character::PUMPKIN) :
@@ -227,9 +219,7 @@ void CharacterHandler::clickButton(ButtonType t, Button* b)
 		break;
 
 	case ButtonType::FLOWER:
-		for (auto el : (Game::instance()->world()->children()))
-			if (dynamic_cast<Button*>(el))
-				(dynamic_cast<Button*>(el))->setWindowOpacity(1);
+		Game::instance()->deselectButtons();
 
 		Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
 			Game::instance()->setSecondCharacter(Character::FLOWER) :
@@ -238,9 +228,7 @@ void CharacterHandler::clickButton(ButtonType t, Button* b)
 		break;
 
 	case ButtonType::DRAGON:
-		for (auto el : (Game::instance()->world()->children()))
-			if (dynamic_cast<Button*>(el))
-				(dynamic_cast<Button*>(el))->setWindowOpacity(1);
+		Game::instance()->deselectButtons();
 
 		Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
 			Game::instance()->setSecondCharacter(Character::DRAGON) :
@@ -249,9 +237,7 @@ void CharacterHandler::clickButton(ButtonType t, Button* b)
 		break;
 
 	case ButtonType::OWL:
-		for (auto el : (Game::instance()->world()->children()))
-			if (dynamic_cast<Button*>(el))
-				(dynamic_cast<Button*>(el))->setWindowOpacity(1);
+		Game::instance()->deselectButtons();
 
 		Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
 			Game::instance()->setSecondCharacter(Character::OWL) :
@@ -260,9 +246,7 @@ void CharacterHandler::clickButton(ButtonType t, Button* b)
 		break;
 
 	case ButtonType::RABBIT:
-		for (auto el : (Game::instance()->world()->children()))
-			if (dynamic_cast<Button*>(el))
-				(dynamic_cast<Button*>(el))->setWindowOpacity(1);
+		Game::instance()->deselectButtons();
 
 		Game::instance()->getState() == GameState::SELECT_SECOND_CHARACTER ?
 			Game::instance()->setSecondCharacter(Character::RABBIT) :
@@ -283,8 +267,6 @@ void CharacterHandler::clickButton(ButtonType t, Button* b)
 		break;
 
 	case ButtonType::RETURN:
-
-		//emit Game::instance()->restartSignal();
 		Game::instance()->reset();
 		Game::instance()->init();
 		break;

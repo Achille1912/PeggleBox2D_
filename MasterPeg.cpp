@@ -31,7 +31,7 @@ void MasterPeg::simulAdvance(b2Body* box) {
         if (Game::instance()->alpha < -89) {
             Game::instance()->printScore();
             printf("Finitooo");
-
+            
             Game::instance()->getBucketGraphic()->setPos(QPoint(0, Game::instance()->sceneRect().height()));
             emit Game::instance()->changeEngine();
             Game::instance()->getMasterPegGraphic()->setFire(false);
@@ -72,12 +72,22 @@ void MasterPeg::simulAdvance(b2Body* box) {
         }
         else {
             printf("%d", Game::instance()->getSimulationScore());
+            int c = 0;
             for (auto el : Game::instance()->PegBox) {
-                static_cast<Peg*>(el->GetUserData())->setSimulHit(false);
+                if (!static_cast<Peg*>(el->GetUserData())->getSimulHit() && !static_cast<Peg*>(el->GetUserData())->getHitted() && static_cast<Peg*>(el->GetUserData())->getPegColor() == PegColor::RED) {
+                    c++;
+                }
             }
+            if(c==1)
+                Game::instance()->setSimulationScore(0);
+            
             Game::instance()->simulationScore.emplace_back(Game::instance()->alpha - 90, Game::instance()->getSimulationScore());
 
             Game::instance()->setSimulationScore(0);
+
+            for (auto el : Game::instance()->PegBox) {
+                static_cast<Peg*>(el->GetUserData())->setSimulHit(false);
+            }
             
             Game::instance()->fire(Game::instance()->alpha);
         }
@@ -130,7 +140,7 @@ void MasterPeg::down() {
         {
             Game::instance()->getCannon()->setPixmap(Sprites::instance()->get("cannon"));
             Game::instance()->getMasterPegGraphic()->setVisible(false);
-
+            Game::instance()->setPower(false);
             this->setFire(false);
             Game::instance()->clearHittedPeg();
             Game::instance()->setRemainingBall(Game::instance()->getRemainingBall() - 1);
