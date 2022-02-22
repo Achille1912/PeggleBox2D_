@@ -204,7 +204,7 @@ public:
     QVector<QGraphicsPixmapItem*> molt;
     QVector<QGraphicsPixmapItem*> molt_x;
     QVector<QLabel*> buttons;
-
+    bool aiCheck;
 
 // SETTERS
         // game attributes

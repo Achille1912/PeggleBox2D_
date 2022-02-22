@@ -83,6 +83,7 @@ Game::Game() : QGraphicsView()
     tmpScore = 0;
     moltInt = 1;
     _gameSounds = new Sounds();
+    aiCheck = false;
 
 
     reset();
@@ -107,6 +108,7 @@ void Game::reset()
     _secondCharacter = Character::NONE;
     restoreGreen = false;
     _power = false;
+    aiCheck = false;
 
     simulationCount = 180;
     turn = true;
@@ -217,6 +219,7 @@ void Game::nextFrame()
 // EVENTI
 void Game::mousePressEvent(QMouseEvent* e)
 {
+
     if (!simulation) {
         if (_state ==GameState::TITLE)
         {
@@ -235,16 +238,9 @@ void Game::mousePressEvent(QMouseEvent* e)
             if (_mode == GameMode::CPU&& !turn)
                 return;
                
-            
-            /*if (e->pos().y()>942) {
-                if ((e->pos().x() > 1550 && e->pos().x() < 1650) || e->pos().x() < 360) {
-                    QGraphicsView::mousePressEvent(e);
-                    return;
-                }
 
-            }*/
 
-            if (!masterPegGraphic->getFire()) {
+            if (!masterPegGraphic->getFire() && !aiCheck) {
                 Game::instance()->setPower(false);
               
                 masterPegGraphic->setFire(true);
