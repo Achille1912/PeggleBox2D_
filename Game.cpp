@@ -331,6 +331,7 @@ void Game::keyPressEvent(QKeyEvent* e)
     }
     if (e->key() == Qt::Key_A && _state == GameState::PLAYING&& !masterPegGraphic->getFire())
     {
+        Game::instance()->uni = false;
         setPower(false);
         for (auto el : trajectory)
             if(el)

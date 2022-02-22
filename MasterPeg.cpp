@@ -152,9 +152,11 @@ void MasterPeg::down() {
 
             if (Game::instance()->getGameMode() == GameMode::CPU && !(Game::instance()->getTurn())) {
                 if (!Game::instance()->getHardMode()) {
+                    Game::instance()->uni = false;
                     randomShot();
                 }
                 else {
+                    Game::instance()->uni = false;
                     Game::instance()->simulationScore.clear();
                     Game::instance()->setSimulationScore(0);
                     Game::instance()->setAlpha(89);
@@ -280,10 +282,12 @@ void MasterPeg::down() {
         if (Game::instance()->getGameMode() == GameMode::CPU && !(Game::instance()->getTurn())) {
 
             if (!Game::instance()->getHardMode()) {
+                Game::instance()->uni = false;
                 randomShot();
             }
             else
             {
+                Game::instance()->uni = false;
                 Game::instance()->simulationScore.clear();
                 Game::instance()->setAlpha(89);
                 Game::instance()->setSimulationScore(0);

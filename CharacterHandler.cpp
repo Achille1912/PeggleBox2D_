@@ -115,6 +115,7 @@ void CharacterHandler::clickButton(ButtonType t, Button* b)
 	case ButtonType::AI:
 		
 		if (!Game::instance()->getMasterPegGraphic()->getFire()) {
+			Game::instance()->uni = false;
 			Game::instance()->simulationScore.clear();
 			Game::instance()->setAlpha(89);
 			Game::instance()->fire(Game::instance()->getAlpha());
