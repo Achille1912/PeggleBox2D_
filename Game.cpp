@@ -224,7 +224,7 @@ void Game::mousePressEvent(QMouseEvent* e)
             return;
         }
 
-        if (_state == GameState::MODE || _state == GameState::RESULT_DOUBLE || _state == GameState::RESULT_SINGLE || _state == GameState::SELECT_SINGLE_CHARACTER || _state == GameState::SELECT_FIRST_CHARACTER || _state == GameState::SELECT_SECOND_CHARACTER || _state == GameState::SELECT_DIFFICULTY) {
+        if (_state == GameState::MODE || _state == GameState::PLAYING || _state == GameState::RESULT_DOUBLE || _state == GameState::RESULT_SINGLE || _state == GameState::SELECT_SINGLE_CHARACTER || _state == GameState::SELECT_FIRST_CHARACTER || _state == GameState::SELECT_SECOND_CHARACTER || _state == GameState::SELECT_DIFFICULTY) {
 
                 QGraphicsView::mousePressEvent(e);
         }
@@ -236,13 +236,13 @@ void Game::mousePressEvent(QMouseEvent* e)
                 return;
                
             
-            if (e->pos().y()>942) {
+            /*if (e->pos().y()>942) {
                 if ((e->pos().x() > 1550 && e->pos().x() < 1650) || e->pos().x() < 360) {
                     QGraphicsView::mousePressEvent(e);
                     return;
                 }
 
-            }
+            }*/
 
             if (!masterPegGraphic->getFire()) {
                 Game::instance()->setPower(false);
