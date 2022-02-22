@@ -1,15 +1,10 @@
 #include <QApplication>
-#include <QPainter>
 #include <QGraphicsPixmapItem>
-#include <QGraphicsProxyWidget>
-#include <QPushButton>
 #include <QKeyEvent>
 #include <QIcon>
 #include <cmath>
-#include <QDebug>
 #include <set>
 #include <QMediaPlayer>
-#include <QStyle>
 #include <QMainWindow>
 
 
@@ -22,7 +17,6 @@
 #include "Button.h"
 #include "CharacterHandler.h"
 #include "Sounds.h"
-
 #include "Sprites.h"
 
 #include "box2d/include/box2d/b2_settings.h"
@@ -79,11 +73,12 @@ Game::Game() : QGraphicsView()
     _character = Character::NONE;
     _power = false;
     simulationCount = 180;
-    greenPeg = 0;
-    tmpScore = 0;
-    moltInt = 1;
+    _greenPeg = 0;
+    _tmpScore = 0;
+    _moltInt = 1;
     _gameSounds = new Sounds();
-    aiCheck = false;
+    _aiCheck = false;
+    uni = false;
 
 
     reset();
@@ -94,21 +89,22 @@ Game::Game() : QGraphicsView()
 void Game::reset()
 {
     _score = 0;
-    moltInt = 1;
-    greenPeg = 0;
-    tmpScore = 0;
-    alpha = 89;
+    _moltInt = 1;
+    _greenPeg = 0;
+    _tmpScore = 0;
+    _alpha = 89;
     simulationScore.clear();
     remainingSimulation.clear();
     buttons.clear();
     _secondScore = 0;
-    remainingBall = 10;
+    _remainingBall = 10;
     _redPegHit = -1;
     _character = Character::NONE;
     _secondCharacter = Character::NONE;
     restoreGreen = false;
     _power = false;
-    aiCheck = false;
+    _aiCheck = false;
+    uni = false;
 
     simulationCount = 180;
     turn = true;
@@ -206,14 +202,6 @@ void Game::nextFrame()
     else {
         masterPegGraphic->simulAdvance(MasterPegBox);
     }
-
-
-
-    //animate
-    //Sprites::instance()->animate();
-    //world()->addPixmap(Sprites::instance()->a);
-
-
 }
 
 // EVENTI
@@ -227,22 +215,17 @@ void Game::mousePressEvent(QMouseEvent* e)
             return;
         }
 
-        if (_state == GameState::MODE || _state == GameState::PLAYING || _state == GameState::RESULT_DOUBLE || _state == GameState::RESULT_SINGLE || _state == GameState::SELECT_SINGLE_CHARACTER || _state == GameState::SELECT_FIRST_CHARACTER || _state == GameState::SELECT_SECOND_CHARACTER || _state == GameState::SELECT_DIFFICULTY) {
-
+        if (_state == GameState::MODE || _state == GameState::PLAYING || _state == GameState::RESULT_DOUBLE || _state == GameState::RESULT_SINGLE || _state == GameState::SELECT_SINGLE_CHARACTER || _state == GameState::SELECT_FIRST_CHARACTER || _state == GameState::SELECT_SECOND_CHARACTER || _state == GameState::SELECT_DIFFICULTY)
                 QGraphicsView::mousePressEvent(e);
-        }
-
 
         if (e->button() == Qt::LeftButton && _state == GameState::PLAYING)
         {
             if (_mode == GameMode::CPU&& !turn)
                 return;
-               
 
-
-            if (!masterPegGraphic->getFire() && !aiCheck) {
+            if (!masterPegGraphic->getFire() && !_aiCheck) {
                 Game::instance()->setPower(false);
-              
+                uni = false;
                 masterPegGraphic->setFire(true);
                 world2d->SetGravity(b2Vec2(0, 25.0f));
                 QPoint midPos((sceneRect().width() / 2), 0), currPos;
@@ -257,7 +240,7 @@ void Game::mousePressEvent(QMouseEvent* e)
                 cannon->setPixmap(Sprites::instance()->get("cannon_without_ball"));
                 Game::instance()->_gameSounds->get("cannonShot")->play();
 
-                tmpScore = getTurn()? getScore(): getSecondScore();
+                _tmpScore = getTurn()? getScore(): getSecondScore();
             
             }
         }
@@ -294,11 +277,11 @@ void Game::mouseMoveEvent(QMouseEvent* e)
                 if (!masterPegGraphic->getFire())
                     MasterPegBox->SetTransform(b2Vec2(v2.p2().x() / 30.0, v2.p2().y() / 30.0), MasterPegBox->GetAngle());
 
-                cannon->setTransformOriginPoint(QPoint(40, -65)); //-65
+                cannon->setTransformOriginPoint(QPoint(40, -65));
                 cannon->setRotation(-v1.angleTo(v2));
             }
 
-            if ((turn?getCharacter():getSecondCharacter()) == Character::UNICORN && getPower()&& !(masterPegGraphic->getFire()))
+            if ((turn?getCharacter():getSecondCharacter()) == Character::UNICORN && uni && !(masterPegGraphic->getFire()))
             {
                 QVector2D p = QVector2D(currPos.x() - midPos.x(), currPos.y() - midPos.y());
                 p.normalize();
@@ -353,8 +336,8 @@ void Game::keyPressEvent(QKeyEvent* e)
             if(el)
                 el->setVisible(false);
         simulationScore.clear();
-        alpha = 89;
-        fire(alpha);
+        _alpha = 89;
+        fire(_alpha);
     }
 }
 
@@ -421,8 +404,8 @@ void Game::clearHittedPeg() {
         }
     }
 
-    if (getRestoreGreen()&&greenPeg<1) {
-        greenPeg++;
+    if (getRestoreGreen()&& _greenPeg<1) {
+        _greenPeg++;
         srand((unsigned)time(0));
         Peg* tmp;
         do {
@@ -440,22 +423,22 @@ void Game::addMolt() {
     molt[_redPegHit]->setVisible(true);
     if (_redPegHit == 9) {
         molt_x[0]->setVisible(true);
-        moltInt = 2;
+        _moltInt = 2;
     }
     else if (_redPegHit == 14) {
         molt_x[1]->setVisible(true);
-        moltInt = 3;
+        _moltInt = 3;
     }
     else if (_redPegHit == 18) {
         molt_x[2]->setVisible(true);
-        moltInt = 5;
+        _moltInt = 5;
     }
     else if (_redPegHit == 21) {
         molt_x[3]->setVisible(true);
-        moltInt = 10;
+        _moltInt = 10;
     }
 
-    mol = true;
+    _mol = true;
 }
 
 void Game::fire(float alfa) {
@@ -472,7 +455,6 @@ void Game::fire(float alfa) {
     QPoint midPos((sceneRect().width() / 2), 130);
 
     QLineF p = QLineF(midPos, QPointF((sceneRect().width() / 2), 300));
-
 
     p.setAngle(alfa);
 
@@ -694,8 +676,4 @@ void Game::updateSchedulers()
     for (auto& t : _schedulers)
         if (t.second.on())
             t.second++;
-}
-
-void Game::restartSlot() {
-    qApp->exit(773);
 }

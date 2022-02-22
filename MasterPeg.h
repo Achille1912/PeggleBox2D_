@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QPoint>
-#include <QPainter>
 #include <QGraphicsPixmapItem>
 
 #include "box2d/include/box2d/b2_settings.h"

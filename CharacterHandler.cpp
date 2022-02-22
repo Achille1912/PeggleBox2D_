@@ -116,9 +116,9 @@ void CharacterHandler::clickButton(ButtonType t, Button* b)
 		
 		if (!Game::instance()->getMasterPegGraphic()->getFire()) {
 			Game::instance()->simulationScore.clear();
-			Game::instance()->alpha = 89;
-			Game::instance()->fire(Game::instance()->alpha);
-			Game::instance()->aiCheck = false;
+			Game::instance()->setAlpha(89);
+			Game::instance()->fire(Game::instance()->getAlpha());
+			Game::instance()->setAiCheck(false);
 		}
 		break;
 	case ButtonType::MENU_BUTTON:

@@ -3,7 +3,6 @@
 #include <QGraphicsView>
 #include <QTimer>
 #include <QLabel>
-#include <QPainterPath>
 #include <map>
 #include <QMediaPlayer>
 
@@ -15,8 +14,6 @@
 #include "Scheduler.h"
 #include "CharacterHandler.h"
 #include "Sounds.h"
-
-
 #include "Button.h"
 
 #include "box2d/include/box2d/b2_settings.h"
@@ -94,12 +91,19 @@ private:
     int _secondScore;
     int _redPegHit;
     bool _power;
-    int remainingBall = 10;
+    int _remainingBall = 10;
     bool restoreGreen = false;
     bool simulation = false;
     int _simulationScore = 0;
     bool hardMode = false;
     bool turn = true;
+    int _moltInt;
+    int _greenPeg;
+    int _tmpScore;
+    bool _aiCheck;
+    int _alpha = 89;
+    bool _mol = false;
+
 
     // FPS measuring and display
     int _frame_count;
@@ -134,9 +138,7 @@ private:
     Game();
 
 public:
-    int moltInt;
-    int greenPeg;
-    int tmpScore;
+  
     Sounds* _gameSounds;
     static Game *instance();
     QVector<b2Body*> PegBox;
@@ -149,6 +151,13 @@ public:
     std::map<std::string, Scheduler> _schedulers;
     virtual void schedule(const std::string& id, int delay, std::function<void()> action);
     virtual void updateSchedulers();
+    std::vector < std::tuple< int, int > >simulationScore;
+    b2Vec2 getTrajectoryPoint(b2Vec2& startingPosition, b2Vec2& startingVelocity, float n);
+    QVector<b2Body*>getPegBox() { return PegBox; }
+    QVector<MasterPeg*> trajectory;
+    QVector<QGraphicsPixmapItem*> molt;
+    QVector<QGraphicsPixmapItem*> molt_x;
+    QVector<QLabel*> buttons;
 
 
     
@@ -165,13 +174,19 @@ public:
     int getSecondScore() { return _secondScore; }
     int getRedPegHit() { return _redPegHit; }
     bool getPower() { return _power; }
-    int getRemainingBall() { return remainingBall; }
+    int getRemainingBall() { return _remainingBall; }
     bool getRestoreGreen() { return restoreGreen; }
     bool getSimulation() { return simulation; }
     int getSimulationScore() { return _simulationScore; }
     bool getHardMode() { return hardMode; }
     bool getTurn() { return turn; }
     CharacterHandler* getCharacterHandler() { return _characterHandler; }
+    int getMoltInt() { return _moltInt; }
+    int getGreenPeg() { return _greenPeg; }
+    int getTmpScore() { return _tmpScore; }
+    bool getAiCheck() { return _aiCheck; }
+    int getAlpha() { return _alpha; }
+    bool getMol() { return _mol; }
 
         // box2d obj
     b2Body* getMasterPegBox() { return MasterPegBox; }
@@ -195,16 +210,7 @@ public:
     QGraphicsPixmapItem* getBandTwo() { return bandTwo; }
     QGraphicsPixmapItem* getPurpleBandOne() { return purpleBandOne; }
     QGraphicsPixmapItem* getPurpleBandTwo() { return purpleBandTwo; }
-
-
-    QVector<b2Body*>getPegBox() { return PegBox; }
-    QVector<MasterPeg*> trajectory;
-    
-
-    QVector<QGraphicsPixmapItem*> molt;
-    QVector<QGraphicsPixmapItem*> molt_x;
-    QVector<QLabel*> buttons;
-    bool aiCheck;
+ 
 
 // SETTERS
         // game attributes
@@ -215,13 +221,19 @@ public:
     void setScore(int s) { _score = s; }
     void setSecondScore(int s) { _secondScore = s; }
     void setPower(bool b) { _power = b; }
-    void setRemainingBall(int x) { remainingBall = x; }
+    void setRemainingBall(int x) { _remainingBall = x; }
     void setRestoreGreen(bool b) { restoreGreen = b; }
     void setSimulation(bool b) { simulation = b; }
     void setSimulationScore(int c) { _simulationScore = c; }
     void setHardMode(bool b) { hardMode = b; }
     void setTurn(bool b) { turn = b; }
     void setCharacterHandler(CharacterHandler* c) {_characterHandler=c; }
+    void setMoltInt(int x) { _moltInt = x; }
+    void setGreenPeg(int x) { _greenPeg = x; }
+    void setTmpScore(int x) { _tmpScore = x; }
+    void setAiCheck(bool b) { _aiCheck = b; }
+    void setAlpha(int x) { _alpha = x; }
+    void setMol(bool b) { _mol = b; }
 
         // box2d obj
     void setMasterPegBox(b2Body* b) { MasterPegBox = b; }
@@ -255,12 +267,8 @@ public:
     void activePower(Character c);
     void showRemainingSimulation();
     void printScore();
-    b2Vec2 getTrajectoryPoint(b2Vec2& startingPosition, b2Vec2& startingVelocity, float n);
     void fire(float alfa);
-    int alpha = 89;
-    std::vector < std::tuple< int, int > >simulationScore;
-    bool me = false;
-    bool mol = false;
+   
     
 
     // event handlers
@@ -271,7 +279,8 @@ public:
     virtual void keyPressEvent(QKeyEvent *e) override;
     virtual void resizeEvent(QResizeEvent* e) override;
 
-   
+    bool uni;
+
     void init();
     void reset();
     void togglePause();
@@ -287,5 +296,5 @@ public slots:
     void updateFPS();
     void gameOverSlot();
     void changeEngineSlot();
-    void restartSlot();
+
 };

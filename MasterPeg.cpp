@@ -2,7 +2,6 @@
 #include "Game.h"
 #include "Sprites.h"
 #include "Sounds.h"
-#include <QSound>
 #include <QVector2D>
 #include <QMediaPlayer>
 
@@ -27,8 +26,8 @@ void MasterPeg::simulAdvance(b2Body* box) {
     {
 
         restorePos(box);
-        Game::instance()->alpha--;
-        if (Game::instance()->alpha < -89) {
+        Game::instance()->setAlpha(Game::instance()->getAlpha()-1);
+        if (Game::instance()->getAlpha() < -89) {
             Game::instance()->printScore();
             printf("Finitooo");
             
@@ -81,7 +80,7 @@ void MasterPeg::simulAdvance(b2Body* box) {
             if(c==1)
                 Game::instance()->setSimulationScore(0);
             
-            Game::instance()->simulationScore.emplace_back(Game::instance()->alpha - 90, Game::instance()->getSimulationScore());
+            Game::instance()->simulationScore.emplace_back(Game::instance()->getAlpha() - 90, Game::instance()->getSimulationScore());
 
             Game::instance()->setSimulationScore(0);
 
@@ -89,7 +88,7 @@ void MasterPeg::simulAdvance(b2Body* box) {
                 static_cast<Peg*>(el->GetUserData())->setSimulHit(false);
             }
             
-            Game::instance()->fire(Game::instance()->alpha);
+            Game::instance()->fire(Game::instance()->getAlpha());
         }
     }
 }
@@ -105,7 +104,7 @@ void MasterPeg::advance(b2Body* box) {
 
 
 void MasterPeg::down() {
-    if (Game::instance()->mol) {
+    if (Game::instance()->getMol()) {
         int x = 0;
         switch (Game::instance()->getRedPegHit()) {
         case 9:
@@ -123,12 +122,12 @@ void MasterPeg::down() {
         }
 
         if (Game::instance()->getTurn()) {
-            if (Game::instance()->moltInt != 1)
-                Game::instance()->setScore(((Game::instance()->getScore() - Game::instance()->tmpScore) * Game::instance()->moltInt) + Game::instance()->tmpScore);
+            if (Game::instance()->getMoltInt() != 1)
+                Game::instance()->setScore(((Game::instance()->getScore() - Game::instance()->getTmpScore()) * Game::instance()->getMoltInt()) + Game::instance()->getTmpScore());
         }
         else {
-            if (Game::instance()->moltInt != 1)
-                Game::instance()->setSecondScore(((Game::instance()->getSecondScore() - Game::instance()->tmpScore) * Game::instance()->moltInt) + Game::instance()->tmpScore);
+            if (Game::instance()->getMoltInt() != 1)
+                Game::instance()->setSecondScore(((Game::instance()->getSecondScore() - Game::instance()->getTmpScore()) * Game::instance()->getMoltInt()) + Game::instance()->getTmpScore());
         }
 
         Game::instance()->printScore();
@@ -140,7 +139,8 @@ void MasterPeg::down() {
         {
             Game::instance()->getCannon()->setPixmap(Sprites::instance()->get("cannon"));
             Game::instance()->getMasterPegGraphic()->setVisible(false);
-            
+            Game::instance()->uni = true;
+            Game::instance()->setPower(false);
             this->setFire(false);
             Game::instance()->clearHittedPeg();
             Game::instance()->setRemainingBall(Game::instance()->getRemainingBall() - 1);
@@ -157,8 +157,8 @@ void MasterPeg::down() {
                 else {
                     Game::instance()->simulationScore.clear();
                     Game::instance()->setSimulationScore(0);
-                    Game::instance()->alpha = 89;
-                    Game::instance()->fire(Game::instance()->alpha);
+                    Game::instance()->setAlpha(89);
+                    Game::instance()->fire(Game::instance()->getAlpha());
                 }
 
             }
@@ -217,8 +217,8 @@ void MasterPeg::down() {
                 else {
                     Game::instance()->simulationScore.clear();
                     Game::instance()->setSimulationScore(0);
-                    Game::instance()->alpha = 89;
-                    Game::instance()->fire(Game::instance()->alpha);
+                    Game::instance()->setAlpha(89);
+                    Game::instance()->fire(Game::instance()->getAlpha());
                 }
 
             }
@@ -241,10 +241,10 @@ void MasterPeg::down() {
             Game::instance()->printRemainingBall(Game::instance()->getRemainingBall());
             restorePos(Game::instance()->getMasterPegBox());
 
-            Game::instance()->alpha = 89;
+            Game::instance()->setAlpha(89);
             Game::instance()->simulationScore.clear();
             Game::instance()->setSimulationScore(0);
-            Game::instance()->fire(Game::instance()->alpha);
+            Game::instance()->fire(Game::instance()->getAlpha());
             return;
         }
            break;
@@ -285,9 +285,9 @@ void MasterPeg::down() {
             else
             {
                 Game::instance()->simulationScore.clear();
-                Game::instance()->alpha = 89;
+                Game::instance()->setAlpha(89);
                 Game::instance()->setSimulationScore(0);
-                Game::instance()->fire(Game::instance()->alpha);
+                Game::instance()->fire(Game::instance()->getAlpha());
             }
         }
 
@@ -340,9 +340,9 @@ void MasterPeg::shot(QLineF c, QLineF p, QLineF f, QVector2D z) {
     Game::instance()->getWorld2d()->SetGravity(b2Vec2(0, 25.0f));
     Game::instance()->getCannon()->setPixmap(Sprites::instance()->get("cannon_without_ball"));
     Game::instance()->_gameSounds->get("cannonShot")->play();
-    Game::instance()->tmpScore = (Game::instance()->getTurn() ?
+    Game::instance()->setTmpScore((Game::instance()->getTurn() ?
         Game::instance()->getScore() :
-        Game::instance()->getSecondScore());
+        Game::instance()->getSecondScore()));
 
 }
 

@@ -3,6 +3,7 @@
 #include "Sprites.h"
 #include "Sounds.h"
 #include "Scheduler.h"
+
 #include <QMediaPlayer>
 
 using namespace PGG;

@@ -3,7 +3,7 @@
 #include "Sounds.h"
 #include "Sprites.h"
 #include <QMediaPlayer>
-#include <QKeyEvent>
+
 
 using namespace PGG;
 
@@ -30,7 +30,7 @@ Button::Button(QRect pos, ButtonType bt) : QLabel(0)
  void Button::mousePressEvent(QMouseEvent* e) {
 	 if (Game::instance()->getState() == GameState::PLAYING)
 		 if (!Game::instance()->getMasterPegGraphic()->getFire())
-			 Game::instance()->aiCheck = true;
+			 Game::instance()->setAiCheck(true);
 	 QLabel::mousePressEvent(e);
 	 emit clicked();
  }
