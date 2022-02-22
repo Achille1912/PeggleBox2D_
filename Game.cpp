@@ -234,9 +234,7 @@ void Game::mousePressEvent(QMouseEvent* e)
         {
             if (_mode == GameMode::CPU&& !turn)
                 return;
-                
-            /*if (itemAt(e->pos()) == dynamic_cast<QGraphicsItem*>(buttons[1]))
-                printf("HEIIIIIIII");*/
+               
             
             if (e->pos().y()>942) {
                 if ((e->pos().x() > 1550 && e->pos().x() < 1650) || e->pos().x() < 360) {
