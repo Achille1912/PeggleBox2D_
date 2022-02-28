@@ -1,7 +1,5 @@
 # peggleBox2D
 
-# peggle
-
 # PLAYING THE GAME
 
 ## Goal
